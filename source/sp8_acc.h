@@ -1,3 +1,6 @@
+#include <vector>
+#include <cmath>
+#include <complex>
 /** Evaluate 8-order polynomial 
  *
  *  The polynomial is parameterized by 7 extremal points
@@ -11,9 +14,9 @@
  */
 template<typename T>
 T sp8(std::vector<T> const & v, T const & x) {
-  const T1 c1 = v[0], c2 = v[1], r1 = v[2];
-  const T1 r2 = v[3], r3 = v[4], r4 = v[5];
-  const T1 r5 = v[6], r6 = v[7], r7 = v[8];
+  const T c1 = v[0], c2 = v[1], r1 = v[2];
+  const T r2 = v[3], r3 = v[4], r4 = v[5];
+  const T r5 = v[6], r6 = v[7], r7 = v[8];
   T x0 = r1*r2;
   T x1 = r7*x0;
   T x2 = r3*r4;
@@ -66,7 +69,7 @@ struct Objective_Fun43 {
     const T1 c1 = v[0], c2 = v[1], r1 = v[2];
     const T1 r2 = v[3], r3 = v[4], r4 = v[5];
     const T1 r5 = v[6], r6 = v[7], r7 = v[8];
-    auto p = [&](T1 x){return poly8(v,x);};
+    auto p = [&](T1 x){return sp8(v,x);};
     result.resize(9);
     result[0] = p(0.0);
     result[1] = p(r2);
