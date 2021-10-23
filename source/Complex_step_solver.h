@@ -2,6 +2,7 @@
 #include <vector>
 #include <complex>
 #include <limits>
+#include <algorithm>
 
 extern "C" void dgesv_(const int *n, const int *nrhs, double *a, const int *lda, int *ipiv, double *b, const int *ldb, int *info);
 extern "C" void sgesv_(const int *n, const int *nrhs, float *a, const int *lda, int *ipiv, float *b, const int *ldb, int *info);
@@ -46,7 +47,9 @@ struct Complex_step_solver {
   }
 
   void step_newton(std::vector<value_type> const & v,
-		   std::vector<value_type>  & vnew) {
+		   std::vector<value_type>  & vnew,
+		   value_type & v_maxabs,
+		   value_type & dv_maxabs) {
     std::vector<value_type> jacobian_colwise;
     get_jacobian(v, jacobian_colwise);
     // Get rhs vector in vnew
@@ -63,8 +66,13 @@ struct Complex_step_solver {
     gesv(&n, &nrhs, a, &lda, ipiv, b, &ldb, &info);
     assert(info == 0);
     // Ok we have vnew = inv(J)*fun(v)
-    // Now take Newton step
+    auto compare_abs = [](value_type a, value_type b) { return std::abs(a) < std::abs(b); };
+    // Compute max absolute element of correction
+    dv_maxabs = std::abs( *std::max_element(vnew.begin(), vnew.end(), compare_abs) );
+    // Now take the Newton step
     for (unsigned int ind = 0; ind<v.size(); ind++) 
       vnew[ind] = v[ind]-vnew[ind];
+    // Compute max absolute element of approximate solution
+    v_maxabs = std::abs( *std::max_element(vnew.begin(), vnew.end(), compare_abs) );
   }
 };
