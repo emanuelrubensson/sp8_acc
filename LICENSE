@@ -1,0 +1,12 @@
+SP8_ACC, version 0.1. A library for creation of multiplication
+	 	      efficient polynomials for expansion of 
+		      matrix step functions. 
+                      
+Copyright (C) 2021 Emanuel H. Rubensson and
+              	   Elias Jarlebring
+
+Distribution without copyright owners' explicit consent prohibited.
+
+This source code is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
