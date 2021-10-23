@@ -1,6 +1,7 @@
 #include <vector>
 #include <cmath>
 #include <complex>
+#include "Complex_step_solver.h"
 /** Evaluate 8-order polynomial 
  *
  *  The polynomial is parameterized by 7 extremal points
@@ -56,12 +57,44 @@ T sp8(std::vector<T> const & v, T const & x) {
   return res;
 }
 
+template<class Objective_function>
+struct Homotopy_solver {
+  typedef typename Objective_function::value_type value_type;
+  void operator()(value_type const L_target,
+		  value_type const H_target,
+		  std::vector<value_type> & v,
+		  value_type & v_maxabs,
+		  value_type & dv_maxabs) {
+    v = Objective_function::v_start;
+    value_type L = Objective_function::L_start;
+    value_type H = Objective_function::H_start;
+    int nsteps = 100;
+    value_type L_step = (L_target-L)/nsteps;
+    value_type H_step = (H_target-H)/nsteps;
+    std::vector<value_type> tmp;
+    for (int ind = 0; ind<nsteps; ind++) {
+      L = L+L_step;
+      H = H+H_step;
+      Objective_function objfun(L,H);
+      Complex_step_solver<Objective_function> solver(objfun);
+      solver.step_newton(v,tmp,v_maxabs,dv_maxabs);
+      v.swap(tmp);
+    }
+    Objective_function objfun(L,H);
+    Complex_step_solver<Objective_function> solver(objfun);
+    for (int ind = 0; ind<4; ind++) {
+      solver.step_newton(v,tmp,v_maxabs,dv_maxabs);
+      v.swap(tmp);
+    }
+  }
+};
+
 template<typename T2>
 struct Objective_Fun43 {
   typedef T2 value_type;
   static std::vector<value_type> const v_start;
-  static const value_type L_start;
-  static const value_type H_start;
+  static const value_type constexpr L_start = 0.55;
+  static const value_type constexpr H_start = 0.65;
   value_type L;
   value_type H;
   Objective_Fun43(value_type const & L, value_type const & H)
@@ -95,9 +128,3 @@ std::vector<T2> const Objective_Fun43<T2>::v_start =
    7.341809614537667e-01,
    8.676371783744240e-01,
    9.650762995000088e-01}; // r7
-template<typename T2>
-const T2 Objective_Fun43<T2>::L_start = 0.55;
-template<typename T2>
-const T2 Objective_Fun43<T2>::H_start = 0.65;
-
-
