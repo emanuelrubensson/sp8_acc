@@ -1,3 +1,5 @@
+#ifndef COMPLEX_STEP_SOLVER_HEADER
+#define COMPLEX_STEP_SOLVER_HEADER
 #include <cassert>
 #include <vector>
 #include <complex>
@@ -76,3 +78,4 @@ struct Complex_step_solver {
     v_maxabs = std::abs( *std::max_element(vnew.begin(), vnew.end(), compare_abs) );
   }
 };
+#endif

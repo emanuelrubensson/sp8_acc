@@ -1,3 +1,5 @@
+#ifndef SP8_ACC_HEADER
+#define SP8_ACC_HEADER
 #include <vector>
 #include <cmath>
 #include <complex>
@@ -128,3 +130,4 @@ std::vector<T2> const Objective_Fun43<T2>::v_start =
    7.341809614537667e-01,
    8.676371783744240e-01,
    9.650762995000088e-01}; // r7
+#endif
