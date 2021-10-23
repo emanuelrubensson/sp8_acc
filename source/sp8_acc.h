@@ -56,13 +56,15 @@ T sp8(std::vector<T> const & v, T const & x) {
   return res;
 }
 
-
 template<typename T2>
 struct Objective_Fun43 {
   typedef T2 value_type;
-  T2 L;
-  T2 H;
-  Objective_Fun43(T2 const & L, T2 const & H)
+  static std::vector<value_type> const v_start;
+  static const value_type L_start;
+  static const value_type H_start;
+  value_type L;
+  value_type H;
+  Objective_Fun43(value_type const & L, value_type const & H)
   :L(L),H(H) {}
   template<typename T1>
   void fun(std::vector<T1> const & v, std::vector<T1> & result) const {
@@ -82,5 +84,20 @@ struct Objective_Fun43 {
     result[8] = p(r7) - 1.0;
   }
 };
+template<typename T2>
+std::vector<T2> const Objective_Fun43<T2>::v_start =
+  {-3.828330354372377e+04, // c1
+   0.000000000000000e+00,  // c2
+   3.630457073236520e-02,  // r1
+   1.391234727632784e-01,  // ...
+   2.902225497081609e-01,
+   4.558182467167558e-01,
+   7.341809614537667e-01,
+   8.676371783744240e-01,
+   9.650762995000088e-01}; // r7
+template<typename T2>
+const T2 Objective_Fun43<T2>::L_start = 0.55;
+template<typename T2>
+const T2 Objective_Fun43<T2>::H_start = 0.65;
 
 

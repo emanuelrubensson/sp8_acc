@@ -6,23 +6,14 @@
 int main(int argc, char* const  argv[]){
   double L_target = 0.5;
   double H_target = 0.6;
-  std::vector<double> v_guess_43 = {-3.828330354372377e+04, // c1
-                                    0.000000000000000e+00,  // c2
-                                    3.630457073236520e-02,
-                                    1.391234727632784e-01,
-                                    2.902225497081609e-01,
-                                    4.558182467167558e-01,
-                                    7.341809614537667e-01,
-                                    8.676371783744240e-01,
-                                    9.650762995000088e-01}; // for L,H=0.55, 0.65
-  double L_guess = 0.55;
-  double H_guess = 0.65;
+  std::vector<double> v = Objective_Fun43<double>::v_start;
+  double L_guess        = Objective_Fun43<double>::L_start;
+  double H_guess        = Objective_Fun43<double>::H_start;
   int nsteps = 100;
   double L_step = (L_target-L_guess)/nsteps;
   double H_step = (H_target-H_guess)/nsteps;
   double L = L_guess;
   double H = H_guess;
-  std::vector<double> v = v_guess_43;
   std::vector<double> tmp;
   double v_maxabs;
   double dv_maxabs;
