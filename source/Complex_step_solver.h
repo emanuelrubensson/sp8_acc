@@ -15,11 +15,11 @@ void gesv(const int *n, const int *nrhs, float *a, const int *lda,
   sgesv_(n, nrhs, a, lda, ipiv, b, ldb, info);
 }
 
-template<class Obective_Function>
+template<class Objective_function>
 struct Complex_step_solver {
-  typedef typename Obective_Function::value_type value_type;
-  Obective_Function const & obj_fun;
-  Complex_step_solver(Obective_Function const & obj_fun) : obj_fun(obj_fun) {}
+  typedef typename Objective_function::value_type value_type;
+  Objective_function const & obj_fun;
+  Complex_step_solver(Objective_function const & obj_fun) : obj_fun(obj_fun) {}
   void partial_derivative(std::vector<value_type> const & v,
 			  int const & i,
 			  std::vector<value_type> & result) {
