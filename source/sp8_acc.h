@@ -64,6 +64,7 @@ struct Homotopy_solver {
   typedef typename Objective_function::value_type value_type;
   void operator()(value_type const L_target,
 		  value_type const H_target,
+		  value_type const dv_tolerance_relative,
 		  std::vector<value_type> & v,
 		  value_type & v_maxabs,
 		  value_type & dv_maxabs) {
@@ -82,9 +83,9 @@ struct Homotopy_solver {
       solver.step_newton(v,tmp,v_maxabs,dv_maxabs);
       v.swap(tmp);
     }
-    Objective_function objfun(L,H);
+    Objective_function objfun(L_target,H_target);
     Complex_step_solver<Objective_function> solver(objfun);
-    for (int ind = 0; ind<4; ind++) {
+    while (dv_maxabs/v_maxabs > dv_tolerance_relative) {
       solver.step_newton(v,tmp,v_maxabs,dv_maxabs);
       v.swap(tmp);
     }
