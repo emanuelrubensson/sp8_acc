@@ -173,6 +173,47 @@ std::vector<T2> const Objective_Fun52<T2>::v_start =
    9.714353568216227e-01}; // r7
 
 template<typename T2>
+struct Objective_Fun61 {
+  typedef T2 value_type;
+  static std::vector<value_type> const v_start;
+  static const value_type constexpr L_start = 0.88;
+  static const value_type constexpr H_start = 0.98;
+  value_type L;
+  value_type H;
+  Objective_Fun61(value_type const & L, value_type const & H)
+  :L(L),H(H) {}
+  template<typename T1>
+  void fun(std::vector<T1> const & v, std::vector<T1> & result) const {
+    const T1 c1 = v[0], c2 = v[1], r1 = v[2];
+    const T1 r2 = v[3], r3 = v[4], r4 = v[5];
+    const T1 r5 = v[6], r6 = v[7], r7 = v[8];
+    auto p = [&](T1 x){return sp8(v,x);};
+    result.resize(9);
+    result[0] = p(0.0);
+    result[1] = p(r2);
+    result[2] = p(r4);
+    result[3] = p(r6);
+    result[4] = p(r1)  - p(L);
+    result[5] = p(r3)  - p(L);
+    result[6] = p(r5)  - p(L);
+    result[7] = p(1.0) - p(H);
+    result[8] = p(r7)  - 1.0;
+  }
+};
+template<typename T2>
+std::vector<T2> const Objective_Fun61<T2>::v_start =
+  {-2.703277318672865e+04, // c1
+   0.000000000000000e+00,  // c2
+   3.704945885349221e-02,  // r1
+   1.424978475605410e-01,  // r2
+   3.000736741629149e-01,  // ...
+   4.852354821229843e-01,
+   6.682580170649393e-01,
+   8.156966140526589e-01,
+   9.904826516137375e-01}; // r7
+
+
+template<typename T2>
 struct Objective_Fun40 {
   typedef T2 value_type;
   static std::vector<value_type> const v_start;
