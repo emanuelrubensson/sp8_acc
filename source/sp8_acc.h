@@ -82,6 +82,7 @@ struct Homotopy_solver {
       Complex_step_solver<Objective_function> solver(objfun);
       solver.step_newton(v,tmp,v_maxabs,dv_maxabs);
       v.swap(tmp);
+      assert( objfun.correct_order_of_roots(v) );
     }
     Objective_function objfun(L_target,H_target);
     Complex_step_solver<Objective_function> solver(objfun);
@@ -367,7 +368,8 @@ struct Objective_Fun50 {
     const T1 c1 = v[0], c2 = v[1], r1 = v[2];
     const T1 r2 = v[3], r3 = v[4], r4 = v[5];
     const T1 r5 = v[6];
-    auto p = [&](T1 x){return sp8(v,x);};
+    std::vector<T1> v_extended = {c1,c2,r1,r2,r3,r4,r5,1.0,1.0};
+    auto p = [&](T1 x){return sp8(v_extended,x);};
     result.resize(7);
     result[0] = p(0.0) - p(L);
     result[1] = p(r2)  - p(L);
@@ -393,12 +395,63 @@ struct Objective_Fun50 {
 };
 template<typename T2>
 std::vector<T2> const Objective_Fun50<T2>::v_start =
-  {77.3871356083815,     // c1
-   5.64517407970927e-06, // c2
-   0.109658351153969,	 // r1
-   0.218907773104264,	 // r2
-   0.326760934389801,	 // r3
-   0.417867208776325,	 // r4
-   0.478661950866626};	 // r5
+  {2004.35036453061,    // c1
+   0.00278073628315719,	// c2
+   0.0287481761625353,	// r1
+   0.109670660767178,	// ...
+   0.227117821345137,
+   0.35569866417358,
+   0.460649364254723};	// r5
+
+template<typename T2>
+struct Objective_Fun60 {
+  typedef T2 value_type;
+  static std::vector<value_type> const v_start;
+  static const value_type constexpr L_start = 0.88;
+  static const value_type constexpr H_start = 1.0; // not used
+  const value_type L;
+  const value_type H;
+  Objective_Fun60(value_type const & L, value_type const & H)
+  :L(L),H(H) {}
+  template<typename T1>
+  void fun(std::vector<T1> const & v, std::vector<T1> & result) const {
+    const T1 c1 = v[0], c2 = v[1], r1 = v[2];
+    const T1 r2 = v[3], r3 = v[4], r4 = v[5];
+    const T1 r5 = v[6], r6 = v[7];
+    std::vector<T1> v_extended = {c1,c2,r1,r2,r3,r4,r5,r6,1.0};
+    auto p = [&](T1 x){return sp8(v_extended,x);};
+    result.resize(8);
+    result[0] = p(0.0);
+    result[1] = p(r2);
+    result[2] = p(r4);
+    result[3] = p(r6);
+    result[4] = p(r1)  - p(L);
+    result[5] = p(r3)  - p(L);
+    result[6] = p(r5)  - p(L);
+    result[7] = p(1.0) - 1.0;
+  }
+  /** Check order of roots
+   *
+   *  For 6-0, the correct order is
+   *  0<r1<r2<r3<r4<r5<r6<L<H<r7=1
+   */
+  bool correct_order_of_roots(std::vector<T2> const & v) const {
+    const T2 c1 = v[0], c2 = v[1], r1 = v[2];
+    const T2 r2 = v[3], r3 = v[4], r4 = v[5];
+    const T2 r5 = v[6], r6 = v[7];
+    return
+      (0<r1) && (r1<r2) && (r2<r3) && (r3<r4) && (r4<r5) && (r5<r6) && (r6<L);
+  }
+};
+template<typename T2>
+std::vector<T2> const Objective_Fun60<T2>::v_start =
+  {-22303.4615521158,     // c1
+   -1.00974195868148e-28, // c2
+   0.03716257529248,      // r1
+   0.14292553399174,      // r2
+   0.300942293257609,	  // ..
+   0.486538327322085,
+   0.669757555005894,
+   0.816704819712282};	  // r6
 
 #endif
