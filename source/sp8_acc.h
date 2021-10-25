@@ -98,8 +98,8 @@ struct Objective_Fun43 {
   static std::vector<value_type> const v_start;
   static const value_type constexpr L_start = 0.55;
   static const value_type constexpr H_start = 0.65;
-  value_type L;
-  value_type H;
+  const value_type L;
+  const value_type H;
   Objective_Fun43(value_type const & L, value_type const & H)
   :L(L),H(H) {}
   template<typename T1>
@@ -152,8 +152,8 @@ struct Objective_Fun52 {
   static std::vector<value_type> const v_start;
   static const value_type constexpr L_start = 0.75;
   static const value_type constexpr H_start = 0.85;
-  value_type L;
-  value_type H;
+  const value_type L;
+  const value_type H;
   Objective_Fun52(value_type const & L, value_type const & H)
   :L(L),H(H) {}
   template<typename T1>
@@ -206,8 +206,8 @@ struct Objective_Fun61 {
   static std::vector<value_type> const v_start;
   static const value_type constexpr L_start = 0.88;
   static const value_type constexpr H_start = 0.98;
-  value_type L;
-  value_type H;
+  const value_type L;
+  const value_type H;
   Objective_Fun61(value_type const & L, value_type const & H)
   :L(L),H(H) {}
   template<typename T1>
@@ -260,8 +260,8 @@ struct Objective_Fun70 {
   static std::vector<value_type> const v_start;
   static const value_type constexpr L_start = 0.94;
   static const value_type constexpr H_start = 0.98;
-  value_type L;
-  value_type H;
+  const value_type L;
+  const value_type H;
   Objective_Fun70(value_type const & L, value_type const & H)
   :L(L),H(H) {}
   template<typename T1>
@@ -312,8 +312,8 @@ struct Objective_Fun40 {
   static std::vector<value_type> const v_start;
   static const value_type constexpr L_start = 0.55;
   static const value_type constexpr H_start = 0.65;
-  value_type L;
-  value_type H;
+  const value_type L;
+  const value_type H;
   Objective_Fun40(value_type const & L, value_type const & H)
   :L(L),H(H) {}
   template<typename T1>
