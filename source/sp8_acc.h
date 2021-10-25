@@ -119,6 +119,20 @@ struct Objective_Fun43 {
     result[7] = p(r5) - 1.0;
     result[8] = p(r7) - 1.0;
   }
+  /** Check order of roots
+   *
+   *  For 4-3, the correct order is
+   *  0<r1<r2<r3<r4<L<H<r5<r6<r7<1
+   */
+  bool correct_order_of_roots(std::vector<T2> const & v) const {
+    const T2 c1 = v[0], c2 = v[1], r1 = v[2];
+    const T2 r2 = v[3], r3 = v[4], r4 = v[5];
+    const T2 r5 = v[6], r6 = v[7], r7 = v[8];
+    return
+      (0<r1) && (r1<r2) && (r2<r3) && (r3<r4) && (r4<L) &&
+      (L<H) &&
+      (H<r5) && (r5<r6) && (r6<r7) && (r7<1.0);
+  }
 };
 template<typename T2>
 std::vector<T2> const Objective_Fun43<T2>::v_start =
@@ -158,6 +172,20 @@ struct Objective_Fun52 {
     result[6] = p(r6)  - 1.0;
     result[7] = p(1.0) - 1.0;
     result[8] = p(r7)  - p(H);
+  }
+  /** Check order of roots
+   *
+   *  For 5-2, the correct order is
+   *  0<r1<r2<r3<r4<r5<L<H<r6<r7<1
+   */
+  bool correct_order_of_roots(std::vector<T2> const & v) const {
+    const T2 c1 = v[0], c2 = v[1], r1 = v[2];
+    const T2 r2 = v[3], r3 = v[4], r4 = v[5];
+    const T2 r5 = v[6], r6 = v[7], r7 = v[8];
+    return
+      (0<r1) && (r1<r2) && (r2<r3) && (r3<r4) && (r4<r5) && (r5<L) &&
+      (L<H) &&
+      (H<r6) && (r6<r7) && (r7<1.0);
   }
 };
 template<typename T2>
@@ -199,6 +227,20 @@ struct Objective_Fun61 {
     result[7] = p(1.0) - p(H);
     result[8] = p(r7)  - 1.0;
   }
+  /** Check order of roots
+   *
+   *  For 6-1, the correct order is
+   *  0<r1<r2<r3<r4<r5<r6<L<H<r7<1
+   */
+  bool correct_order_of_roots(std::vector<T2> const & v) const {
+    const T2 c1 = v[0], c2 = v[1], r1 = v[2];
+    const T2 r2 = v[3], r3 = v[4], r4 = v[5];
+    const T2 r5 = v[6], r6 = v[7], r7 = v[8];
+    return
+      (0<r1) && (r1<r2) && (r2<r3) && (r3<r4) && (r4<r5) && (r5<r6) && (r6<L) &&
+      (L<H) &&
+      (H<r7) && (r7<1.0);
+  }
 };
 template<typename T2>
 std::vector<T2> const Objective_Fun61<T2>::v_start =
@@ -239,6 +281,18 @@ struct Objective_Fun70 {
     result[7] = p(r7);
     result[8] = p(1.0) - 1.0;
   }
+  /** Check order of roots
+   *
+   *  For 7-0, the correct order is
+   *  0<r1<r2<r3<r4<r5<r6<r7<L<H<1
+   */
+  bool correct_order_of_roots(std::vector<T2> const & v) const {
+    const T2 c1 = v[0], c2 = v[1], r1 = v[2];
+    const T2 r2 = v[3], r3 = v[4], r4 = v[5];
+    const T2 r5 = v[6], r6 = v[7], r7 = v[8];
+    return
+      (0<r1) && (r1<r2) && (r2<r3) && (r3<r4) && (r4<r5) && (r5<r6) && (r6<r7) && (r7<L);
+  }
 };
 template<typename T2>
 std::vector<T2> const Objective_Fun70<T2>::v_start =
@@ -275,6 +329,19 @@ struct Objective_Fun40 {
     result[3] = p(r1) - p(r3);
     result[4] = p(r1) - p(L);
     result[5] = p(1)  - 1.0;
+  }
+  /** Check order of roots
+   *
+   *  For 4-0, the correct order is
+   *  0<r1<r2<r3<r4<L<H<r5=r6=r7=1
+   */
+  bool correct_order_of_roots(std::vector<T2> const & v) const {
+    std::cout << v.size() << std::endl;
+    const T2 c1 = v[0], c2 = v[1], r1 = v[2];
+    const T2 r2 = v[3], r3 = v[4], r4 = v[5];
+    // Note that v has only 6 elements in the 4-0 case (r5=r6=r7=1)
+    return
+      (0<r1) && (r1<r2) && (r2<r3) && (r3<r4) && (r4<L);
   }
 };
 template<typename T2>

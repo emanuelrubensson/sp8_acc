@@ -21,6 +21,8 @@ static void test_homotopy_solver(typename Objective_fun::value_type L_target,
   std::vector<value_type> tmp;
   objfun.fun(v,tmp);
   assert(std::all_of(tmp.begin(), tmp.end(), [residual_tolerance](value_type el){return std::abs(el)<residual_tolerance;}));
+  // Check that order of roots is correct
+  assert( objfun.correct_order_of_roots(v) );
   //  for (int ind = 0;ind < v.size();ind++)    
   //    std::cout << v[ind] << std::endl;
 }
@@ -45,7 +47,7 @@ int main(int argc, char* const  argv[]){
 						 dv_tolerance_relative);
   L_target = 0.97;
   H_target = 0.98;
-  test_homotopy_solver<Objective_Fun61<double> >(L_target,
+  test_homotopy_solver<Objective_Fun70<double> >(L_target,
 						 H_target,
 						 dv_tolerance_relative);
   std::cout << argv[0] << " finished OK!" << std::endl;
