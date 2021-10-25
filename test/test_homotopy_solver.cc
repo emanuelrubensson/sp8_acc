@@ -35,5 +35,8 @@ int main(int argc, char* const  argv[]){
   test_homotopy_solver<Objective_Fun43<double> >(L_target,
 						 H_target,
 						 dv_tolerance_relative);
+  test_homotopy_solver<Objective_Fun52<double> >(L_target,
+						 H_target,
+						 dv_tolerance_relative);
   std::cout << argv[0] << " finished OK!" << std::endl;
 }
