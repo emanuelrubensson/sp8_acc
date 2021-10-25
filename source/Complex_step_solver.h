@@ -1,5 +1,6 @@
 #ifndef COMPLEX_STEP_SOLVER_HEADER
 #define COMPLEX_STEP_SOLVER_HEADER
+#include <iostream>
 #include <cassert>
 #include <vector>
 #include <complex>
@@ -66,6 +67,8 @@ struct Complex_step_solver {
     int ldb = n;
     int info;
     gesv(&n, &nrhs, a, &lda, ipiv, b, &ldb, &info);
+    if (info != 0)
+      std::cout << "gesv failed with n = " << n << ", info = " << info << std::endl;
     assert(info == 0);
     // Ok we have vnew = inv(J)*fun(v)
     auto compare_abs = [](value_type a, value_type b) { return std::abs(a) < std::abs(b); };
