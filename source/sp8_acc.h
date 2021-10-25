@@ -310,8 +310,8 @@ template<typename T2>
 struct Objective_Fun40 {
   typedef T2 value_type;
   static std::vector<value_type> const v_start;
-  static const value_type constexpr L_start = 0.55;
-  static const value_type constexpr H_start = 0.65;
+  static const value_type constexpr L_start = 0.5;
+  static const value_type constexpr H_start = 1.0; // not used
   const value_type L;
   const value_type H;
   Objective_Fun40(value_type const & L, value_type const & H)
@@ -336,7 +336,6 @@ struct Objective_Fun40 {
    *  0<r1<r2<r3<r4<L<H<r5=r6=r7=1
    */
   bool correct_order_of_roots(std::vector<T2> const & v) const {
-    std::cout << v.size() << std::endl;
     const T2 c1 = v[0], c2 = v[1], r1 = v[2];
     const T2 r2 = v[3], r3 = v[4], r4 = v[5];
     // Note that v has only 6 elements in the 4-0 case (r5=r6=r7=1)
@@ -344,15 +343,14 @@ struct Objective_Fun40 {
       (0<r1) && (r1<r2) && (r2<r3) && (r3<r4) && (r4<L);
   }
 };
-// FIXME: Starting values below are from 4-3 case (but it seems to work anyway).
 template<typename T2>
 std::vector<T2> const Objective_Fun40<T2>::v_start =
-  {-3.828330354372377e+04, // c1
-   0.000000000000000e+00,  // c2
-   3.630457073236520e-02,  // r1
-   1.391234727632784e-01,  // r2
-   2.902225497081609e-01,  // r3
-   4.558182467167558e-01}; // r4
+  {-3082.84741694587,     // c1
+   -2.52435489670693e-29, // c2
+   0.0366703565717832,	  // r1
+   0.139392693385197,	  // r2
+   0.285519637000744,	  // r3
+   0.431541718562603};	  // r4
 
 template<typename T2>
 struct Objective_Fun50 {
