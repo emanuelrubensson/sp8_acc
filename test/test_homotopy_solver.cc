@@ -1,4 +1,6 @@
 #include <iostream>
+#include <iomanip>
+
 #include <cassert>
 #include "sp8_acc.h"
 
@@ -24,20 +26,23 @@ static void test_homotopy_solver(typename Objective_fun::value_type L_target,
   // Check that order of roots is correct
   assert( objfun.correct_order_of_roots(v) );
   //  for (int ind = 0;ind < v.size();ind++)    
-  //    std::cout << v[ind] << std::endl;
+  //    std::cout << std::setprecision(15) << v[ind] << std::endl;
 }
 
 int main(int argc, char* const  argv[]){
   double L_target = 0.5;
   double H_target = 0.6;
   double dv_tolerance_relative = 1e-10;
-  test_homotopy_solver<Objective_Fun40<double> >(L_target,
-						 H_target,
-						 dv_tolerance_relative);
   test_homotopy_solver<Objective_Fun43<double> >(L_target,
 						 H_target,
 						 dv_tolerance_relative);
   test_homotopy_solver<Objective_Fun52<double> >(L_target,
+						 H_target,
+						 dv_tolerance_relative);
+  test_homotopy_solver<Objective_Fun40<double> >(L_target,
+						 H_target,
+						 dv_tolerance_relative);
+  test_homotopy_solver<Objective_Fun50<double> >(L_target,
 						 H_target,
 						 dv_tolerance_relative);
   L_target = 0.94;

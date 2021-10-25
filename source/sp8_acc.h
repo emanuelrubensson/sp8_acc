@@ -344,6 +344,7 @@ struct Objective_Fun40 {
       (0<r1) && (r1<r2) && (r2<r3) && (r3<r4) && (r4<L);
   }
 };
+// FIXME: Starting values below are from 4-3 case (but it seems to work anyway).
 template<typename T2>
 std::vector<T2> const Objective_Fun40<T2>::v_start =
   {-3.828330354372377e+04, // c1
@@ -352,5 +353,54 @@ std::vector<T2> const Objective_Fun40<T2>::v_start =
    1.391234727632784e-01,  // r2
    2.902225497081609e-01,  // r3
    4.558182467167558e-01}; // r4
+
+template<typename T2>
+struct Objective_Fun50 {
+  typedef T2 value_type;
+  static std::vector<value_type> const v_start;
+  static const value_type constexpr L_start = 0.5;
+  static const value_type constexpr H_start = 1.0; // not used
+  const value_type L;
+  const value_type H;
+  Objective_Fun50(value_type const & L, value_type const & H)
+  :L(L),H(H) {}
+  template<typename T1>
+  void fun(std::vector<T1> const & v, std::vector<T1> & result) const {
+    const T1 c1 = v[0], c2 = v[1], r1 = v[2];
+    const T1 r2 = v[3], r3 = v[4], r4 = v[5];
+    const T1 r5 = v[6];
+    auto p = [&](T1 x){return sp8(v,x);};
+    result.resize(7);
+    result[0] = p(0.0) - p(L);
+    result[1] = p(r2)  - p(L);
+    result[2] = p(r4)  - p(L);
+    result[3] = p(r1);
+    result[4] = p(r3);
+    result[5] = p(r5);
+    result[6] = p(1.0) - 1.0;
+  }
+  /** Check order of roots
+   *
+   *  For 5-0, the correct order is
+   *  0<r1<r2<r3<r4<r5<L<H<r6=r7=1
+   */
+  bool correct_order_of_roots(std::vector<T2> const & v) const {
+    const T2 c1 = v[0], c2 = v[1], r1 = v[2];
+    const T2 r2 = v[3], r3 = v[4], r4 = v[5];
+    const T2 r5 = v[6];
+    // Note that v has only 7 elements in the 5-0 case (r6=r7=1)
+    return
+      (0<r1) && (r1<r2) && (r2<r3) && (r3<r4) && (r4<r5) && (r5<L);
+  }
+};
+template<typename T2>
+std::vector<T2> const Objective_Fun50<T2>::v_start =
+  {77.3871356083815,     // c1
+   5.64517407970927e-06, // c2
+   0.109658351153969,	 // r1
+   0.218907773104264,	 // r2
+   0.326760934389801,	 // r3
+   0.417867208776325,	 // r4
+   0.478661950866626};	 // r5
 
 #endif
