@@ -89,6 +89,7 @@ struct Homotopy_solver {
     while (dv_maxabs/v_maxabs > dv_tolerance_relative) {
       solver.step_newton(v,tmp,v_maxabs,dv_maxabs);
       v.swap(tmp);
+      assert( objfun.correct_order_of_roots(v) );
     }
   }
 };
@@ -395,13 +396,13 @@ struct Objective_Fun50 {
 };
 template<typename T2>
 std::vector<T2> const Objective_Fun50<T2>::v_start =
-  {2004.35036453061,    // c1
-   0.00278073628315719,	// c2
-   0.0287481761625353,	// r1
-   0.109670660767178,	// ...
-   0.227117821345137,
-   0.35569866417358,
-   0.460649364254723};	// r5
+  {1974.00119732597,    // c1
+   0.00267129139635331, // c2
+   0.028633198688273,   // r1
+   0.109223055107629,   // ...
+   0.226156115705252,
+   0.354106988313488,
+   0.458452413536081};  // r5
 
 template<typename T2>
 struct Objective_Fun60 {
