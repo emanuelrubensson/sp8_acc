@@ -79,13 +79,35 @@ void sp8_eval(double *b,int n,
 
   // The matrix operations with memory slot usage
   // mem1 = A^2;
+  // TODO
+
   // mem2 = c4*A2+c3*A;
+  for (unsigned int ind = 0; ind<n*n; ind++)
+    mem2[ind]=c4*mem1[ind]+c3*A[ind];
+
   // mem3 = mem1 * mem2;
+  // TODO
+
   // mem2 = d1*A+d2*mem1+mem3;
+  for (unsigned int ind = 0; ind<n*n; ind++)
+    mem2[ind]=d1*A[ind]+d2*mem1[ind]+mem3[ind];
+
   // A  = f0*I+f1*A+f2*mem1+e0*mem3;
+  for (unsigned int ind = 0; ind<n*n; ind++)
+    A[ind]=f1*A[ind]+f2*mem1[ind]+e0*mem3[ind];
+  for (unsigned int ind = 0; ind<n; ind++) // Add identity multiple
+    A[ind+ind*n]=A[ind+ind*n]+f0;
+
   // mem1 = e2*mem1+mem3;
+  for (unsigned int ind = 0; ind<n*n; ind++)
+    mem1[ind]=e2*mem1[ind]+mem3[ind];
+
   // mem3 = mem1*mem2;
+  // TODO
+
   // A = A + mem3;
+  for (unsigned int ind = 0; ind<n*n; ind++)
+    A[ind]=A[ind]+mem3[ind];
 
 
   return;
