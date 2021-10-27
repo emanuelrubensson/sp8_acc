@@ -102,6 +102,8 @@ struct Homotopy_solver {
       }
     }
     assert(dv_relative < std::sqrt(std::numeric_limits<value_type>::epsilon()));
+    // Add ones in the end (for 4-0, 5-0, and 6-0 cases).
+    v.resize(9, 1.0);
   }
 };
 

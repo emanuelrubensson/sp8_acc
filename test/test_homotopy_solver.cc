@@ -11,6 +11,7 @@ static void test_homotopy_solver(typename Objective_fun::value_type L_target,
   std::vector<value_type> v;
   Homotopy_solver<Objective_fun> solver;
   solver(L_target, H_target, v);
+  assert(v.size() == 9);
   // Check that all residual elements abs values are below some tolerance
   value_type residual_tolerance = std::sqrt(std::numeric_limits<value_type>::epsilon()); // this is ad hoc
   Objective_fun objfun(L_target,H_target);
