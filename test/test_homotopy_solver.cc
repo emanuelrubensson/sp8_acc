@@ -6,19 +6,18 @@
 
 template<typename Objective_fun>
 static void test_homotopy_solver(typename Objective_fun::value_type L_target,
-				 typename Objective_fun::value_type H_target,
-				 typename Objective_fun::value_type dv_tolerance_relative) {
+				 typename Objective_fun::value_type H_target) {
   typedef typename Objective_fun::value_type value_type;
   std::vector<value_type> v;
   value_type v_maxabs;
   value_type dv_maxabs;
   Homotopy_solver<Objective_fun> solver;
-  solver(L_target, H_target, dv_tolerance_relative, v, v_maxabs,dv_maxabs);
+  solver(L_target, H_target, v, v_maxabs,dv_maxabs);
   // Check solution
-  // Check that step size satisfies tolerance
-  assert(dv_maxabs/v_maxabs < dv_tolerance_relative);
+  // Check that step size is small
+  assert(dv_maxabs/v_maxabs < std::sqrt(std::numeric_limits<value_type>::epsilon()));
   // Check that all residual elements abs values are below some tolerance
-  value_type residual_tolerance = dv_tolerance_relative; // this is ad hoc
+  value_type residual_tolerance = std::sqrt(std::numeric_limits<value_type>::epsilon()); // this is ad hoc
   Objective_fun objfun(L_target,H_target);
   std::vector<value_type> tmp;
   objfun.fun(v,tmp);
@@ -32,31 +31,16 @@ static void test_homotopy_solver(typename Objective_fun::value_type L_target,
 int main(int argc, char* const  argv[]){
   double L_target = 0.5;
   double H_target = 0.6;
-  double dv_tolerance_relative = 1e-10;
-  test_homotopy_solver<Objective_Fun43<double> >(L_target,
-						 H_target,
-						 dv_tolerance_relative);
-  test_homotopy_solver<Objective_Fun52<double> >(L_target,
-						 H_target,
-						 dv_tolerance_relative);
-  test_homotopy_solver<Objective_Fun40<double> >(L_target,
-						 H_target,
-						 dv_tolerance_relative);
-  test_homotopy_solver<Objective_Fun50<double> >(L_target,
-						 H_target,
-						 dv_tolerance_relative);
+  test_homotopy_solver<Objective_Fun43<double> >(L_target, H_target);
+  test_homotopy_solver<Objective_Fun52<double> >(L_target, H_target);
+  test_homotopy_solver<Objective_Fun40<double> >(L_target, H_target);
+  test_homotopy_solver<Objective_Fun50<double> >(L_target, H_target);
   L_target = 0.94;
   H_target = 0.95;
-  test_homotopy_solver<Objective_Fun61<double> >(L_target,
-						 H_target,
-						 dv_tolerance_relative);
-  test_homotopy_solver<Objective_Fun60<double> >(L_target,
-						 H_target,
-						 dv_tolerance_relative);
+  test_homotopy_solver<Objective_Fun61<double> >(L_target, H_target);
+  test_homotopy_solver<Objective_Fun60<double> >(L_target, H_target);
   L_target = 0.97;
   H_target = 0.98;
-  test_homotopy_solver<Objective_Fun70<double> >(L_target,
-						 H_target,
-						 dv_tolerance_relative);
+  test_homotopy_solver<Objective_Fun70<double> >(L_target, H_target);
   std::cout << argv[0] << " finished OK!" << std::endl;
 }

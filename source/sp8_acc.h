@@ -64,7 +64,6 @@ struct Homotopy_solver {
   typedef typename Objective_function::value_type value_type;
   void operator()(value_type const L_target,
 		  value_type const H_target,
-		  value_type const dv_tolerance_relative,
 		  std::vector<value_type> & v,
 		  value_type & v_maxabs,
 		  value_type & dv_maxabs) {
@@ -86,11 +85,23 @@ struct Homotopy_solver {
     }
     Objective_function objfun(L_target,H_target);
     Complex_step_solver<Objective_function> solver(objfun);
-    while (dv_maxabs/v_maxabs > dv_tolerance_relative) {
+    value_type dv_relative = dv_maxabs/v_maxabs;
+    value_type dv_relative_prev;
+    int max_iter = 10;
+    for (int ind = 0;ind < max_iter;ind++) {
+      dv_relative_prev = dv_relative;
       solver.step_newton(v,tmp,v_maxabs,dv_maxabs);
       v.swap(tmp);
       assert( objfun.correct_order_of_roots(v) );
+      dv_relative = dv_maxabs/v_maxabs;
+      if (dv_relative < std::sqrt(std::numeric_limits<value_type>::epsilon())) {
+	// Ok, we are at least "half way" to machine epsilon
+	// Break if error is not decreasing substantially
+	if (dv_relative > dv_relative_prev/10)
+	  break;
+      }
     }
+    assert(dv_relative < std::sqrt(std::numeric_limits<value_type>::epsilon()));
   }
 };
 
