@@ -59,8 +59,15 @@ T sp8(std::vector<T> const & v, T const & x) {
   return res;
 }
 
+template<typename value_type>
+struct Homotopy_solver_base {
+  virtual void operator()(value_type const L_target,
+			  value_type const H_target,
+			  std::vector<value_type> & v) = 0;
+};
+
 template<class Objective_function>
-struct Homotopy_solver {
+struct Homotopy_solver: public Homotopy_solver_base<typename Objective_function::value_type> {
   typedef typename Objective_function::value_type value_type;
   void operator()(value_type const L_target,
 		  value_type const H_target,
@@ -467,5 +474,41 @@ std::vector<T2> const Objective_Fun60<T2>::v_start =
    0.486538327322085,
    0.669757555005894,
    0.816704819712282};	  // r6
+
+
+template<typename value_type>
+Homotopy_solver_base<value_type>* homotopy_solver_factory(unsigned int roots_left, unsigned int roots_right) {
+  assert(roots_left  <= 7);
+  assert(roots_right <= 7);
+  Homotopy_solver_base<value_type>* solver;
+  auto switch_pair = [](unsigned int x, unsigned int y){return (x<<3)+y;};
+  switch(switch_pair(roots_left, roots_right)) {
+  case switch_pair(4,0):
+    solver = new Homotopy_solver<Objective_Fun40<value_type> >;
+    break;
+  case switch_pair(5,0):
+    solver = new Homotopy_solver<Objective_Fun50<value_type> >;
+    break;
+  case switch_pair(6,0):
+    solver = new Homotopy_solver<Objective_Fun60<value_type> >;
+    break;
+  case switch_pair(7,0):
+    solver = new Homotopy_solver<Objective_Fun70<value_type> >;
+    break;
+  case switch_pair(4,3):
+    solver = new Homotopy_solver<Objective_Fun43<value_type> >;
+    break;
+  case switch_pair(5,2):
+    solver = new Homotopy_solver<Objective_Fun52<value_type> >;
+    break;
+  case switch_pair(6,1):
+    solver = new Homotopy_solver<Objective_Fun61<value_type> >;
+    break;
+  default:
+    std::cout << "homotopy_solver_factory not implemented for <left-right> = <" << roots_left << "-" << roots_right << ">" << std::endl;
+    std::exit(1);
+  }
+  return solver;
+}
 
 #endif
