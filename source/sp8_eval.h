@@ -1,6 +1,18 @@
 #include <vector>
 #include <cmath>
 #include <complex>
+#include<cblas.h>
+
+//
+//extern "C" void dgemm_(const int *n, const int *nrhs, double *a, const int *lda, int *ipiv, double *b, const int *ldb, int *info);
+//void dgemm(const int *n, const int *nrhs, double *a, const int *lda,
+//	  int *ipiv, double *b, const int *ldb, int *info) {
+//  cblas_dgemm(CblasColMajor, CblasNoTrans, CblasNoTrans, n, n, n,
+//            ONE, memslots[2], n, memslots[3], n,
+//            ZERO, memslots[0], n);
+//  dgemm_(n, nrhs, a, lda, ipiv, b, ldb, info);
+//}
+//
 
 void sp8_eval(double *b,int n,
 	      double *A, double *mem1, double *mem2, double *mem3){
@@ -79,14 +91,19 @@ void sp8_eval(double *b,int n,
 
   // The matrix operations with memory slot usage
   // mem1 = A^2;
-  // TODO
+  cblas_dgemm(CblasColMajor, CblasNoTrans, CblasNoTrans, n, n, n,
+            1.0, A, n,A, n,
+            0-0, mem1, n);
 
   // mem2 = c4*A2+c3*A;
   for (unsigned int ind = 0; ind<n*n; ind++)
     mem2[ind]=c4*mem1[ind]+c3*A[ind];
 
+
   // mem3 = mem1 * mem2;
-  // TODO
+  cblas_dgemm(CblasColMajor, CblasNoTrans, CblasNoTrans, n, n, n,
+            1.0, mem1, n,mem2, n,
+            0-0, mem3, n);
 
   // mem2 = d1*A+d2*mem1+mem3;
   for (unsigned int ind = 0; ind<n*n; ind++)
@@ -103,7 +120,9 @@ void sp8_eval(double *b,int n,
     mem1[ind]=e2*mem1[ind]+mem3[ind];
 
   // mem3 = mem1*mem2;
-  // TODO
+  cblas_dgemm(CblasColMajor, CblasNoTrans, CblasNoTrans, n, n, n,
+            1.0, mem1, n,mem2, n,
+            0-0, mem3, n);
 
   // A = A + mem3;
   for (unsigned int ind = 0; ind<n*n; ind++)
