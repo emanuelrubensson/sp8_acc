@@ -9,13 +9,8 @@ static void test_homotopy_solver(typename Objective_fun::value_type L_target,
 				 typename Objective_fun::value_type H_target) {
   typedef typename Objective_fun::value_type value_type;
   std::vector<value_type> v;
-  value_type v_maxabs;
-  value_type dv_maxabs;
   Homotopy_solver<Objective_fun> solver;
-  solver(L_target, H_target, v, v_maxabs,dv_maxabs);
-  // Check solution
-  // Check that step size is small
-  assert(dv_maxabs/v_maxabs < std::sqrt(std::numeric_limits<value_type>::epsilon()));
+  solver(L_target, H_target, v);
   // Check that all residual elements abs values are below some tolerance
   value_type residual_tolerance = std::sqrt(std::numeric_limits<value_type>::epsilon()); // this is ad hoc
   Objective_fun objfun(L_target,H_target);

@@ -64,9 +64,9 @@ struct Homotopy_solver {
   typedef typename Objective_function::value_type value_type;
   void operator()(value_type const L_target,
 		  value_type const H_target,
-		  std::vector<value_type> & v,
-		  value_type & v_maxabs,
-		  value_type & dv_maxabs) {
+		  std::vector<value_type> & v) {
+    value_type v_maxabs;
+    value_type dv_maxabs;
     v = Objective_function::v_start;
     value_type L = Objective_function::L_start;
     value_type H = Objective_function::H_start;
