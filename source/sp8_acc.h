@@ -59,6 +59,37 @@ T sp8(std::vector<T> const & v, T const & x) {
   return res;
 }
 
+template<typename T>
+void get_sp8_monomial_coefficients(std::vector<T> const & v,
+				   std::vector<T> & mc) {
+  const T c1 = v[0], c2 = v[1], r1 = v[2];
+  const T r2 = v[3], r3 = v[4], r4 = v[5];
+  const T r5 = v[6], r6 = v[7], r7 = v[8];
+  mc.assign(9,0.0); // Fill with 9 zeros
+  mc[0] = 1.0; // x8 coeff
+  for(int i = 0; i < 7; i++) {
+    mc[1] = mc[1] - v[i+2]; // x7 coeff
+    for(int j = i+1; j < 7; j++) {
+      mc[2] = mc[2] + v[i+2]*v[j+2]; // x6 coeff
+      for(int k = j+1; k < 7; k++) {
+	mc[3] = mc[3] - v[i+2]*v[j+2]*v[k+2]; // x5 coeff
+	for(int l = k+1; l < 7; l++) {
+	  mc[4] = mc[4] + v[i+2]*v[j+2]*v[k+2]*v[l+2]; // x4 coeff
+	  for(int m = l+1; m < 7; m++) {
+	    mc[5] = mc[5] - v[i+2]*v[j+2]*v[k+2]*v[l+2]*v[m+2]; // x3 coeff
+	    for(int n = m+1; n < 7; n++)
+	      mc[6] = mc[6] + v[i+2]*v[j+2]*v[k+2]*v[l+2]*v[m+2]*v[n+2]; // x2 coeff
+	  }
+	}
+      }
+    }
+  }
+  mc[7] = -r1*r2*r3*r4*r5*r6*r7; // x coeff
+  for(int ind = 0; ind < 8; ind++)
+    mc[ind] = mc[ind]*c1*(1.0/(8.0-(T)ind));
+  mc[8] = c2;
+}
+
 template<typename value_type>
 struct Homotopy_solver_base {
   virtual void operator()(value_type const L_target,
