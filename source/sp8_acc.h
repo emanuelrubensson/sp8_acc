@@ -60,6 +60,46 @@ T sp8(std::vector<T> const & v, T const & x) {
 }
 
 template<typename T>
+T sp8_prim(std::vector<T> const & v, T const & x) {
+  const T c1 = v[0], c2 = v[1], r1 = v[2];
+  const T r2 = v[3], r3 = v[4], r4 = v[5];
+  const T r5 = v[6], r6 = v[7], r7 = v[8];
+  return c1*(x-r1)*(x-r2)*(x-r3)*(x-r4)*(x-r5)*(x-r6)*(x-r7);
+}
+
+/** Get polynomial corresponding to flipped ([0,1]) interval.
+ *
+ *  p_flipped(x) = 1-p(1-x)
+ *
+ * Parameters given by
+ *   r_flipped(i) = 1-r(8-i), i = 1,...,7
+ *
+ *   p_flipped'(0) = p'(1) -->
+ *     -c1_flipped*prod_i(r_flipped(i)) = p'(1)
+ *
+ *   p_flipped(0) = 1-p(1) -->
+ *     c2_flipped = 1-p(1)
+ */
+template<typename T>
+void get_flipped_polynomial(std::vector<T> const & v, std::vector<T> & v_flipped) {
+  const T c1 = v[0], c2 = v[1], r1 = v[2];
+  const T r2 = v[3], r3 = v[4], r4 = v[5];
+  const T r5 = v[6], r6 = v[7], r7 = v[8];
+  v_flipped.resize(9);
+  T r_product_flipped = 1.0;
+  for(unsigned int ind = 0; ind < 7; ind++) {
+    v_flipped[ind+2] = 1-v[8-ind];
+    r_product_flipped = r_product_flipped*v_flipped[ind+2];
+  }
+  // p_flipped'(0) = p'(1)
+  T c1_flipped = -(1.0/r_product_flipped)*sp8_prim(v,(T)1.0);
+  T c2_flipped = 1 - sp8(v,(T)1.0);
+  v_flipped[0] = c1_flipped;
+  v_flipped[1] = c2_flipped;
+}
+
+
+template<typename T>
 void get_sp8_monomial_coefficients(std::vector<T> const & v,
 				   std::vector<T> & mc) {
   const T c1 = v[0], c2 = v[1], r1 = v[2];
