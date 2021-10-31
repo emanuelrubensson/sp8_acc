@@ -73,10 +73,8 @@ T sp8_prim(std::vector<T> const & v, T const & x) {
  *
  * Parameters given by
  *   r_flipped(i) = 1-r(8-i), i = 1,...,7
- *
- *   p_flipped'(0) = p'(1) -->
- *     -c1_flipped*prod_i(r_flipped(i)) = p'(1)
- *
+ *   p_flipped'(1-x) = p'(x) -->
+ *     c1_flipped*prod_i(1-r_flipped(i)-x) = p'(x)
  *   p_flipped(0) = 1-p(1) -->
  *     c2_flipped = 1-p(1)
  */
@@ -86,13 +84,30 @@ void get_flipped_polynomial(std::vector<T> const & v, std::vector<T> & v_flipped
   const T r2 = v[3], r3 = v[4], r4 = v[5];
   const T r5 = v[6], r6 = v[7], r7 = v[8];
   v_flipped.resize(9);
-  T r_product_flipped = 1.0;
-  for(unsigned int ind = 0; ind < 7; ind++) {
+  // Compute values r_flipped(i) = 1-r(8-i), i = 1,...,7
+  for(unsigned int ind = 0; ind < 7; ind++)
     v_flipped[ind+2] = 1-v[8-ind];
-    r_product_flipped = r_product_flipped*v_flipped[ind+2];
+  // Find x value in [0,1] as far away from r_i, i=1,...,7 as possible
+  // Candidates are 0, (r1+r2)/2, (r2+r3)/2, ..., (r6+r7)/2, 1.0
+  T max_dist = r1;
+  T x = 0;
+  for(unsigned int ind = 0; ind < 6; ind++) {
+    T dist = (v[ind+3]-v[ind+2])/2;
+    if (dist > max_dist) {
+      max_dist = dist;
+      x = v[ind+2]+dist;
+    }
   }
-  // p_flipped'(0) = p'(1)
-  T c1_flipped = -(1.0/r_product_flipped)*sp8_prim(v,(T)1.0);
+  if (1-r7 > max_dist) {
+    max_dist = 1-r7;
+    x = 1.0;
+  }
+  // Compute product
+  T r_product_flipped = 1.0;
+  for(unsigned int ind = 0; ind < 7; ind++)
+    r_product_flipped = r_product_flipped*(1-v_flipped[ind+2]-x);
+  // p_flipped'(1-x) = p'(x)
+  T c1_flipped = sp8_prim(v,x)/r_product_flipped;
   T c2_flipped = 1 - sp8(v,(T)1.0);
   v_flipped[0] = c1_flipped;
   v_flipped[1] = c2_flipped;
