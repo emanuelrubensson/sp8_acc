@@ -597,4 +597,19 @@ Homotopy_solver_base<value_type>* homotopy_solver_factory(unsigned int roots_lef
   return solver;
 }
 
+template<typename T>
+void get_sp8_params(const T L, const T H,
+		    const int left, const int right,
+		    std::vector<T> & v) {
+  if (left < right) {
+    std::vector<T> v_tmp;
+    get_sp8_params(1-H, 1-L, right, left,  v_tmp);
+    get_flipped_polynomial(v_tmp, v); // v is flipped
+    return;
+  }
+  Homotopy_solver_base<double>* solver = homotopy_solver_factory<double>(left, right);
+  (*solver)(L, H, v);
+  delete solver;
+}
+
 #endif

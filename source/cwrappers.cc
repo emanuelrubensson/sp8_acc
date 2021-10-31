@@ -6,9 +6,7 @@ extern "C" {
 		      const int roots_left, const int roots_right,
 		      double* v_output) {
     std::vector<double> v;
-    Homotopy_solver_base<double>* solver = homotopy_solver_factory<double>(roots_left, roots_right);
-    (*solver)(L, H, v);
-    delete solver;
+    get_sp8_params(L, H, roots_left, roots_right, v);
     assert(v.size() == 9);
     std::copy_n(v.begin(), 9, v_output);
   }
