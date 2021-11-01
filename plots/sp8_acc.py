@@ -14,3 +14,11 @@ get_sp8_monomial_coefficients = sp8_cwrappers_lib.get_sp8_monomial_coefficients
 get_sp8_monomial_coefficients.restype = None
 get_sp8_monomial_coefficients.argtypes = [ndpointer(ctypes.c_double, ndim=1, shape=(9), flags="C_CONTIGUOUS"),
                                           ndpointer(ctypes.c_double, ndim=1, shape=(9), flags="C_CONTIGUOUS")]
+
+sp8_prim = sp8_cwrappers_lib.sp8_prim
+sp8_prim.restype = ctypes.c_double
+sp8_prim.argtypes = [ndpointer(ctypes.c_double, ndim=1, shape=(9), flags="C_CONTIGUOUS"),ctypes.c_double]
+
+sp8 = sp8_cwrappers_lib.sp8
+sp8.restype = ctypes.c_double
+sp8.argtypes = [ndpointer(ctypes.c_double, ndim=1, shape=(9), flags="C_CONTIGUOUS"),ctypes.c_double]
