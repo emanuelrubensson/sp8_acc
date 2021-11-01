@@ -163,7 +163,7 @@ struct Homotopy_solver: public Homotopy_solver_base<typename Objective_function:
     v = Objective_function::v_start;
     value_type L = Objective_function::L_start;
     value_type H = Objective_function::H_start;
-    int nsteps = 100;
+    int nsteps = 200;
     value_type L_step = (L_target-L)/nsteps;
     value_type H_step = (H_target-H)/nsteps;
     std::vector<value_type> tmp;
