@@ -22,4 +22,19 @@ extern "C" {
     get_sp8_monomial_coefficients(v, mc_vec);
     std::copy_n(mc_vec.begin(), 9, mc);
   }
+
+  double sp8(double const * v_input, double const x) {
+    std::vector<double> v;
+    v.resize(9);
+    std::copy_n(v_input, 9, v.begin());
+    return sp8(v, x);
+  }
+
+  double sp8_prim(double const * v_input, double const x) {
+    std::vector<double> v;
+    v.resize(9);
+    std::copy_n(v_input, 9, v.begin());
+    return sp8_prim(v, x);
+  }
+
 }
