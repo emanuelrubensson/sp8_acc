@@ -23,7 +23,6 @@
  *         mem1, mem2, mem3 workspace for the method of the same size as A
  * Output: A  
  */
-
 void sp8_eval(double *b,int n,
 	      double *A, double *mem1, double *mem2, double *mem3){
   double b0=b[0];
