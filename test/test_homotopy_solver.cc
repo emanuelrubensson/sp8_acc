@@ -60,4 +60,5 @@ int main(int argc, char* const  argv[]){
   }
 
   std::cout << argv[0] << " finished OK!" << std::endl;
+  return 0;
 }
