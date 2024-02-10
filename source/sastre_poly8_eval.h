@@ -3,6 +3,12 @@
 #include <vector>
 #include <cmath>
 
+/** Proxy template for handling the special case where the 'matrix' is
+    a single floating point number. This template also provides a
+    template for the implementation of Matrix classes to be used with
+    sastre_poly_8_eval.
+    
+*/
 template<typename T_matrix_scalar>
 struct Scalar_proxy {
   T_matrix_scalar x;
@@ -11,8 +17,8 @@ struct Scalar_proxy {
     x = other.x;
     return *this;
   }
-  inline static Scalar_proxy<T_matrix_scalar> multiply_symm_product(Scalar_proxy<T_matrix_scalar> const & A,
-								    Scalar_proxy<T_matrix_scalar> const & B) {
+  inline static Scalar_proxy<T_matrix_scalar> multiply(Scalar_proxy<T_matrix_scalar> const & A,
+						       Scalar_proxy<T_matrix_scalar> const & B) {
     return Scalar_proxy(A.x*B.x);
   }
   inline void scale_and_add(T_matrix_scalar const a,
@@ -38,6 +44,11 @@ void sastre_poly_8_eval(std::vector<T_scalar> const & mc,
   x = X.x;
 }
 
+/** If the input matrix to sastre_poly_8_eval is symmetric, then all
+    intermediate matrices and the output matrix are also symmetric. In
+    this case symmetric matrix storage and computation may be used
+    throughout.
+ */
 template<typename T_scalar, typename T_matrix>
 void sastre_poly_8_eval(std::vector<T_scalar> const & mc,
 			T_matrix & A,
@@ -78,10 +89,10 @@ void sastre_poly_8_eval(std::vector<T_scalar> const & mc,
   const T_scalar e0 = (b3 - d1 * e2) / c3; // Not explicitly
 					   // documented by sastre?
   const T_scalar one = 1.0;
-  T_matrix M1 = T_matrix::multiply_symm_product(A, A); // M1 = A*A
+  T_matrix M1 = T_matrix::multiply(A, A);     // M1 = A*A
   T_matrix M2 = M1;                           // M2 = M1
   M2.scale_and_add(c4, c3, A);                // M2 = c4*M2 + c3*A
-  T_matrix M3 = T_matrix::multiply_symm_product(M1,M2); // M3 = M1*M2
+  T_matrix M3 = T_matrix::multiply(M1,M2);    // M3 = M1*M2
   M2 = M3;                                    // M2 = M3
   M2.scale_and_add(one, d2, M1);              // M2 = M2 + d2*M1
   M2.scale_and_add(one, d1, A);               // M2 = M2 + d1*A
@@ -89,7 +100,7 @@ void sastre_poly_8_eval(std::vector<T_scalar> const & mc,
   A.scale_and_add(one, e0, M3);               // A = A + e0*M3
   A.add_scaled_identity(f0);                  // A = A+f0*I
   M1.scale_and_add(e2, one, M3);              // M1 = e2*M1 + M3
-  M3 = T_matrix::multiply_symm_product(M1,M2); // M3 = M1*M2
+  M3 = T_matrix::multiply(M1,M2);             // M3 = M1*M2
   A.scale_and_add(one, one, M3);              // A = A + M3
 }
 
