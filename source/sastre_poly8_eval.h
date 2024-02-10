@@ -35,7 +35,7 @@ struct Scalar_proxy {
 };
 
 
-template<typename T_scalar, typename T_matrix_scalar>
+template<typename T_matrix_scalar, typename T_scalar>
 void sastre_poly_8_eval(std::vector<T_scalar> const & mc,
 			T_matrix_scalar & x,
 			std::true_type) {
@@ -49,7 +49,7 @@ void sastre_poly_8_eval(std::vector<T_scalar> const & mc,
     this case symmetric matrix storage and computation may be used
     throughout.
  */
-template<typename T_scalar, typename T_matrix>
+template<typename T_matrix, typename T_scalar>
 void sastre_poly_8_eval(std::vector<T_scalar> const & mc,
 			T_matrix & A,
 			std::false_type) {
@@ -105,7 +105,7 @@ void sastre_poly_8_eval(std::vector<T_scalar> const & mc,
 }
 
 
-template<typename T_scalar, typename T_matrix>
+template<typename T_matrix, typename T_scalar>
 void sastre_poly_8_eval(std::vector<T_scalar> const & mc,
 			T_matrix & x) {
   sastre_poly_8_eval(mc, x, std::is_floating_point<T_matrix>());
