@@ -12,14 +12,14 @@
 template<typename T_matrix_scalar>
 struct Scalar_proxy {
   T_matrix_scalar x;
-  Scalar_proxy(T_matrix_scalar const x) :x(x) {}
+  Scalar_proxy(T_matrix_scalar const x = T_matrix_scalar()) :x(x) {}
   inline Scalar_proxy operator=(Scalar_proxy const & other) {
     x = other.x;
     return *this;
   }
-  inline static Scalar_proxy<T_matrix_scalar> multiply(Scalar_proxy<T_matrix_scalar> const & A,
-						       Scalar_proxy<T_matrix_scalar> const & B) {
-    return Scalar_proxy(A.x*B.x);
+  inline void multiply(Scalar_proxy<T_matrix_scalar> const & A,
+		       Scalar_proxy<T_matrix_scalar> const & B) {
+    this->x = A.x*B.x;
   }
   inline void scale_and_add(T_matrix_scalar const a,
 			    T_matrix_scalar const b,
@@ -89,10 +89,12 @@ void sastre_poly_8_eval(std::vector<T_scalar> const & mc,
   const T_scalar e0 = (b3 - d1 * e2) / c3; // Not explicitly
 					   // documented by sastre?
   const T_scalar one = 1.0;
-  T_matrix M1 = T_matrix::multiply(A, A);     // M1 = A*A
+  T_matrix M1;
+  M1.multiply(A, A);                          // M1 = A*A
   T_matrix M2 = M1;                           // M2 = M1
   M2.scale_and_add(c4, c3, A);                // M2 = c4*M2 + c3*A
-  T_matrix M3 = T_matrix::multiply(M1,M2);    // M3 = M1*M2
+  T_matrix M3;
+  M3.multiply(M1,M2);                         // M3 = M1*M2
   M2 = M3;                                    // M2 = M3
   M2.scale_and_add(one, d2, M1);              // M2 = M2 + d2*M1
   M2.scale_and_add(one, d1, A);               // M2 = M2 + d1*A
@@ -100,7 +102,7 @@ void sastre_poly_8_eval(std::vector<T_scalar> const & mc,
   A.scale_and_add(one, e0, M3);               // A = A + e0*M3
   A.add_scaled_identity(f0);                  // A = A+f0*I
   M1.scale_and_add(e2, one, M3);              // M1 = e2*M1 + M3
-  M3 = T_matrix::multiply(M1,M2);             // M3 = M1*M2
+  M3.multiply(M1,M2);                         // M3 = M1*M2
   A.scale_and_add(one, one, M3);              // A = A + M3
 }
 
