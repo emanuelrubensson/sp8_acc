@@ -7,8 +7,10 @@
 #include <limits>
 #include <algorithm>
 
-extern "C" void dgesv_(const int *n, const int *nrhs, double *a, const int *lda, int *ipiv, double *b, const int *ldb, int *info);
-extern "C" void sgesv_(const int *n, const int *nrhs, float *a, const int *lda, int *ipiv, float *b, const int *ldb, int *info);
+extern "C" void dgesv_(const int *n, const int *nrhs, double *a, const int *lda,
+		       int *ipiv, double *b, const int *ldb, int *info);
+extern "C" void sgesv_(const int *n, const int *nrhs, float *a, const int *lda,
+		       int *ipiv, float *b, const int *ldb, int *info);
 void gesv(const int *n, const int *nrhs, double *a, const int *lda,
 	  int *ipiv, double *b, const int *ldb, int *info) {
   dgesv_(n, nrhs, a, lda, ipiv, b, ldb, info);
