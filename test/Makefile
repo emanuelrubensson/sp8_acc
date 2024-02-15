@@ -1,12 +1,18 @@
 TOPDIR=..
 SP8_ACC_INCL=-I$(realpath $(TOPDIR)/source)
-LIBS=-llapack
-all: test_homotopy_solver test_sp8_evaluation_scalar
+LIBS=-llapack -lblas
+all: test_homotopy_solver test_sp8_evaluation_scalar test_poly8_evaluation_matrix test_poly8_evaluation_matrix_symmetric
 
 test_homotopy_solver: test_homotopy_solver.cc
 	$(CXX) -std=c++17 $(SP8_ACC_INCL) -o $@ $^ $(LIBS)
 
 test_sp8_evaluation_scalar: test_sp8_evaluation_scalar.cc 
+	$(CXX) -std=c++17 $(SP8_ACC_INCL) -o $@ $^ $(LIBS)
+
+test_poly8_evaluation_matrix: test_poly8_evaluation_matrix.cc
+	$(CXX) -std=c++17 $(SP8_ACC_INCL) -o $@ $^ $(LIBS)
+
+test_poly8_evaluation_matrix_symmetric: test_poly8_evaluation_matrix_symmetric.cc
 	$(CXX) -std=c++17 $(SP8_ACC_INCL) -o $@ $^ $(LIBS)
 
 test_eval_sp8: test_eval_sp8.cc
@@ -19,5 +25,11 @@ check: test_homotopy_solver test_sp8_evaluation_scalar
 	./test_sp8_evaluation_scalar > test_sp8_evaluation_scalar_output.txt && grep -q 'finished OK!' test_sp8_evaluation_scalar_output.txt || exit 1;
 	rm test_sp8_evaluation_scalar_output.txt
 	printf "test_sp8_evaluation_scalar finished OK!\n"
+	./test_poly8_evaluation_matrix > test_poly8_evaluation_matrix_output.txt && grep -q 'finished OK!' test_poly8_evaluation_matrix_output.txt || exit 1;
+	rm test_poly8_evaluation_matrix_output.txt
+	printf "test_poly8_evaluation_matrix finished OK!\n"
+	./test_poly8_evaluation_matrix_symmetric > test_poly8_evaluation_matrix_symmetric_output.txt && grep -q 'finished OK!' test_poly8_evaluation_matrix_symmetric_output.txt || exit 1;
+	rm test_poly8_evaluation_matrix_symmetric_output.txt
+	printf "test_poly8_evaluation_matrix_symmetric finished OK!\n"
 clean:
-	rm test_homotopy_solver test_sp8_evaluation_scalar test_eval_sp8
+	rm test_homotopy_solver test_sp8_evaluation_scalar test_poly8_evaluation_matrix test_poly8_evaluation_matrix_symmetric test_eval_sp8
