@@ -597,6 +597,15 @@ Homotopy_solver_base<value_type>* homotopy_solver_factory(unsigned int roots_lef
   return solver;
 }
 
+/** Get coefficients of eigth degree polynomial. User decides location
+    of extremal points.
+    @param L      lumo eigenvalue within [0,1] interval
+    @param H      homo eigenvalue within [0,1] interval (L<H)
+    @param left   number of stationary points to the left of L
+    @param right  number of stationary points to the right of H
+    @param v      output vector with 7 extremal points (r1,..,r7) and
+                  two scale and shift factors, see sp8.
+*/
 template<typename T>
 void get_sp8_params(const T L, const T H,
 		    const int left, const int right,
@@ -611,5 +620,54 @@ void get_sp8_params(const T L, const T H,
   (*solver)(L, H, v);
   delete solver;
 }
+
+
+/** Choose number of extremal points to the left and right based on
+ *  which one gives the largest slope at mu = (H+L)/2.  The break
+ *  points (0.692, 0.855, 0.963) come from numerical experiments.
+ */
+template<typename T>
+void get_no_of_extremal_points_left_right(const T L, const T H,
+					  int & left, int & right) {
+  const T limit_value = 0.01;
+  const T mu = (L+H)/2;
+  if (mu < 0.5) {
+    get_no_of_extremal_points_left_right(1-H, 1-L, right, left);
+    return;
+  }
+  // Ok, only need to handle mu in [0.5, 1]
+  if (mu < 0.692) { // Use <4-3>
+    left  = 4;
+    right = 3;
+  } else if (mu < 0.855) { // Use <5-2>
+    left  = 5;
+    right = 2;
+  } else if (mu < 0.963) { // Use <6-1>
+    left  = 6;
+    right = 1;
+  } else { // Use <7-0>
+    left  = 7;
+    right = 0;
+  }
+  if (H > 1-limit_value)  // Use <4-0> or <5-0> or <6-0> or <7-0>
+    right = 0;
+}
+
+/** Get coefficients of eigth degree polynomial. This version chooses
+    location of extremal points based on location of mu = (H+L)/2. The
+    polynomial with the largest slope at mu is chosen.
+    @param L      lumo eigenvalue within [0,1] interval
+    @param H      homo eigenvalue within [0,1] interval (L<H)
+    @param v      output vector with 7 extremal points (r1,..,r7) and
+                  two scale and shift factors, see sp8.
+*/
+template<typename T>
+void get_sp8_params_max_slope(const T L, const T H, std::vector<T> & v) {
+  int left  = 0;
+  int right = 0;
+  get_no_of_extremal_points_left_right(L, H, left, right);
+  get_sp8_params(L, H, left, right, v);
+}
+
 
 #endif
