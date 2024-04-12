@@ -415,6 +415,48 @@ std::vector<T2> const Objective_Fun70<T2>::v_start =
    9.042233802799536e-01};// r7
 
 template<typename T2>
+struct Objective_Fun20 {
+  typedef T2 value_type;
+  static std::vector<value_type> const v_start;
+  static const value_type constexpr L_start = 0.4;
+  static const value_type constexpr H_start = 1.0; // not used
+  const value_type L;
+  const value_type H;
+  Objective_Fun20(value_type const & L, value_type const & H)
+  :L(L),H(H) {}
+  template<typename T1>
+  void fun(std::vector<T1> const & v, std::vector<T1> & result) const {
+    const T1 c1 = v[0], c2 = v[1], r1 = v[2];
+    const T1 r2 = v[3];
+      std::vector<T1> v_extended = {c1,c2,r1,r2,1.0,1.0,1.0,1.0,1.0};
+    auto p = [&](T1 x){return sp8(v_extended,x);};
+    result.resize(4);
+    result[0] = p(0.0);
+    result[1] = p(r2);
+    result[2] = p(r1) - p(L);
+    result[3] = p(1)  - 1.0;
+  }
+  /** Check order of roots
+   *
+   *  For 2-0, the correct order is
+   *  0<r1<r2<L<H<r3=r4=r5=r6=r7=1
+   */
+  bool correct_order_of_roots(std::vector<T2> const & v) const {
+    const T2 c1 = v[0], c2 = v[1], r1 = v[2];
+    const T2 r2 = v[3];
+    // Note that v has only 4 elements in the 2-0 case (r3=r4=r5=r6=r7=1)
+    return
+      (0<r1) && (r1<r2) && (r2<L);
+  }
+};
+template<typename T2>
+std::vector<T2> const Objective_Fun20<T2>::v_start =
+  {-796.3368359148582840, // c1
+   0.0,                   // c2
+   0.0645147150177223,    // r1
+   0.2420578253664362};   // r2
+
+template<typename T2>
 struct Objective_Fun30 {
   typedef T2 value_type;
   static std::vector<value_type> const v_start;
@@ -613,6 +655,9 @@ Homotopy_solver_base<value_type>* homotopy_solver_factory(unsigned int roots_lef
   Homotopy_solver_base<value_type>* solver;
   auto switch_pair = [](unsigned int x, unsigned int y){return (x<<3)+y;};
   switch(switch_pair(roots_left, roots_right)) {
+  case switch_pair(2,0):
+    solver = new Homotopy_solver<Objective_Fun20<value_type> >;
+    break;
   case switch_pair(3,0):
     solver = new Homotopy_solver<Objective_Fun30<value_type> >;
     break;
