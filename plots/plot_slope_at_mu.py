@@ -4,13 +4,16 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 def get_slope(left,right,mu_vec,gap):
+    acc_left = True
+    acc_right = True
+    sp8_spec = (left,right,acc_left,acc_right)
     lumo_vec = [mu-gap/2 for mu in mu_vec]
     homo_vec = [mu+gap/2 for mu in mu_vec]
     slope_vec = np.empty(len(mu_vec))
     map_vec = np.empty(len(mu_vec))
     for idx,(mu,lumo,homo) in enumerate(zip(mu_vec,lumo_vec,homo_vec)):
         v = np.empty(9)
-        get_sp8_params(lumo,homo,left,right,v)
+        get_sp8_params(lumo,homo,sp8_spec,v)
         slope_vec[idx] = sp8_prim(v,mu)
         map_vec[idx] = sp8(v,mu)
     return slope_vec, map_vec

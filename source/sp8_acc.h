@@ -730,24 +730,46 @@ Homotopy_solver_base<value_type>* homotopy_solver_factory(unsigned int roots_lef
   return solver;
 }
 
+struct SP8_spec {
+
+  int left;       /**< number of stationary points to the left of L  */
+  int right;      /**< number of stationary points to the right of H */
+  bool acc_left;  /**< use acceleration to the left?                 */
+  bool acc_right; /**< use acceleration to the right?                */
+  SP8_spec(int left, int right, bool acc_left, bool acc_right)
+    : left(left), right(right), acc_left(acc_left), acc_right(acc_right) {}
+  SP8_spec reversed() const {
+    return SP8_spec(right, left, acc_right, acc_left);
+  }
+};
+
 /** Get coefficients of eigth degree polynomial. User decides location
-    of extremal points.
-    @param L      lumo eigenvalue within [0,1] interval
-    @param H      homo eigenvalue within [0,1] interval (L<H)
-    @param left   number of stationary points to the left of L
-    @param right  number of stationary points to the right of H
-    @param v      output vector with 7 extremal points (r1,..,r7) and
-                  two scale and shift factors, see sp8.
+    of extremal points and whether to use acceleration to the left
+    and/or right via the sp8_spec parameter.
+    @param L        lumo eigenvalue within [0,1] interval
+    @param H        homo eigenvalue within [0,1] interval (L<H)
+    @param sp8_spec see definition of SP8_spec
+    @param v        output vector with 7 extremal points (r1,..,r7) and
+                    two scale and shift factors, see sp8.
 */
 template<typename T>
 void get_sp8_params(const T L, const T H,
-		    const int left, const int right,
+		    const SP8_spec sp8_spec,
 		    std::vector<T> & v) {
-  if (left < right) {
+  if (sp8_spec.left < sp8_spec.right) {
     std::vector<T> v_tmp;
-    get_sp8_params(1-H, 1-L, right, left,  v_tmp);
+    get_sp8_params(1-H, 1-L, sp8_spec.reversed(),  v_tmp);
     get_flipped_polynomial(v_tmp, v); // v is flipped
     return;
+  }
+  int left  = sp8_spec.left;
+  int right = sp8_spec.right;
+  if (!sp8_spec.acc_left)
+    left = 0;
+  if (!sp8_spec.acc_right)
+    right = 0;
+  if (left == 0 && right == 0) {
+    //FIXME: return plain polys
   }
   Homotopy_solver_base<double>* solver = homotopy_solver_factory<double>(left, right);
   (*solver)(L, H, v);
@@ -758,32 +780,35 @@ void get_sp8_params(const T L, const T H,
 /** Choose number of extremal points to the left and right based on
  *  which one gives the largest slope at mu = (H+L)/2.  The break
  *  points (0.692, 0.855, 0.963) come from numerical experiments.
+ *  Experiments: small gap and acceleration based on exact H and L
+ *  values.
  */
 template<typename T>
-void get_no_of_extremal_points_left_right(const T L, const T H,
+void get_no_of_extremal_points_left_right(const T mu,
 					  int & left, int & right) {
-  const T limit_value = 0.01;
-  const T mu = (L+H)/2;
   if (mu < 0.5) {
-    get_no_of_extremal_points_left_right(1-H, 1-L, right, left);
+    get_no_of_extremal_points_left_right(1-mu, right, left);
     return;
   }
   // Ok, only need to handle mu in [0.5, 1]
   if (mu < 0.692) { // Use <4-3>
     left  = 4;
     right = 3;
-  } else if (mu < 0.855) { // Use <5-2>
+    return;
+  }
+  if (mu < 0.855) { // Use <5-2>
     left  = 5;
     right = 2;
-  } else if (mu < 0.963) { // Use <6-1>
+    return;
+  }
+  if (mu < 0.963) { // Use <6-1>
     left  = 6;
     right = 1;
-  } else { // Use <7-0>
-    left  = 7;
-    right = 0;
+    return;
   }
-  if (H > 1-limit_value)  // Use <4-0> or <5-0> or <6-0> or <7-0>
-    right = 0;
+  // Use <7-0>
+  left  = 7;
+  right = 0;
 }
 
 /** Get coefficients of eigth degree polynomial. This version chooses
@@ -796,10 +821,12 @@ void get_no_of_extremal_points_left_right(const T L, const T H,
 */
 template<typename T>
 void get_sp8_params_max_slope(const T L, const T H, std::vector<T> & v) {
-  int left  = 0;
-  int right = 0;
-  get_no_of_extremal_points_left_right(L, H, left, right);
-  get_sp8_params(L, H, left, right, v);
+  const T limit_value = 0.01;
+  int left, right = 0;
+  get_no_of_extremal_points_left_right((L+H)/2, left, right);
+  // Use acceleration when L is away from 0 and H away from 1
+  SP8_spec sp8_spec = {left, right, L > limit_value, H < 1-limit_value};
+  get_sp8_params(L, H, sp8_spec, v);
 }
 
 
