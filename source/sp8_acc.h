@@ -415,6 +415,50 @@ std::vector<T2> const Objective_Fun70<T2>::v_start =
    9.042233802799536e-01};// r7
 
 template<typename T2>
+struct Objective_Fun30 {
+  typedef T2 value_type;
+  static std::vector<value_type> const v_start;
+  static const value_type constexpr L_start = 0.5;
+  static const value_type constexpr H_start = 1.0; // not used
+  const value_type L;
+  const value_type H;
+  Objective_Fun30(value_type const & L, value_type const & H)
+  :L(L),H(H) {}
+  template<typename T1>
+  void fun(std::vector<T1> const & v, std::vector<T1> & result) const {
+    const T1 c1 = v[0], c2 = v[1], r1 = v[2];
+    const T1 r2 = v[3], r3 = v[4]; 
+    std::vector<T1> v_extended = {c1,c2,r1,r2,r3,1.0,1.0,1.0,1.0};
+    auto p = [&](T1 x){return sp8(v_extended,x);};
+    result.resize(5);
+    result[0] = p(0.0) - p(L);
+    result[1] = p(r2)  - p(L);
+    result[2] = p(r1);
+    result[3] = p(r3);
+    result[4] = p(1.0) - 1.0;
+  }
+  /** Check order of roots
+   *
+   *  For 3-0, the correct order is
+   *  0<r1<r2<r3<L<H<r4=r5=r6=r7=1
+   */
+  bool correct_order_of_roots(std::vector<T2> const & v) const {
+    const T2 c1 = v[0], c2 = v[1], r1 = v[2];
+    const T2 r2 = v[3], r3 = v[4];
+    // Note that v has only 5 elements in the 3-0 case (r4=r5=r6=r7=1)
+    return
+      (0<r1) && (r1<r2) && (r2<r3) && (r3<L);
+  }
+};
+template<typename T2>
+std::vector<T2> const Objective_Fun30<T2>::v_start =
+  {2632.4596551462145726,  // c1
+   0.1848064209714597,     // c2
+   0.0491352255195878,     // r1
+   0.1869223450229846,     // r2
+   0.3779197335216983};    // r3
+
+template<typename T2>
 struct Objective_Fun40 {
   typedef T2 value_type;
   static std::vector<value_type> const v_start;
@@ -569,6 +613,9 @@ Homotopy_solver_base<value_type>* homotopy_solver_factory(unsigned int roots_lef
   Homotopy_solver_base<value_type>* solver;
   auto switch_pair = [](unsigned int x, unsigned int y){return (x<<3)+y;};
   switch(switch_pair(roots_left, roots_right)) {
+  case switch_pair(3,0):
+    solver = new Homotopy_solver<Objective_Fun30<value_type> >;
+    break;
   case switch_pair(4,0):
     solver = new Homotopy_solver<Objective_Fun40<value_type> >;
     break;
