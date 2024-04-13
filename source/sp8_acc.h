@@ -731,7 +731,6 @@ Homotopy_solver_base<value_type>* homotopy_solver_factory(unsigned int roots_lef
 }
 
 struct SP8_spec {
-
   int left;       /**< number of stationary points to the left of L  */
   int right;      /**< number of stationary points to the right of H */
   bool acc_left;  /**< use acceleration to the left?                 */
@@ -742,6 +741,40 @@ struct SP8_spec {
     return SP8_spec(right, left, acc_right, acc_left);
   }
 };
+
+template<typename T>
+void get_sp8_params_no_acc(int left, int right, std::vector<T> & v) {
+  auto switch_pair = [](unsigned int x, unsigned int y){return (x<<3)+y;};
+  switch(switch_pair(left, right)) {
+  case switch_pair(4,3):
+    v.assign({-280.0, 0, 0, 0, 0, 0, 1, 1, 1});
+    break;
+  case switch_pair(3,4):
+    v.assign({280.0, 0, 0, 0, 0, 1, 1, 1, 1});
+    break;
+  case switch_pair(5,2):
+    v.assign({168.0, 0, 0, 0, 0, 0, 0, 1, 1});
+    break;
+  case switch_pair(2,5):
+    v.assign({-168.0, 0, 0, 0, 1, 1, 1, 1, 1});
+    break;
+  case switch_pair(6,1):
+    v.assign({-56.0, 0, 0, 0, 0, 0, 0, 0, 1});
+    break;
+  case switch_pair(1,6):
+    v.assign({56.0, 0, 0, 1, 1, 1, 1, 1, 1});
+    break;
+  case switch_pair(7,0):
+    v.assign({8.0, 0, 0, 0, 0, 0, 0, 0, 0});
+    break;
+  case switch_pair(0,7):
+    v.assign({-8.0, 0, 1, 1, 1, 1, 1, 1, 1});
+    break;
+  default:
+    std::cout << "sp8 without acceleration does not exist with <left-right> = <" << left << "-" << right << ">" << std::endl;
+    std::exit(1);
+  }
+}
 
 /** Get coefficients of eigth degree polynomial. User decides location
     of extremal points and whether to use acceleration to the left
@@ -756,6 +789,10 @@ template<typename T>
 void get_sp8_params(const T L, const T H,
 		    const SP8_spec sp8_spec,
 		    std::vector<T> & v) {
+  if (!sp8_spec.acc_left && !sp8_spec.acc_right) {
+    get_sp8_params_no_acc(sp8_spec.left, sp8_spec.right, v);
+    return;
+  }
   if (sp8_spec.left < sp8_spec.right) {
     std::vector<T> v_tmp;
     get_sp8_params(1-H, 1-L, sp8_spec.reversed(),  v_tmp);
@@ -768,9 +805,6 @@ void get_sp8_params(const T L, const T H,
     left = 0;
   if (!sp8_spec.acc_right)
     right = 0;
-  if (left == 0 && right == 0) {
-    //FIXME: return plain polys
-  }
   Homotopy_solver_base<double>* solver = homotopy_solver_factory<double>(left, right);
   (*solver)(L, H, v);
   delete solver;
