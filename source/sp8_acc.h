@@ -809,7 +809,13 @@ int get_sp8_params(const T L, const T H,
     get_sp8_params_no_acc(sp8_spec.left, sp8_spec.right, v);
     return 0;
   }
-  if (sp8_spec.left < sp8_spec.right) {
+  int left  = sp8_spec.left;
+  int right = sp8_spec.right;
+  if (!sp8_spec.acc_left)
+    left = 0;
+  if (!sp8_spec.acc_right)
+    right = 0;
+  if (left < right) {
     std::vector<T> v_tmp;
     int info = get_sp8_params(1-H, 1-L, sp8_spec.reversed(),  v_tmp);
     if (info != 0)
@@ -817,12 +823,6 @@ int get_sp8_params(const T L, const T H,
     get_flipped_polynomial(v_tmp, v); // v is flipped
     return 0;
   }
-  int left  = sp8_spec.left;
-  int right = sp8_spec.right;
-  if (!sp8_spec.acc_left)
-    left = 0;
-  if (!sp8_spec.acc_right)
-    right = 0;
   Homotopy_solver_base<double>* solver = homotopy_solver_factory<double>(left, right);
   int info = solver->solve(L, H, v);
   delete solver;
@@ -886,7 +886,7 @@ void get_sp8_params_max_slope(const T L, const T H, std::vector<T> & v) {
   if (info != 0) {
     // get_sp8_params is not expected to fail in this case...
     std::cerr << "get_sp8_params failed with info = " << info
-	      << "with params L = " << L
+	      << " with params L = " << L
 	      << ", H = " << H
 	      << "<" << sp8_spec.left
 	      << "," << sp8_spec.right
