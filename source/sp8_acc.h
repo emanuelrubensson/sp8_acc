@@ -147,17 +147,17 @@ void get_sp8_monomial_coefficients(std::vector<T> const & v,
 
 template<typename value_type>
 struct Homotopy_solver_base {
-  virtual void operator()(value_type const L_target,
-			  value_type const H_target,
-			  std::vector<value_type> & v) = 0;
+  virtual int solve(value_type const L_target,
+                    value_type const H_target,
+                    std::vector<value_type> & v) = 0;
 };
 
 template<class Objective_function>
 struct Homotopy_solver: public Homotopy_solver_base<typename Objective_function::value_type> {
   typedef typename Objective_function::value_type value_type;
-  void operator()(value_type const L_target,
-		  value_type const H_target,
-		  std::vector<value_type> & v) {
+  int solve(value_type const L_target,
+            value_type const H_target,
+            std::vector<value_type> & v) {
     value_type v_maxabs;
     value_type dv_maxabs;
     v = Objective_function::v_start;
@@ -172,9 +172,12 @@ struct Homotopy_solver: public Homotopy_solver_base<typename Objective_function:
       H = H+H_step;
       Objective_function objfun(L,H);
       Complex_step_solver<Objective_function> solver(objfun);
-      solver.step_newton(v,tmp,v_maxabs,dv_maxabs);
+      int info = solver.step_newton(v,tmp,v_maxabs,dv_maxabs);
+      if (info != 0)
+        return 1;
       v.swap(tmp);
-      assert( objfun.correct_order_of_roots(v) );
+      if ( !objfun.correct_order_of_roots(v) )
+        return 2;
     }
     Objective_function objfun(L_target,H_target);
     Complex_step_solver<Objective_function> solver(objfun);
@@ -183,9 +186,12 @@ struct Homotopy_solver: public Homotopy_solver_base<typename Objective_function:
     int max_iter = 10;
     for (int ind = 0;ind < max_iter;ind++) {
       dv_relative_prev = dv_relative;
-      solver.step_newton(v,tmp,v_maxabs,dv_maxabs);
+      int info = solver.step_newton(v,tmp,v_maxabs,dv_maxabs);
+      if (info != 0)
+	return 1;
       v.swap(tmp);
-      assert( objfun.correct_order_of_roots(v) );
+      if ( !objfun.correct_order_of_roots(v) )
+	return 2;
       dv_relative = dv_maxabs/v_maxabs;
       if (dv_relative < std::sqrt(std::numeric_limits<value_type>::epsilon())) {
 	// Ok, we are at least "half way" to machine epsilon
@@ -194,9 +200,11 @@ struct Homotopy_solver: public Homotopy_solver_base<typename Objective_function:
 	  break;
       }
     }
-    assert(dv_relative < std::sqrt(std::numeric_limits<value_type>::epsilon()));
+    if (dv_relative >= std::sqrt(std::numeric_limits<value_type>::epsilon()))
+      return 3;
     // Add ones in the end (for 4-0, 5-0, and 6-0 cases).
     v.resize(9, 1.0);
+    return 0;
   }
 };
 
@@ -736,7 +744,12 @@ struct SP8_spec {
   bool acc_left;  /**< use acceleration to the left?                 */
   bool acc_right; /**< use acceleration to the right?                */
   SP8_spec(int left, int right, bool acc_left, bool acc_right)
-    : left(left), right(right), acc_left(acc_left), acc_right(acc_right) {}
+    : left(left), right(right), acc_left(acc_left), acc_right(acc_right) {
+    // Acceleration to the left not possible with left == 0.
+    assert( !(acc_left  && left  == 0) );
+    // Likewise to the right.
+    assert( !(acc_right && right == 0) );
+  }
   SP8_spec reversed() const {
     return SP8_spec(right, left, acc_right, acc_left);
   }
@@ -786,18 +799,23 @@ void get_sp8_params_no_acc(int left, int right, std::vector<T> & v) {
                     two scale and shift factors, see sp8.
 */
 template<typename T>
-void get_sp8_params(const T L, const T H,
-		    const SP8_spec sp8_spec,
-		    std::vector<T> & v) {
+int get_sp8_params(const T L, const T H,
+		   const SP8_spec sp8_spec,
+		   std::vector<T> & v) {
+  assert(0 <= L);
+  assert(L <  H);
+  assert(H <= 1);
   if (!sp8_spec.acc_left && !sp8_spec.acc_right) {
     get_sp8_params_no_acc(sp8_spec.left, sp8_spec.right, v);
-    return;
+    return 0;
   }
   if (sp8_spec.left < sp8_spec.right) {
     std::vector<T> v_tmp;
-    get_sp8_params(1-H, 1-L, sp8_spec.reversed(),  v_tmp);
+    int info = get_sp8_params(1-H, 1-L, sp8_spec.reversed(),  v_tmp);
+    if (info != 0)
+      return info;
     get_flipped_polynomial(v_tmp, v); // v is flipped
-    return;
+    return 0;
   }
   int left  = sp8_spec.left;
   int right = sp8_spec.right;
@@ -806,8 +824,9 @@ void get_sp8_params(const T L, const T H,
   if (!sp8_spec.acc_right)
     right = 0;
   Homotopy_solver_base<double>* solver = homotopy_solver_factory<double>(left, right);
-  (*solver)(L, H, v);
+  int info = solver->solve(L, H, v);
   delete solver;
+  return info;
 }
 
 
@@ -855,12 +874,25 @@ void get_no_of_extremal_points_left_right(const T mu,
 */
 template<typename T>
 void get_sp8_params_max_slope(const T L, const T H, std::vector<T> & v) {
+  assert(0 <= L);
+  assert(L <  H);
+  assert(H <= 1);
   const T limit_value = 0.01;
   int left, right = 0;
   get_no_of_extremal_points_left_right((L+H)/2, left, right);
   // Use acceleration when L is away from 0 and H away from 1
   SP8_spec sp8_spec = {left, right, L > limit_value, H < 1-limit_value};
-  get_sp8_params(L, H, sp8_spec, v);
+  int info = get_sp8_params(L, H, sp8_spec, v);
+  if (info != 0) {
+    // get_sp8_params is not expected to fail in this case...
+    std::cerr << "get_sp8_params failed with info = " << info
+	      << "with params L = " << L
+	      << ", H = " << H
+	      << "<" << sp8_spec.left
+	      << "," << sp8_spec.right
+	      << ">" << std::endl;
+    std::exit(1);
+  }
 }
 
 

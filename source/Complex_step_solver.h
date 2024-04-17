@@ -51,10 +51,10 @@ struct Complex_step_solver {
     }
   }
 
-  void step_newton(std::vector<value_type> const & v,
-		   std::vector<value_type>  & vnew,
-		   value_type & v_maxabs,
-		   value_type & dv_maxabs) {
+  int step_newton(std::vector<value_type> const & v,
+                  std::vector<value_type>  & vnew,
+                  value_type & v_maxabs,
+                  value_type & dv_maxabs) {
     std::vector<value_type> jacobian_colwise;
     get_jacobian(v, jacobian_colwise);
     // Get rhs vector in vnew
@@ -69,9 +69,10 @@ struct Complex_step_solver {
     int ldb = n;
     int info;
     gesv(&n, &nrhs, a, &lda, ipiv, b, &ldb, &info);
-    if (info != 0)
+    if (info != 0) {
       std::cout << "gesv failed with n = " << n << ", info = " << info << std::endl;
-    assert(info == 0);
+      return 1;
+    }
     // Ok we have vnew = inv(J)*fun(v)
     auto compare_abs = [](value_type a, value_type b) { return std::abs(a) < std::abs(b); };
     // Compute max absolute element of correction
@@ -81,6 +82,7 @@ struct Complex_step_solver {
       vnew[ind] = v[ind]-vnew[ind];
     // Compute max absolute element of approximate solution
     v_maxabs = std::abs( *std::max_element(vnew.begin(), vnew.end(), compare_abs) );
+    return 0;
   }
 };
 #endif
