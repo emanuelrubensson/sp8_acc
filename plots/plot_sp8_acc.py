@@ -8,7 +8,10 @@ def plot_sp8(homo, lumo, left, right, filename):
     acc_left = True
     acc_right = True
     sp8_spec = (left,right,acc_left,acc_right)
-    get_sp8_params(lumo,homo,sp8_spec,v)
+    info = get_sp8_params(lumo,homo,sp8_spec,v)
+    if info != 0:
+        print("get_sp8_params failed with info = {info}")
+        exit(1)
     print(f'Slope <{left},{right}>: {sp8_prim(v,homo)}')
 #    print(f'v: {[ "{:0.16f}".format(x) for x in v]}')
     mc = np.empty(9)

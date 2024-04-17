@@ -2,15 +2,18 @@
 
 extern "C" {
   /** v_output should point to array with 9 elements */
-  void get_sp8_params(const double L, const double H,
-		      const int left, const int right,
-		      const bool acc_left, const bool acc_right,
-		      double* v_output) {
+  int get_sp8_params(const double L, const double H,
+                     const int left, const int right,
+                     const bool acc_left, const bool acc_right,
+                     double* v_output) {
     SP8_spec sp8_spec = {left, right, acc_left, acc_right};
     std::vector<double> v;
-    get_sp8_params(L, H, sp8_spec, v);
+    int info = get_sp8_params(L, H, sp8_spec, v);
+    if (info != 0)
+      return info;
     assert(v.size() == 9);
     std::copy_n(v.begin(), 9, v_output);
+    return 0;
   }
 
   /** v_output should point to array with 9 elements */

@@ -3,7 +3,7 @@ from numpy.ctypeslib import ndpointer
 sp8_cwrappers_lib = ctypes.cdll.LoadLibrary("../source/sp8_cwrappers.so")
 
 get_sp8_params_helper = sp8_cwrappers_lib.get_sp8_params
-get_sp8_params_helper.restype = None
+get_sp8_params_helper.restype = ctypes.c_int
 get_sp8_params_helper.argtypes = [ctypes.c_double,
                                   ctypes.c_double,
                                   ctypes.c_int,
@@ -16,7 +16,7 @@ def get_sp8_params(lumo,homo,sp8_spec,v):
     right     = sp8_spec[1]
     acc_left  = sp8_spec[2]
     acc_right = sp8_spec[3]
-    get_sp8_params_helper(lumo,homo,left,right,acc_left,acc_right,v)
+    return get_sp8_params_helper(lumo,homo,left,right,acc_left,acc_right,v)
     
 get_sp8_params_max_slope = sp8_cwrappers_lib.get_sp8_params_max_slope
 get_sp8_params_max_slope.restype = None
