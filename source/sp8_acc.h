@@ -155,9 +155,26 @@ struct Homotopy_solver_base {
 template<class Objective_function>
 struct Homotopy_solver: public Homotopy_solver_base<typename Objective_function::value_type> {
   typedef typename Objective_function::value_type value_type;
+  int error_code_incorrect_order(bool ok_left, bool ok_right) {
+    assert(!ok_left || !ok_right);
+    if (!ok_left && !ok_right) return 3;
+    if (!ok_left)  return -2;
+    if (!ok_right) return  2;
+    return 10; // To suppress compiler warning, this point should not be reached
+  }
+  /*
+     Return codes:
+     0: success
+     1: failure in step_newton
+    -2: incorrect order of roots to the left
+    +2: incorrect order of roots to the right
+     3: incorrect order of roots to the left and right
+     4: failed to reach relative error < sqrt(eps) within maxiter
+  */
   int solve(value_type const L_target,
             value_type const H_target,
             std::vector<value_type> & v) {
+    bool ok_left, ok_right = true;
     value_type v_maxabs;
     value_type dv_maxabs;
     v = Objective_function::v_start;
@@ -176,8 +193,8 @@ struct Homotopy_solver: public Homotopy_solver_base<typename Objective_function:
       if (info != 0)
         return 1;
       v.swap(tmp);
-      if ( !objfun.correct_order_of_roots(v) )
-        return 2;
+      if ( !objfun.correct_order_of_roots(v, ok_left, ok_right) )
+        return error_code_incorrect_order(ok_left, ok_right);
     }
     Objective_function objfun(L_target,H_target);
     Complex_step_solver<Objective_function> solver(objfun);
@@ -190,18 +207,18 @@ struct Homotopy_solver: public Homotopy_solver_base<typename Objective_function:
       if (info != 0)
 	return 1;
       v.swap(tmp);
-      if ( !objfun.correct_order_of_roots(v) )
-	return 2;
+      if ( !objfun.correct_order_of_roots(v, ok_left, ok_right) )
+        return error_code_incorrect_order(ok_left, ok_right);
       dv_relative = dv_maxabs/v_maxabs;
       if (dv_relative < std::sqrt(std::numeric_limits<value_type>::epsilon())) {
 	// Ok, we are at least "half way" to machine epsilon
 	// Break if error is not decreasing substantially
-	if (dv_relative > dv_relative_prev/10)
+	if (dv_relative > dv_relative_prev/2)
 	  break;
       }
     }
     if (dv_relative >= std::sqrt(std::numeric_limits<value_type>::epsilon()))
-      return 3;
+      return 4;
     // Add ones in the end (for 4-0, 5-0, and 6-0 cases).
     v.resize(9, 1.0);
     return 0;
@@ -240,14 +257,14 @@ struct Objective_Fun43 {
    *  For 4-3, the correct order is
    *  0<r1<r2<r3<r4<L<H<r5<r6<r7<1
    */
-  bool correct_order_of_roots(std::vector<T2> const & v) const {
+  bool correct_order_of_roots(std::vector<T2> const & v,
+                              bool & ok_left, bool & ok_right) const {
     const T2 c1 = v[0], c2 = v[1], r1 = v[2];
     const T2 r2 = v[3], r3 = v[4], r4 = v[5];
     const T2 r5 = v[6], r6 = v[7], r7 = v[8];
-    return
-      (0<r1) && (r1<r2) && (r2<r3) && (r3<r4) && (r4<L) &&
-      (L<H) &&
-      (H<r5) && (r5<r6) && (r6<r7) && (r7<1.0);
+    ok_left  = (0<r1) && (r1<r2) && (r2<r3) && (r3<r4) && (r4<L);
+    ok_right = (H<r5) && (r5<r6) && (r6<r7) && (r7<1.0);
+    return ok_left && ok_right;
   }
 };
 template<typename T2>
@@ -294,14 +311,14 @@ struct Objective_Fun52 {
    *  For 5-2, the correct order is
    *  0<r1<r2<r3<r4<r5<L<H<r6<r7<1
    */
-  bool correct_order_of_roots(std::vector<T2> const & v) const {
+  bool correct_order_of_roots(std::vector<T2> const & v,
+                              bool & ok_left, bool & ok_right) const {
     const T2 c1 = v[0], c2 = v[1], r1 = v[2];
     const T2 r2 = v[3], r3 = v[4], r4 = v[5];
     const T2 r5 = v[6], r6 = v[7], r7 = v[8];
-    return
-      (0<r1) && (r1<r2) && (r2<r3) && (r3<r4) && (r4<r5) && (r5<L) &&
-      (L<H) &&
-      (H<r6) && (r6<r7) && (r7<1.0);
+    ok_left  = (0<r1) && (r1<r2) && (r2<r3) && (r3<r4) && (r4<r5) && (r5<L);
+    ok_right = (H<r6) && (r6<r7) && (r7<1.0);
+    return ok_left && ok_right;
   }
 };
 template<typename T2>
@@ -348,14 +365,15 @@ struct Objective_Fun61 {
    *  For 6-1, the correct order is
    *  0<r1<r2<r3<r4<r5<r6<L<H<r7<1
    */
-  bool correct_order_of_roots(std::vector<T2> const & v) const {
+  bool correct_order_of_roots(std::vector<T2> const & v,
+                              bool & ok_left, bool & ok_right) const {
     const T2 c1 = v[0], c2 = v[1], r1 = v[2];
     const T2 r2 = v[3], r3 = v[4], r4 = v[5];
     const T2 r5 = v[6], r6 = v[7], r7 = v[8];
-    return
-      (0<r1) && (r1<r2) && (r2<r3) && (r3<r4) && (r4<r5) && (r5<r6) && (r6<L) &&
-      (L<H) &&
-      (H<r7) && (r7<1.0);
+    ok_left  =
+      (0<r1) && (r1<r2) && (r2<r3) && (r3<r4) && (r4<r5) && (r5<r6) && (r6<L);
+    ok_right = (H<r7) && (r7<1.0);
+    return ok_left && ok_right;
   }
 };
 template<typename T2>
@@ -402,12 +420,15 @@ struct Objective_Fun70 {
    *  For 7-0, the correct order is
    *  0<r1<r2<r3<r4<r5<r6<r7<L<H<1
    */
-  bool correct_order_of_roots(std::vector<T2> const & v) const {
+  bool correct_order_of_roots(std::vector<T2> const & v,
+                              bool & ok_left, bool & ok_right) const {
     const T2 c1 = v[0], c2 = v[1], r1 = v[2];
     const T2 r2 = v[3], r3 = v[4], r4 = v[5];
     const T2 r5 = v[6], r6 = v[7], r7 = v[8];
-    return
-      (0<r1) && (r1<r2) && (r2<r3) && (r3<r4) && (r4<r5) && (r5<r6) && (r6<r7) && (r7<L);
+    ok_left  = (0<r1) && (r1<r2) && (r2<r3) && (r3<r4) && (r4<r5)
+      && (r5<r6) && (r6<r7) && (r7<L);
+    ok_right = true;
+    return ok_left && ok_right;
   }
 };
 template<typename T2>
@@ -447,11 +468,13 @@ struct Objective_Fun10 {
    *  For 1-0, the correct order is
    *  0<r1<L<H<r2=r3=r4=r5=r6=r7=1
    */
-  bool correct_order_of_roots(std::vector<T2> const & v) const {
+  bool correct_order_of_roots(std::vector<T2> const & v,
+                              bool & ok_left, bool & ok_right) const {
     const T2 c1 = v[0], c2 = v[1], r1 = v[2];
     // Note that v has only 3 elements in the 1-0 case (r2=r3=r4=r5=r6=r7=1)
-    return
-      (0<r1) && (r1<L);
+    ok_left  = (0<r1) && (r1<L);
+    ok_right = true;
+    return ok_left && ok_right;
   }
 };
 template<typename T2>
@@ -487,12 +510,14 @@ struct Objective_Fun20 {
    *  For 2-0, the correct order is
    *  0<r1<r2<L<H<r3=r4=r5=r6=r7=1
    */
-  bool correct_order_of_roots(std::vector<T2> const & v) const {
+  bool correct_order_of_roots(std::vector<T2> const & v,
+                              bool & ok_left, bool & ok_right) const {
     const T2 c1 = v[0], c2 = v[1], r1 = v[2];
     const T2 r2 = v[3];
     // Note that v has only 4 elements in the 2-0 case (r3=r4=r5=r6=r7=1)
-    return
-      (0<r1) && (r1<r2) && (r2<L);
+    ok_left  = (0<r1) && (r1<r2) && (r2<L);
+    ok_right = true;
+    return ok_left && ok_right;
   }
 };
 template<typename T2>
@@ -530,12 +555,14 @@ struct Objective_Fun30 {
    *  For 3-0, the correct order is
    *  0<r1<r2<r3<L<H<r4=r5=r6=r7=1
    */
-  bool correct_order_of_roots(std::vector<T2> const & v) const {
+  bool correct_order_of_roots(std::vector<T2> const & v,
+                              bool & ok_left, bool & ok_right) const {
     const T2 c1 = v[0], c2 = v[1], r1 = v[2];
     const T2 r2 = v[3], r3 = v[4];
     // Note that v has only 5 elements in the 3-0 case (r4=r5=r6=r7=1)
-    return
-      (0<r1) && (r1<r2) && (r2<r3) && (r3<L);
+    ok_left  = (0<r1) && (r1<r2) && (r2<r3) && (r3<L);
+    ok_right = true;
+    return ok_left && ok_right;
   }
 };
 template<typename T2>
@@ -575,12 +602,14 @@ struct Objective_Fun40 {
    *  For 4-0, the correct order is
    *  0<r1<r2<r3<r4<L<H<r5=r6=r7=1
    */
-  bool correct_order_of_roots(std::vector<T2> const & v) const {
+  bool correct_order_of_roots(std::vector<T2> const & v,
+                              bool & ok_left, bool & ok_right) const {
     const T2 c1 = v[0], c2 = v[1], r1 = v[2];
     const T2 r2 = v[3], r3 = v[4], r4 = v[5];
     // Note that v has only 6 elements in the 4-0 case (r5=r6=r7=1)
-    return
-      (0<r1) && (r1<r2) && (r2<r3) && (r3<r4) && (r4<L);
+    ok_left  = (0<r1) && (r1<r2) && (r2<r3) && (r3<r4) && (r4<L);
+    ok_right = true;
+    return ok_left && ok_right;
   }
 };
 template<typename T2>
@@ -623,13 +652,15 @@ struct Objective_Fun50 {
    *  For 5-0, the correct order is
    *  0<r1<r2<r3<r4<r5<L<H<r6=r7=1
    */
-  bool correct_order_of_roots(std::vector<T2> const & v) const {
+  bool correct_order_of_roots(std::vector<T2> const & v,
+                              bool & ok_left, bool & ok_right) const {
     const T2 c1 = v[0], c2 = v[1], r1 = v[2];
     const T2 r2 = v[3], r3 = v[4], r4 = v[5];
     const T2 r5 = v[6];
     // Note that v has only 7 elements in the 5-0 case (r6=r7=1)
-    return
-      (0<r1) && (r1<r2) && (r2<r3) && (r3<r4) && (r4<r5) && (r5<L);
+    ok_left  = (0<r1) && (r1<r2) && (r2<r3) && (r3<r4) && (r4<r5) && (r5<L);
+    ok_right = true;
+    return ok_left && ok_right;
   }
 };
 template<typename T2>
@@ -674,12 +705,15 @@ struct Objective_Fun60 {
    *  For 6-0, the correct order is
    *  0<r1<r2<r3<r4<r5<r6<L<H<r7=1
    */
-  bool correct_order_of_roots(std::vector<T2> const & v) const {
+  bool correct_order_of_roots(std::vector<T2> const & v,
+                              bool & ok_left, bool & ok_right) const {
     const T2 c1 = v[0], c2 = v[1], r1 = v[2];
     const T2 r2 = v[3], r3 = v[4], r4 = v[5];
     const T2 r5 = v[6], r6 = v[7];
-    return
+    ok_left  =
       (0<r1) && (r1<r2) && (r2<r3) && (r3<r4) && (r4<r5) && (r5<r6) && (r6<L);
+    ok_right = true;
+    return ok_left && ok_right;
   }
 };
 template<typename T2>
@@ -819,7 +853,7 @@ int get_sp8_params(const T L, const T H,
     std::vector<T> v_tmp;
     int info = get_sp8_params(1-H, 1-L, sp8_spec.reversed(),  v_tmp);
     if (info != 0)
-      return info;
+      return -info; // reversed
     get_flipped_polynomial(v_tmp, v); // v is flipped
     return 0;
   }
