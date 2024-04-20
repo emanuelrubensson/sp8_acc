@@ -1,7 +1,7 @@
 TOPDIR=..
 SP8_ACC_INCL=-I$(realpath $(TOPDIR)/source)
 LIBS=-llapack -lblas
-all: test_homotopy_solver test_sp8_evaluation_scalar test_poly8_evaluation_matrix test_poly8_evaluation_matrix_symmetric
+all: test_homotopy_solver test_sp8_evaluation_scalar test_poly8_evaluation_matrix test_poly8_evaluation_matrix_symmetric test_get_sp8_params_max_gap
 
 test_homotopy_solver: test_homotopy_solver.cc
 	$(CXX) -std=c++17 $(SP8_ACC_INCL) -o $@ $^ $(LIBS)
@@ -14,11 +14,13 @@ test_poly8_evaluation_matrix: test_poly8_evaluation_matrix.cc
 
 test_poly8_evaluation_matrix_symmetric: test_poly8_evaluation_matrix_symmetric.cc
 	$(CXX) -std=c++17 $(SP8_ACC_INCL) -o $@ $^ $(LIBS)
+test_get_sp8_params_max_gap: test_get_sp8_params_max_gap.cc
+	$(CXX) -std=c++17 $(SP8_ACC_INCL) -o $@ $^ $(LIBS)
 
 test_eval_sp8: test_eval_sp8.cc
 	$(CXX) $(SP8_ACC_INCL) -o $@ $^ $(LIBS)
 
-check: test_homotopy_solver test_sp8_evaluation_scalar
+check: all
 	./test_homotopy_solver > test_homotopy_solver_output.txt && grep -q 'finished OK!' test_homotopy_solver_output.txt || exit 1;
 	rm test_homotopy_solver_output.txt
 	printf "test_homotopy_solver finished OK!\n"
@@ -31,5 +33,8 @@ check: test_homotopy_solver test_sp8_evaluation_scalar
 	./test_poly8_evaluation_matrix_symmetric > test_poly8_evaluation_matrix_symmetric_output.txt && grep -q 'finished OK!' test_poly8_evaluation_matrix_symmetric_output.txt || exit 1;
 	rm test_poly8_evaluation_matrix_symmetric_output.txt
 	printf "test_poly8_evaluation_matrix_symmetric finished OK!\n"
+	./test_get_sp8_params_max_gap > test_get_sp8_params_max_gap_output.txt && grep -q 'finished OK!' test_get_sp8_params_max_gap_output.txt || exit 1;
+	rm test_get_sp8_params_max_gap_output.txt
+	printf "test_get_sp8_params_max_gap finished OK!\n"
 clean:
-	rm test_homotopy_solver test_sp8_evaluation_scalar test_poly8_evaluation_matrix test_poly8_evaluation_matrix_symmetric test_eval_sp8
+	rm test_homotopy_solver test_sp8_evaluation_scalar test_poly8_evaluation_matrix test_poly8_evaluation_matrix_symmetric test_eval_sp8 test_get_sp8_params_max_gap
