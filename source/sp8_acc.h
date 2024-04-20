@@ -2,6 +2,7 @@
 #define SP8_ACC_HEADER
 #include <vector>
 #include <cmath>
+#include <algorithm>
 #include <complex>
 #include "Complex_step_solver.h"
 /** Evaluate 8-order polynomial 
@@ -170,34 +171,60 @@ struct Homotopy_solver: public Homotopy_solver_base<typename Objective_function:
     +2: incorrect order of roots to the right
      3: incorrect order of roots to the left and right
      4: failed to reach relative error < sqrt(eps) within maxiter
+     5: reached maxiter in homotopy part
   */
-  int solve(value_type const L_target,
-            value_type const H_target,
+  int solve(value_type L_target,
+            value_type H_target,
             std::vector<value_type> & v) {
+    assert(Objective_function::left != 0); // can be handled by flipping the interval
+    if (Objective_function::right == 0)
+      H_target = 1; // Not used in objective function in this case
     bool ok_left, ok_right = true;
     value_type v_maxabs;
     value_type dv_maxabs;
     v = Objective_function::v_start;
     value_type L = Objective_function::L_start;
     value_type H = Objective_function::H_start;
-    int nsteps = 200;
-    value_type L_step = (L_target-L)/nsteps;
-    value_type H_step = (H_target-H)/nsteps;
+    Objective_function objfun(L, H);
+    Complex_step_solver<Objective_function> solver(objfun);
+    value_type gap_target = H_target - L_target;
     std::vector<value_type> tmp;
-    for (int ind = 0; ind<nsteps; ind++) {
-      L = L+L_step;
-      H = H+H_step;
-      Objective_function objfun(L,H);
-      Complex_step_solver<Objective_function> solver(objfun);
+    int count = 0;
+    while (L != L_target || H != H_target) {
+      count++;
+      // closest root to the left of L
+      value_type root_near_L = v[Objective_function::left+1];
+      // closest root to the right of H
+      // or 1 if no roots to the right
+      value_type root_near_H = Objective_function::right == 0 ?
+	                       1 : v[9-Objective_function::right];
+      // max step length half distance to closest root
+      value_type max_step_L = (L - root_near_L)/2;
+      value_type max_step_H = (root_near_H - H)/2;
+      if (L_target < L)
+	L = std::max(L_target, L - max_step_L);
+      if (H_target > H)
+	H = std::min(H_target, H + max_step_H);
+      if (L_target > L)
+	L = std::min({L_target,
+                      std::max(L, H-0.9*gap_target), // keep distance to H
+	              L + max_step_L});
+      if (H_target < H)
+	H = std::max({H_target,
+	              std::min(H, L+0.9*gap_target), // keep distance to L
+		      H - max_step_H});
+      objfun.L = L;
+      objfun.H = H;
       int info = solver.step_newton(v,tmp,v_maxabs,dv_maxabs);
       if (info != 0)
         return 1;
       v.swap(tmp);
       if ( !objfun.correct_order_of_roots(v, ok_left, ok_right) )
         return error_code_incorrect_order(ok_left, ok_right);
+      if (count > 10000)
+	// Count usually between 0 and 300
+	return 5;
     }
-    Objective_function objfun(L_target,H_target);
-    Complex_step_solver<Objective_function> solver(objfun);
     value_type dv_relative = dv_maxabs/v_maxabs;
     value_type dv_relative_prev;
     int max_iter = 10;
@@ -228,11 +255,13 @@ struct Homotopy_solver: public Homotopy_solver_base<typename Objective_function:
 template<typename T2>
 struct Objective_Fun43 {
   typedef T2 value_type;
+  static const int left  = 4;
+  static const int right = 3;
   static std::vector<value_type> const v_start;
   static const value_type constexpr L_start = 0.55;
   static const value_type constexpr H_start = 0.65;
-  const value_type L;
-  const value_type H;
+  value_type L;
+  value_type H;
   Objective_Fun43(value_type const & L, value_type const & H)
   :L(L),H(H) {}
   template<typename T1>
@@ -264,7 +293,7 @@ struct Objective_Fun43 {
     const T2 r5 = v[6], r6 = v[7], r7 = v[8];
     ok_left  = (0<r1) && (r1<r2) && (r2<r3) && (r3<r4) && (r4<L);
     ok_right = (H<r5) && (r5<r6) && (r6<r7) && (r7<1.0);
-    return ok_left && ok_right;
+    return ok_left && ok_right && L<H;
   }
 };
 template<typename T2>
@@ -282,11 +311,13 @@ std::vector<T2> const Objective_Fun43<T2>::v_start =
 template<typename T2>
 struct Objective_Fun52 {
   typedef T2 value_type;
+  static const int left  = 5;
+  static const int right = 2;
   static std::vector<value_type> const v_start;
   static const value_type constexpr L_start = 0.75;
   static const value_type constexpr H_start = 0.85;
-  const value_type L;
-  const value_type H;
+  value_type L;
+  value_type H;
   Objective_Fun52(value_type const & L, value_type const & H)
   :L(L),H(H) {}
   template<typename T1>
@@ -318,7 +349,7 @@ struct Objective_Fun52 {
     const T2 r5 = v[6], r6 = v[7], r7 = v[8];
     ok_left  = (0<r1) && (r1<r2) && (r2<r3) && (r3<r4) && (r4<r5) && (r5<L);
     ok_right = (H<r6) && (r6<r7) && (r7<1.0);
-    return ok_left && ok_right;
+    return ok_left && ok_right && L<H;
   }
 };
 template<typename T2>
@@ -336,11 +367,13 @@ std::vector<T2> const Objective_Fun52<T2>::v_start =
 template<typename T2>
 struct Objective_Fun61 {
   typedef T2 value_type;
+  static const int left  = 6;
+  static const int right = 1;
   static std::vector<value_type> const v_start;
   static const value_type constexpr L_start = 0.88;
   static const value_type constexpr H_start = 0.98;
-  const value_type L;
-  const value_type H;
+  value_type L;
+  value_type H;
   Objective_Fun61(value_type const & L, value_type const & H)
   :L(L),H(H) {}
   template<typename T1>
@@ -373,7 +406,7 @@ struct Objective_Fun61 {
     ok_left  =
       (0<r1) && (r1<r2) && (r2<r3) && (r3<r4) && (r4<r5) && (r5<r6) && (r6<L);
     ok_right = (H<r7) && (r7<1.0);
-    return ok_left && ok_right;
+    return ok_left && ok_right && L<H;
   }
 };
 template<typename T2>
@@ -391,11 +424,13 @@ std::vector<T2> const Objective_Fun61<T2>::v_start =
 template<typename T2>
 struct Objective_Fun70 {
   typedef T2 value_type;
+  static const int left  = 7;
+  static const int right = 0;
   static std::vector<value_type> const v_start;
   static const value_type constexpr L_start = 0.94;
-  static const value_type constexpr H_start = 0.98;
-  const value_type L;
-  const value_type H;
+  static const value_type constexpr H_start = 1.0;
+  value_type L;
+  value_type H;
   Objective_Fun70(value_type const & L, value_type const & H)
   :L(L),H(H) {}
   template<typename T1>
@@ -428,7 +463,7 @@ struct Objective_Fun70 {
     ok_left  = (0<r1) && (r1<r2) && (r2<r3) && (r3<r4) && (r4<r5)
       && (r5<r6) && (r6<r7) && (r7<L);
     ok_right = true;
-    return ok_left && ok_right;
+    return ok_left && ok_right && L<H;
   }
 };
 template<typename T2>
@@ -446,11 +481,13 @@ std::vector<T2> const Objective_Fun70<T2>::v_start =
 template<typename T2>
 struct Objective_Fun10 {
   typedef T2 value_type;
+  static const int left  = 1;
+  static const int right = 0;
   static std::vector<value_type> const v_start;
   static const value_type constexpr L_start = 0.3;
-  static const value_type constexpr H_start = 1.0; // not used
-  const value_type L;
-  const value_type H;
+  static const value_type constexpr H_start = 1.0;
+  value_type L;
+  value_type H;
   Objective_Fun10(value_type const & L, value_type const & H)
   :L(L),H(H) {}
   template<typename T1>
@@ -474,7 +511,7 @@ struct Objective_Fun10 {
     // Note that v has only 3 elements in the 1-0 case (r2=r3=r4=r5=r6=r7=1)
     ok_left  = (0<r1) && (r1<L);
     ok_right = true;
-    return ok_left && ok_right;
+    return ok_left && ok_right && L<H;
   }
 };
 template<typename T2>
@@ -486,11 +523,13 @@ std::vector<T2> const Objective_Fun10<T2>::v_start =
 template<typename T2>
 struct Objective_Fun20 {
   typedef T2 value_type;
+  static const int left  = 2;
+  static const int right = 0;
   static std::vector<value_type> const v_start;
   static const value_type constexpr L_start = 0.4;
-  static const value_type constexpr H_start = 1.0; // not used
-  const value_type L;
-  const value_type H;
+  static const value_type constexpr H_start = 1.0;
+  value_type L;
+  value_type H;
   Objective_Fun20(value_type const & L, value_type const & H)
   :L(L),H(H) {}
   template<typename T1>
@@ -517,7 +556,7 @@ struct Objective_Fun20 {
     // Note that v has only 4 elements in the 2-0 case (r3=r4=r5=r6=r7=1)
     ok_left  = (0<r1) && (r1<r2) && (r2<L);
     ok_right = true;
-    return ok_left && ok_right;
+    return ok_left && ok_right && L<H;
   }
 };
 template<typename T2>
@@ -530,11 +569,13 @@ std::vector<T2> const Objective_Fun20<T2>::v_start =
 template<typename T2>
 struct Objective_Fun30 {
   typedef T2 value_type;
+  static const int left  = 3;
+  static const int right = 0;
   static std::vector<value_type> const v_start;
   static const value_type constexpr L_start = 0.5;
-  static const value_type constexpr H_start = 1.0; // not used
-  const value_type L;
-  const value_type H;
+  static const value_type constexpr H_start = 1.0;
+  value_type L;
+  value_type H;
   Objective_Fun30(value_type const & L, value_type const & H)
   :L(L),H(H) {}
   template<typename T1>
@@ -562,7 +603,7 @@ struct Objective_Fun30 {
     // Note that v has only 5 elements in the 3-0 case (r4=r5=r6=r7=1)
     ok_left  = (0<r1) && (r1<r2) && (r2<r3) && (r3<L);
     ok_right = true;
-    return ok_left && ok_right;
+    return ok_left && ok_right && L<H;
   }
 };
 template<typename T2>
@@ -576,11 +617,13 @@ std::vector<T2> const Objective_Fun30<T2>::v_start =
 template<typename T2>
 struct Objective_Fun40 {
   typedef T2 value_type;
+  static const int left  = 4;
+  static const int right = 0;
   static std::vector<value_type> const v_start;
   static const value_type constexpr L_start = 0.5;
-  static const value_type constexpr H_start = 1.0; // not used
-  const value_type L;
-  const value_type H;
+  static const value_type constexpr H_start = 1.0;
+  value_type L;
+  value_type H;
   Objective_Fun40(value_type const & L, value_type const & H)
   :L(L),H(H) {}
   template<typename T1>
@@ -609,7 +652,7 @@ struct Objective_Fun40 {
     // Note that v has only 6 elements in the 4-0 case (r5=r6=r7=1)
     ok_left  = (0<r1) && (r1<r2) && (r2<r3) && (r3<r4) && (r4<L);
     ok_right = true;
-    return ok_left && ok_right;
+    return ok_left && ok_right && L<H;
   }
 };
 template<typename T2>
@@ -624,11 +667,13 @@ std::vector<T2> const Objective_Fun40<T2>::v_start =
 template<typename T2>
 struct Objective_Fun50 {
   typedef T2 value_type;
+  static const int left  = 5;
+  static const int right = 0;
   static std::vector<value_type> const v_start;
   static const value_type constexpr L_start = 0.5;
-  static const value_type constexpr H_start = 1.0; // not used
-  const value_type L;
-  const value_type H;
+  static const value_type constexpr H_start = 1.0;
+  value_type L;
+  value_type H;
   Objective_Fun50(value_type const & L, value_type const & H)
   :L(L),H(H) {}
   template<typename T1>
@@ -660,7 +705,7 @@ struct Objective_Fun50 {
     // Note that v has only 7 elements in the 5-0 case (r6=r7=1)
     ok_left  = (0<r1) && (r1<r2) && (r2<r3) && (r3<r4) && (r4<r5) && (r5<L);
     ok_right = true;
-    return ok_left && ok_right;
+    return ok_left && ok_right && L<H;
   }
 };
 template<typename T2>
@@ -676,11 +721,13 @@ std::vector<T2> const Objective_Fun50<T2>::v_start =
 template<typename T2>
 struct Objective_Fun60 {
   typedef T2 value_type;
+  static const int left  = 6;
+  static const int right = 0;
   static std::vector<value_type> const v_start;
   static const value_type constexpr L_start = 0.88;
-  static const value_type constexpr H_start = 1.0; // not used
-  const value_type L;
-  const value_type H;
+  static const value_type constexpr H_start = 1.0;
+  value_type L;
+  value_type H;
   Objective_Fun60(value_type const & L, value_type const & H)
   :L(L),H(H) {}
   template<typename T1>
@@ -713,7 +760,7 @@ struct Objective_Fun60 {
     ok_left  =
       (0<r1) && (r1<r2) && (r2<r3) && (r3<r4) && (r4<r5) && (r5<r6) && (r6<L);
     ok_right = true;
-    return ok_left && ok_right;
+    return ok_left && ok_right && L<H;
   }
 };
 template<typename T2>
