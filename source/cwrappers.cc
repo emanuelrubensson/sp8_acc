@@ -25,6 +25,16 @@ extern "C" {
     std::copy_n(v.begin(), 9, v_output);
   }
 
+  /** v_output should point to array with 9 elements */
+  void get_sp8_params_max_gap(const double L_outer, const double L_inner,
+                              const double H_inner, const double H_outer,
+                              double* v_output) {
+    std::vector<double> v;
+    get_sp8_params_max_gap(L_outer, L_inner, H_inner, H_outer, v);
+    assert(v.size() == 9);
+    std::copy_n(v.begin(), 9, v_output);
+  }
+
   /** v_input should point to array with 9 elements.
    *  mc      should point to array with 9 elements.
    */
