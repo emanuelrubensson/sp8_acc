@@ -976,5 +976,65 @@ void get_sp8_params_max_slope(const T L, const T H, std::vector<T> & v) {
   }
 }
 
+template<typename T>
+void get_sp8_params_max_gap(const T L_outer, const T L_inner,
+                            const T H_inner, const T H_outer,
+                            std::vector<T> & v) {
+  const T limit_value = 0.01;
+  T gap_old = H_inner-L_inner;
+  assert(gap_old > 0);
+  T gap = 0;
+  std::vector<T> v_tmp;
+  for(int left = 0; left <= 7; left++) {
+    int right = 7 - left;
+    // Use acceleration to the left when L_outer is away from 0
+    // but not when there are no stationary points to the left
+    bool acc_left  = L_outer > limit_value && left > 0;
+    // and similarly to the right
+    bool acc_right = H_outer < 1-limit_value && right > 0;
+    SP8_spec sp8_spec = {left, right, acc_left, acc_right};
+    // Outer bounds used for acceleration, a precautious approach and
+    // necessary if we want homo and lumo to be isolated for eigenvalue
+    // estimation
+    int info = get_sp8_params(L_outer, H_outer, sp8_spec, v_tmp);
+    if (info != 0) {
+      // Attempt to turn off acceleration
+      if (info !=  2)  // if problem not to the right (only)
+	sp8_spec.acc_left  = false;
+      if (info != -2) // if problem not to the left (only)
+	sp8_spec.acc_right = false;
+      std::cout << "Rerun without acceleration triggered! info = " << info << std::endl;
+      info = get_sp8_params(L_outer, H_outer, sp8_spec, v_tmp);
+    }
+    if (info != 0) {
+      std::cerr << "Warning: get_sp8_params_max_gap: get_sp8_params failed with info = " << info
+		<< " with params L_outer = " << L_outer
+		<< ", L_inner = " << L_inner
+		<< ", H_inner = " << H_inner
+		<< ", H_outer = " << H_outer
+		<< ", <" << sp8_spec.left
+		<< "," << sp8_spec.right
+		<< "> "
+		<< acc_left << ", "
+		<< acc_right
+		<< std::endl;
+      continue;
+    }
+    // Ok now we can compute the updated gap_new = H_inner_new-L_inner_new
+    T gap_tmp = sp8(v_tmp,H_inner) - sp8(v_tmp,L_inner);
+    if (gap_tmp > gap) {
+      gap = gap_tmp;
+      v = v_tmp;
+    }
+  }
+  if (gap == 0) {
+    std::cerr << "get_sp8_params_max_gap: get_sp8_params failed for all possible configurations, exiting." << std::endl;
+    std::exit(1);
+  }
+  if (gap <= gap_old) {
+    std::cerr << "get_sp8_params_max_gap: get_sp8_params failed to produce polynomial giving increasing gap, exiting." << std::endl;
+    std::exit(1);
+  }
+}
 
 #endif
