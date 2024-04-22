@@ -14,9 +14,9 @@
 */
 template<typename T>
 static void test_sp8_evaluation(std::vector<T> const &  v, T const x) {
-  T sp8_poly_value = sp8(v,x);
+  T sp8_poly_value = sp8::sp8_eval(v,x);
   std::vector<T> mc;
-  get_sp8_monomial_coefficients(v, mc);
+  sp8::get_sp8_monomial_coefficients(v, mc);
   assert(mc.size() == 9);
   T sp8_poly_value_monomial = 0;
   T x_pow = 1;
@@ -26,7 +26,7 @@ static void test_sp8_evaluation(std::vector<T> const &  v, T const x) {
   }
   T diff_sp8_mono = std::abs(sp8_poly_value - sp8_poly_value_monomial);
   T sp8_poly_value_sastre = x;
-  sastre_poly_8_eval(mc, sp8_poly_value_sastre);
+  sp8::sastre_poly_8_eval(mc, sp8_poly_value_sastre);
   T diff_sp8_sastre = std::abs(sp8_poly_value - sp8_poly_value_sastre);
   //  std::cout << std::setprecision(15);
   //  std::cout << "sastre: " << sp8_poly_value_sastre << std::endl;

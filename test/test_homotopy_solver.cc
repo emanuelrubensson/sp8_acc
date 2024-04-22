@@ -9,7 +9,7 @@ static void test_homotopy_solver(typename Objective_fun::value_type L_target,
 				 typename Objective_fun::value_type H_target) {
   typedef typename Objective_fun::value_type value_type;
   std::vector<value_type> v;
-  Homotopy_solver<Objective_fun> solver;
+  sp8::Homotopy_solver<Objective_fun> solver;
   solver.solve(L_target, H_target, v);
   assert(v.size() == 9);
   // Check that all residual elements abs values are below some tolerance
@@ -28,10 +28,10 @@ static void test_homotopy_solver(typename Objective_fun::value_type L_target,
 template<typename T>
 static void test_flip(std::vector<T> const &  v) {
     std::vector<T> v_flipped;
-    get_flipped_polynomial(v, v_flipped);
+    sp8::get_flipped_polynomial(v, v_flipped);
     T x = 0.384;
-    T ref = 1-sp8(v,1-x);
-    T value = sp8(v_flipped,x);
+    T ref = 1-sp8::sp8_eval(v,1-x);
+    T value = sp8::sp8_eval(v_flipped,x);
     assert( std::abs(ref-value) < std::sqrt(std::numeric_limits<T>::epsilon()));
 }
 
@@ -39,17 +39,17 @@ int main(int argc, char* const  argv[]){
   {
     double L_target = 0.5;
     double H_target = 0.6;
-    test_homotopy_solver<Objective_Fun43<double> >(L_target, H_target);
-    test_homotopy_solver<Objective_Fun52<double> >(L_target, H_target);
-    test_homotopy_solver<Objective_Fun40<double> >(L_target, H_target);
-    test_homotopy_solver<Objective_Fun50<double> >(L_target, H_target);
+    test_homotopy_solver<sp8::Objective_Fun43<double> >(L_target, H_target);
+    test_homotopy_solver<sp8::Objective_Fun52<double> >(L_target, H_target);
+    test_homotopy_solver<sp8::Objective_Fun40<double> >(L_target, H_target);
+    test_homotopy_solver<sp8::Objective_Fun50<double> >(L_target, H_target);
     L_target = 0.94;
     H_target = 0.95;
-    test_homotopy_solver<Objective_Fun61<double> >(L_target, H_target);
-    test_homotopy_solver<Objective_Fun60<double> >(L_target, H_target);
+    test_homotopy_solver<sp8::Objective_Fun61<double> >(L_target, H_target);
+    test_homotopy_solver<sp8::Objective_Fun60<double> >(L_target, H_target);
     L_target = 0.97;
     H_target = 0.98;
-    test_homotopy_solver<Objective_Fun70<double> >(L_target, H_target);
+    test_homotopy_solver<sp8::Objective_Fun70<double> >(L_target, H_target);
   }
   {
     std::vector<double> v = {3.616e+04, 2.515e-01, 0.0373, 0.143, 0.301, 0.485, 0.659, 0.899, 0.971};

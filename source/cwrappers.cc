@@ -6,9 +6,9 @@ extern "C" {
                      const int left, const int right,
                      const bool acc_left, const bool acc_right,
                      double* v_output) {
-    SP8_spec sp8_spec = {left, right, acc_left, acc_right};
+    sp8::SP8_spec sp8_spec = {left, right, acc_left, acc_right};
     std::vector<double> v;
-    int info = get_sp8_params(L, H, sp8_spec, v);
+    int info = sp8::get_sp8_params(L, H, sp8_spec, v);
     if (info != 0)
       return info;
     assert(v.size() == 9);
@@ -20,7 +20,7 @@ extern "C" {
   void get_sp8_params_max_slope(const double L, const double H,
 				double* v_output) {
     std::vector<double> v;
-    get_sp8_params_max_slope(L, H, v);
+    sp8::get_sp8_params_max_slope(L, H, v);
     assert(v.size() == 9);
     std::copy_n(v.begin(), 9, v_output);
   }
@@ -30,7 +30,7 @@ extern "C" {
                               const double H_inner, const double H_outer,
                               double* v_output) {
     std::vector<double> v;
-    get_sp8_params_max_gap(L_outer, L_inner, H_inner, H_outer, v);
+    sp8::get_sp8_params_max_gap(L_outer, L_inner, H_inner, H_outer, v);
     assert(v.size() == 9);
     std::copy_n(v.begin(), 9, v_output);
   }
@@ -43,22 +43,22 @@ extern "C" {
     std::vector<double> mc_vec;
     v.resize(9);
     std::copy_n(v_input, 9, v.begin());
-    get_sp8_monomial_coefficients(v, mc_vec);
+    sp8::get_sp8_monomial_coefficients(v, mc_vec);
     std::copy_n(mc_vec.begin(), 9, mc);
   }
 
-  double sp8(double const * v_input, double const x) {
+  double sp8_eval(double const * v_input, double const x) {
     std::vector<double> v;
     v.resize(9);
     std::copy_n(v_input, 9, v.begin());
-    return sp8(v, x);
+    return sp8::sp8_eval(v, x);
   }
 
   double sp8_prim(double const * v_input, double const x) {
     std::vector<double> v;
     v.resize(9);
     std::copy_n(v_input, 9, v.begin());
-    return sp8_prim(v, x);
+    return sp8::sp8_prim(v, x);
   }
 
 }
