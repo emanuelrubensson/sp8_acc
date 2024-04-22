@@ -38,9 +38,15 @@ struct Scalar_proxy {
 template<typename T_matrix_scalar, typename T_scalar>
 void sastre_poly_8_eval(std::vector<T_scalar> const & mc,
 			T_matrix_scalar & x,
-			std::true_type) {
+			std::true_type,
+			T_matrix_scalar m1,
+			T_matrix_scalar m2,
+			T_matrix_scalar m3) {
   Scalar_proxy X(x);
-  sastre_poly_8_eval(mc, X);
+  Scalar_proxy M1(m1);
+  Scalar_proxy M2(m2);
+  Scalar_proxy M3(m3);
+  sastre_poly_8_eval(mc, X, M1, M2, M3);
   x = X.x;
 }
 
@@ -52,7 +58,10 @@ void sastre_poly_8_eval(std::vector<T_scalar> const & mc,
 template<typename T_matrix, typename T_scalar>
 void sastre_poly_8_eval(std::vector<T_scalar> const & mc,
 			T_matrix & A,
-			std::false_type) {
+			std::false_type,
+			T_matrix & M1,
+			T_matrix & M2,
+			T_matrix & M3) {
   const T_scalar b0=mc[8], b1=mc[7], b2=mc[6];
   const T_scalar b3=mc[5], b4=mc[4], b5=mc[3];
   const T_scalar b6=mc[2], b7=mc[1], b8=mc[0];
@@ -62,7 +71,7 @@ void sastre_poly_8_eval(std::vector<T_scalar> const & mc,
     std::vector<T_scalar> mc_minus(9);
     for (unsigned int ind = 0; ind<9; ind++)      
       mc_minus[ind]=-mc[ind];
-    sastre_poly_8_eval(mc_minus, A);
+    sastre_poly_8_eval(mc_minus, A, std::is_floating_point<T_matrix>(), M1, M2, M3);
     A.negate();
     return;
   }
@@ -89,11 +98,9 @@ void sastre_poly_8_eval(std::vector<T_scalar> const & mc,
   const T_scalar e0 = (b3 - d1 * e2) / c3; // Not explicitly
 					   // documented by sastre?
   const T_scalar one = 1.0;
-  T_matrix M1;
   M1.multiply(A, A);                          // M1 = A*A
-  T_matrix M2 = M1;                           // M2 = M1
+  M2 = M1;                                    // M2 = M1
   M2.scale_and_add(c4, c3, A);                // M2 = c4*M2 + c3*A
-  T_matrix M3;
   M3.multiply(M1,M2);                         // M3 = M1*M2
   M2 = M3;                                    // M2 = M3
   M2.scale_and_add(one, d2, M1);              // M2 = M2 + d2*M1
@@ -109,8 +116,19 @@ void sastre_poly_8_eval(std::vector<T_scalar> const & mc,
 
 template<typename T_matrix, typename T_scalar>
 void sastre_poly_8_eval(std::vector<T_scalar> const & mc,
+			T_matrix & x,
+			T_matrix & M1,
+			T_matrix & M2,
+			T_matrix & M3) {
+  sastre_poly_8_eval(mc, x, std::is_floating_point<T_matrix>(), M1, M2, M3);
+}
+template<typename T_matrix, typename T_scalar>
+void sastre_poly_8_eval(std::vector<T_scalar> const & mc,
 			T_matrix & x) {
-  sastre_poly_8_eval(mc, x, std::is_floating_point<T_matrix>());
+  T_matrix M1;
+  T_matrix M2;
+  T_matrix M3;
+  sastre_poly_8_eval(mc, x, M1, M2, M3);
 }
 
 #endif
