@@ -1,5 +1,5 @@
 TOPDIR=..
-SP8_ACC_INCL=-I$(realpath $(TOPDIR)/source)
+SP8_ACC_INCL=-I$(realpath $(TOPDIR)/sp8cc)
 LIBS=-llapack -lblas
 all: test_homotopy_solver test_sp8_evaluation_scalar test_poly8_evaluation_matrix test_poly8_evaluation_matrix_symmetric test_get_sp8_params_max_gap
 

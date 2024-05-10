@@ -1,6 +1,12 @@
 import ctypes
+import glob
+import os
 from numpy.ctypeslib import ndpointer
-sp8_cwrappers_lib = ctypes.cdll.LoadLibrary("../source/sp8_cwrappers.so")
+
+lib_search_path = os.path.abspath(os.path.join(os.path.dirname(__file__),
+                                               '..','**','sp8cc*.so'))
+libfile = glob.glob(lib_search_path, recursive=True)[0]
+sp8_cwrappers_lib = ctypes.cdll.LoadLibrary(libfile)
 
 get_sp8_params_helper = sp8_cwrappers_lib.get_sp8_params
 get_sp8_params_helper.restype = ctypes.c_int

@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-from sp8_acc import *
+import sp8py
 import numpy as np
 import matplotlib.pyplot as plt
 
@@ -9,8 +9,8 @@ def get_max_slope(mu_vec,gap):
     slope_vec = np.empty(len(mu_vec))
     for idx,(mu,lumo,homo) in enumerate(zip(mu_vec,lumo_vec,homo_vec)):
         v = np.empty(9)
-        get_sp8_params_max_slope(lumo,homo,v)
-        slope_vec[idx] = sp8_prim(v,mu)
+        sp8py.get_sp8_params_max_slope(lumo,homo,v)
+        slope_vec[idx] = sp8py.sp8_prim(v,mu)
     return slope_vec
 
 npoints = 500

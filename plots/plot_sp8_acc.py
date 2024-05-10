@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-from sp8_acc import *
+import sp8py
 import numpy as np
 import matplotlib.pyplot as plt
 
@@ -8,14 +8,14 @@ def plot_sp8(homo, lumo, left, right, filename):
     acc_left = True
     acc_right = True
     sp8_spec = (left,right,acc_left,acc_right)
-    info = get_sp8_params(lumo,homo,sp8_spec,v)
+    info = sp8py.get_sp8_params(lumo,homo,sp8_spec,v)
     if info != 0:
         print(f"get_sp8_params failed with info = {info}")
         exit(1)
-    print(f'Slope <{left},{right}>: {sp8_prim(v,homo)}')
+    print(f'Slope <{left},{right}>: {sp8py.sp8_prim(v,homo)}')
 #    print(f'v: {[ "{:0.16f}".format(x) for x in v]}')
     mc = np.empty(9)
-    get_sp8_monomial_coefficients(v,mc)
+    sp8py.get_sp8_monomial_coefficients(v,mc)
     xv = np.linspace(-0.1,1.1,500)
     yv = [np.polyval(mc, x) for x in xv]
 

@@ -1,11 +1,11 @@
 #!/usr/bin/env python3
-from sp8_acc import *
+import sp8py
 import numpy as np
 import matplotlib.pyplot as plt
 
 def get_slope(left,right,mu_vec,gap):
-    acc_left = True
-    acc_right = True
+    acc_left = left != 0
+    acc_right = right != 0
     sp8_spec = (left,right,acc_left,acc_right)
     lumo_vec = [mu-gap/2 for mu in mu_vec]
     homo_vec = [mu+gap/2 for mu in mu_vec]
@@ -13,9 +13,9 @@ def get_slope(left,right,mu_vec,gap):
     map_vec = np.empty(len(mu_vec))
     for idx,(mu,lumo,homo) in enumerate(zip(mu_vec,lumo_vec,homo_vec)):
         v = np.empty(9)
-        get_sp8_params(lumo,homo,sp8_spec,v)
-        slope_vec[idx] = sp8_prim(v,mu)
-        map_vec[idx] = sp8(v,mu)
+        sp8py.get_sp8_params(lumo,homo,sp8_spec,v)
+        slope_vec[idx] = sp8py.sp8_prim(v,mu)
+        map_vec[idx] = sp8py.sp8(v,mu)
     return slope_vec, map_vec
 
 npoints = 150

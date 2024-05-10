@@ -964,7 +964,11 @@ namespace sp8 {
     int left, right = 0;
     get_no_of_extremal_points_left_right((L+H)/2, left, right);
     // Use acceleration when L is away from 0 and H away from 1
-    SP8_spec sp8_spec = {left, right, L > limit_value, H < 1-limit_value};
+    // but not when there is no stationary points to the left and
+    // right respectively
+    bool acc_left  = L > limit_value && left > 0;
+    bool acc_right = H < 1-limit_value && right > 0;
+    SP8_spec sp8_spec = {left, right, acc_left, acc_right};
     int info = get_sp8_params(L, H, sp8_spec, v);
     if (info != 0) {
       // get_sp8_params is not expected to fail in this case...
