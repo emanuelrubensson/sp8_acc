@@ -26,7 +26,8 @@ static void test_sp8_evaluation(std::vector<T> const &  v, T const x) {
   }
   T diff_sp8_mono = std::abs(sp8_poly_value - sp8_poly_value_monomial);
   T sp8_poly_value_sastre = x;
-  sp8::sastre_poly_8_eval(mc, sp8_poly_value_sastre);
+  T x2 = x*x;
+  sp8::sastre_poly_8_eval(mc, sp8_poly_value_sastre, x2);
   T diff_sp8_sastre = std::abs(sp8_poly_value - sp8_poly_value_sastre);
   //  std::cout << std::setprecision(15);
   //  std::cout << "sastre: " << sp8_poly_value_sastre << std::endl;

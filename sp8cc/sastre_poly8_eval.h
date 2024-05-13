@@ -41,14 +41,14 @@ namespace sp8 {
   void sastre_poly_8_eval(std::vector<T_scalar> const & mc,
 			  T_matrix_scalar & x,
 			  std::true_type,
-			  T_matrix_scalar m1,
+			  T_matrix_scalar x2,
 			  T_matrix_scalar m2,
 			  T_matrix_scalar m3) {
     Scalar_proxy X(x);
-    Scalar_proxy M1(m1);
+    Scalar_proxy X2(x2);
     Scalar_proxy M2(m2);
     Scalar_proxy M3(m3);
-    sastre_poly_8_eval(mc, X, M1, M2, M3);
+    sastre_poly_8_eval(mc, X, X2, M2, M3);
     x = X.x;
   }
 
@@ -61,7 +61,7 @@ namespace sp8 {
   void sastre_poly_8_eval(std::vector<T_scalar> const & mc,
 			  T_matrix & A,
 			  std::false_type,
-			  T_matrix & M1,
+			  T_matrix & A2,
 			  T_matrix & M2,
 			  T_matrix & M3) {
     const T_scalar b0=mc[8], b1=mc[7], b2=mc[6];
@@ -73,7 +73,7 @@ namespace sp8 {
       std::vector<T_scalar> mc_minus(9);
       for (unsigned int ind = 0; ind<9; ind++)      
 	mc_minus[ind]=-mc[ind];
-      sastre_poly_8_eval(mc_minus, A, std::is_floating_point<T_matrix>(), M1, M2, M3);
+      sastre_poly_8_eval(mc_minus, A, std::is_floating_point<T_matrix>(), A2, M2, M3);
       A.negate();
       return;
     }
@@ -100,37 +100,36 @@ namespace sp8 {
     const T_scalar e0 = (b3 - d1 * e2) / c3; // Not explicitly
     // documented by sastre?
     const T_scalar one = 1.0;
-    M1.multiply(A, A);                          // M1 = A*A
-    M2 = M1;                                    // M2 = M1
+    M2 = A2;                                    // M2 = A2
     M2.scale_and_add(c4, c3, A);                // M2 = c4*M2 + c3*A
-    M3.multiply(M1,M2);                         // M3 = M1*M2
+    M3.multiply(A2,M2);                         // M3 = A2*M2
     M2 = M3;                                    // M2 = M3
-    M2.scale_and_add(one, d2, M1);              // M2 = M2 + d2*M1
+    M2.scale_and_add(one, d2, A2);              // M2 = M2 + d2*A2
     M2.scale_and_add(one, d1, A);               // M2 = M2 + d1*A
-    A.scale_and_add(f1, f2, M1);                // A = f1*A + f2*M1
+    A.scale_and_add(f1, f2, A2);                // A = f1*A + f2*A2
     A.scale_and_add(one, e0, M3);               // A = A + e0*M3
     A.add_scaled_identity(f0);                  // A = A+f0*I
-    M1.scale_and_add(e2, one, M3);              // M1 = e2*M1 + M3
-    M3.multiply(M1,M2);                         // M3 = M1*M2
+    A2.scale_and_add(e2, one, M3);              // A2 = e2*A2 + M3
+    M3.multiply(A2,M2);                         // M3 = A2*M2
     A.scale_and_add(one, one, M3);              // A = A + M3
   }
 
 
   template<typename T_matrix, typename T_scalar>
   void sastre_poly_8_eval(std::vector<T_scalar> const & mc,
-			  T_matrix & x,
-			  T_matrix & M1,
+			  T_matrix & A,
+			  T_matrix & A2,
 			  T_matrix & M2,
 			  T_matrix & M3) {
-    sastre_poly_8_eval(mc, x, std::is_floating_point<T_matrix>(), M1, M2, M3);
+    sastre_poly_8_eval(mc, A, std::is_floating_point<T_matrix>(), A2, M2, M3);
   }
   template<typename T_matrix, typename T_scalar>
   void sastre_poly_8_eval(std::vector<T_scalar> const & mc,
-			  T_matrix & x) {
-    T_matrix M1;
+			  T_matrix & A,
+			  T_matrix & A2) {
     T_matrix M2;
     T_matrix M3;
-    sastre_poly_8_eval(mc, x, M1, M2, M3);
+    sastre_poly_8_eval(mc, A, A2, M2, M3);
   }
 
 

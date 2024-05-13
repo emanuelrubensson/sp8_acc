@@ -71,7 +71,9 @@ struct Matrix {
 template<typename T>
 static void test_poly8_evaluation(std::vector<T> const & mc, Matrix<T> const & A, Matrix<T> const & sol_ref) {
   Matrix<T> poly_value_sastre = A;
-  sp8::sastre_poly_8_eval(mc, poly_value_sastre);
+  Matrix<T> A2;
+  A2.multiply(A, A);                          // A2 = A*A
+  sp8::sastre_poly_8_eval(mc, poly_value_sastre, A2);
   for(unsigned int ind = 0; ind < A.n*A.n;ind++) {
     assert(std::abs(poly_value_sastre.elements[ind] - sol_ref.elements[ind]) < std::sqrt(std::numeric_limits<T>::epsilon()));
     std::cout << std::setprecision(15) << poly_value_sastre.elements[ind] << std::endl;

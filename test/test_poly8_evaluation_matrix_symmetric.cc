@@ -65,7 +65,9 @@ struct Matrix_symmetric {
 template<typename T>
 static void test_poly8_evaluation(std::vector<T> const & mc, Matrix_symmetric<T> const & A, Matrix_symmetric<T> const & sol_ref) {
   Matrix_symmetric<T> sp8_poly_value_sastre = A;
-  sp8::sastre_poly_8_eval(mc, sp8_poly_value_sastre);
+  Matrix_symmetric<T> A2;
+  A2.multiply(A, A);                          // A2 = A*A  
+  sp8::sastre_poly_8_eval(mc, sp8_poly_value_sastre, A2);
   for(unsigned int ind = 0; ind < A.n*A.n;ind++) {
     // std::cout << std::setprecision(15) << sp8_poly_value_sastre.elements[ind] << std::endl;
     assert(std::abs(sp8_poly_value_sastre.elements[ind] - sol_ref.elements[ind]) < std::sqrt(std::numeric_limits<T>::epsilon()));
