@@ -1,4 +1,13 @@
 #include "sp8_acc.h"
+#include "Matrix_proxy.h"
+
+template<typename T_scalar>
+void matrix_multiply(T_scalar * ap, T_scalar * bp, T_scalar * cp, int n) {
+  sp8::Matrix_proxy<T_scalar> A(ap,n);
+  sp8::Matrix_proxy<T_scalar> B(bp,n);
+  sp8::Matrix_proxy<T_scalar> C(cp,n);
+  C.multiply(A,B);
+}
 
 extern "C" {
   /** v_output should point to array with 9 elements */
@@ -59,6 +68,13 @@ extern "C" {
     v.resize(9);
     std::copy_n(v_input, 9, v.begin());
     return sp8::sp8_prim(v, x);
+  }
+
+  void matmul_single(float * ap, float * bp, float * cp, int n) {
+    matrix_multiply(ap, bp, cp, n);
+  }
+  void matmul_double(double * ap, double * bp, double * cp, int n) {
+    matrix_multiply(ap, bp, cp, n);
   }
 
 }
