@@ -1,7 +1,4 @@
-all: sp8cc/sp8cc.so
-	
-
-sp8cc/sp8cc.so:
+all:
 	cd sp8cc && $(MAKE)
 
 install:
