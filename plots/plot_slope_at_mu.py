@@ -15,7 +15,7 @@ def get_slope(left,right,mu_vec,gap):
         v = np.empty(9)
         sp8py.get_sp8_params(lumo,homo,sp8_spec,v)
         slope_vec[idx] = sp8py.sp8_prim(v,mu)
-        map_vec[idx] = sp8py.sp8(v,mu)
+        map_vec[idx] = sp8py.sp8_eval(v,mu)
     return slope_vec, map_vec
 
 npoints = 150
