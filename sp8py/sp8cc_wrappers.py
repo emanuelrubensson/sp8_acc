@@ -9,6 +9,13 @@ lib_search_path = os.path.abspath(os.path.join(os.path.dirname(__file__),
 libfile = glob.glob(lib_search_path, recursive=True)[0]
 sp8_cwrappers_lib = ctypes.cdll.LoadLibrary(libfile)
 
+def none_is_another(lst):
+    for ind, el in enumerate(lst):
+        for ind2 in range(ind+1,len(lst)):
+            if el is lst[ind2]:
+                return False
+    return True
+
 get_sp8_params_helper = sp8_cwrappers_lib.get_sp8_params
 get_sp8_params_helper.restype = ctypes.c_int
 get_sp8_params_helper.argtypes = [ctypes.c_double,
@@ -52,8 +59,6 @@ sp8_eval = sp8_cwrappers_lib.sp8_eval
 sp8_eval.restype = ctypes.c_double
 sp8_eval.argtypes = [ndpointer(ctypes.c_double, ndim=1, shape=(9), flags="C_CONTIGUOUS"),ctypes.c_double]
 
-
-
 matmul_single_helper = sp8_cwrappers_lib.matmul_single
 matmul_single_helper.restype = None
 matmul_single_helper.argtypes = [ndpointer(ctypes.c_float, ndim=2, flags="F_CONTIGUOUS"),
@@ -74,11 +79,87 @@ def matmul(A,B,C):
     mC,nC = np.shape(C)    
     assert(mA == nA == mB == nB == mC == nC)
     if isinstance(A[0][0], float): # OBS: "np.float64" is a "float" but not the other way around
-        assert(isinstance(B[0][0], float));
-        assert(isinstance(C[0][0], float));
         matmul_double_helper(A,B,C,nA)
     if isinstance(A[0][0], np.float32):
-        assert(isinstance(B[0][0], np.float32));
-        assert(isinstance(C[0][0], np.float32));
         matmul_single_helper(A,B,C,nA)
     return
+
+sastre_poly_8_eval_single_helper = sp8_cwrappers_lib.sastre_poly_8_eval_single
+sastre_poly_8_eval_single_helper.restype = None
+sastre_poly_8_eval_single_helper.argtypes = [ndpointer(ctypes.c_float, ndim=1, shape=(9), flags="C_CONTIGUOUS"),
+                                             ndpointer(ctypes.c_float, ndim=2, flags="F_CONTIGUOUS"),
+                                             ndpointer(ctypes.c_float, ndim=2, flags="F_CONTIGUOUS"),
+                                             ndpointer(ctypes.c_float, ndim=2, flags="F_CONTIGUOUS"),
+                                             ndpointer(ctypes.c_float, ndim=2, flags="F_CONTIGUOUS"),
+                                             ctypes.c_int]
+sastre_poly_8_eval_double_helper = sp8_cwrappers_lib.sastre_poly_8_eval_double
+sastre_poly_8_eval_double_helper.restype = None
+sastre_poly_8_eval_double_helper.argtypes = [ndpointer(ctypes.c_double, ndim=1, shape=(9), flags="C_CONTIGUOUS"),
+                                             ndpointer(ctypes.c_double, ndim=2, flags="F_CONTIGUOUS"),
+                                             ndpointer(ctypes.c_double, ndim=2, flags="F_CONTIGUOUS"),
+                                             ndpointer(ctypes.c_double, ndim=2, flags="F_CONTIGUOUS"),
+                                             ndpointer(ctypes.c_double, ndim=2, flags="F_CONTIGUOUS"),
+                                             ctypes.c_int]
+def sastre_poly_8_eval(mc, X, X2, M2, M3):
+    assert(np.ndim(X)==np.ndim(X2)==np.ndim(M2)==np.ndim(M3)==2)
+    mX,nX   = np.shape(X)
+    mX2,nX2 = np.shape(X2)
+    mM2,nM2 = np.shape(M2)
+    mM3,nM3 = np.shape(M3)
+    assert(mX == nX == mX2 == nX2 == mM2 == nM2 == mM3 == nM3)
+    if isinstance(X[0][0], float):
+        sastre_poly_8_eval_double_helper(mc, X, X2, M2, M3, nX)
+        return
+    if isinstance(X[0][0], np.float32):
+        mc = np.asanyarray(mc, dtype=np.float32)
+        sastre_poly_8_eval_single_helper(mc, X, X2, M2, M3, nX)
+        return
+
+poly_8_eval_single_helper = sp8_cwrappers_lib.poly_8_eval_single
+poly_8_eval_single_helper.restype = None
+poly_8_eval_single_helper.argtypes = [ndpointer(ctypes.c_float, ndim=1, shape=(9), flags="C_CONTIGUOUS"),
+                                      ndpointer(ctypes.c_float, ndim=2, flags="F_CONTIGUOUS"),
+                                      ndpointer(ctypes.c_float, ndim=2, flags="F_CONTIGUOUS"),
+                                      ndpointer(ctypes.c_float, ndim=2, flags="F_CONTIGUOUS"),
+                                      ndpointer(ctypes.c_float, ndim=2, flags="F_CONTIGUOUS"),
+                                      ctypes.c_int]
+poly_8_eval_double_helper = sp8_cwrappers_lib.poly_8_eval_double
+poly_8_eval_double_helper.restype = None
+poly_8_eval_double_helper.argtypes = [ndpointer(ctypes.c_double, ndim=1, shape=(9), flags="C_CONTIGUOUS"),
+                                      ndpointer(ctypes.c_double, ndim=2, flags="F_CONTIGUOUS"),
+                                      ndpointer(ctypes.c_double, ndim=2, flags="F_CONTIGUOUS"),
+                                      ndpointer(ctypes.c_double, ndim=2, flags="F_CONTIGUOUS"),
+                                      ndpointer(ctypes.c_double, ndim=2, flags="F_CONTIGUOUS"),
+                                      ctypes.c_int]
+def poly_8_eval(mc, X, X2, M2, M3):
+    assert( none_is_another( (X, X2, M2, M3) ) )
+    assert(np.ndim(X)==np.ndim(X2)==np.ndim(M2)==np.ndim(M3)==2)
+    mX,nX   = np.shape(X)
+    mX2,nX2 = np.shape(X2)
+    mM2,nM2 = np.shape(M2)
+    mM3,nM3 = np.shape(M3)
+    assert(mX == nX == mX2 == nX2 == mM2 == nM2 == mM3 == nM3)
+    if isinstance(X[0][0], float):
+        poly_8_eval_double_helper(mc, X, X2, M2, M3, nX)
+        return
+    if isinstance(X[0][0], np.float32):
+        mc = np.asanyarray(mc, dtype=np.float32)
+        poly_8_eval_single_helper(mc, X, X2, M2, M3, nX)
+        return
+
+trace_XmX2_single_helper = sp8_cwrappers_lib.trace_XmX2_single
+trace_XmX2_single_helper.restype = ctypes.c_float
+trace_XmX2_single_helper.argtypes = [ndpointer(ctypes.c_float, ndim=2, flags="F_CONTIGUOUS"),
+                                     ctypes.c_int]
+trace_XmX2_double_helper = sp8_cwrappers_lib.trace_XmX2_double
+trace_XmX2_double_helper.restype = ctypes.c_double
+trace_XmX2_double_helper.argtypes = [ndpointer(ctypes.c_double, ndim=2, flags="F_CONTIGUOUS"),
+                                     ctypes.c_int]
+def trace_XmX2(X):
+    assert(np.ndim(X) == 2)
+    mX,nX   = np.shape(X)
+    assert(mX == nX)
+    if isinstance(X[0][0], float):
+        return trace_XmX2_double_helper(X,nX)
+    if isinstance(X[0][0], np.float32):
+        return trace_XmX2_single_helper(X,nX)

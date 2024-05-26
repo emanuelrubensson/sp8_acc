@@ -5,5 +5,9 @@ from .sp8cc_wrappers import (
     get_sp8_monomial_coefficients,
     sp8_prim,
     sp8_eval,
-    matmul
+    matmul,
+    sastre_poly_8_eval,
+    poly_8_eval,
+    trace_XmX2
 )
+from .sp2 import *
