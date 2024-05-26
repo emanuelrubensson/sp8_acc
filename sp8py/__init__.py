@@ -1,4 +1,5 @@
 from .sp8cc_wrappers import (
+    get_sp8_params_no_acc,
     get_sp8_params,
     get_sp8_params_max_slope,
     get_sp8_params_max_gap,

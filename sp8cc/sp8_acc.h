@@ -839,7 +839,8 @@ namespace sp8 {
   };
 
   template<typename T>
-  void get_sp8_params_no_acc(int left, int right, std::vector<T> & v) {
+  void get_sp8_params_no_acc(const int left, const int right,
+                             std::vector<T> & v) {
     auto switch_pair = [](unsigned int x, unsigned int y){return (x<<3)+y;};
     switch(switch_pair(left, right)) {
     case switch_pair(4,3):
