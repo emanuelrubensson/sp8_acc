@@ -1,12 +1,57 @@
+#include <array>
 #include "sp8_acc.h"
 #include "Matrix_proxy.h"
+#include "sastre_poly8_eval.h"
+#include "poly8_eval.h"
 
 template<typename T_scalar>
-void matrix_multiply(T_scalar * ap, T_scalar * bp, T_scalar * cp, int n) {
-  sp8::Matrix_proxy<T_scalar> A(ap,n);
-  sp8::Matrix_proxy<T_scalar> B(bp,n);
+void matrix_multiply(T_scalar const * ap, T_scalar const * bp, T_scalar * cp, int n) {
+  sp8::Matrix_proxy<T_scalar const> const A(ap,n);
+  sp8::Matrix_proxy<T_scalar const> const B(bp,n);
   sp8::Matrix_proxy<T_scalar> C(cp,n);
   C.multiply(A,B);
+}
+
+template<typename T, std::size_t N>
+bool none_is_equal(std::array<T*,N> const & ptrs) {
+  for(unsigned int ind=0;ind<N;ind++)
+    for(unsigned int ind2=ind+1;ind2<N;ind2++)
+      if ( ptrs[ind] == ptrs[ind2] )
+	return false;
+  return true;
+}
+
+template<typename T_scalar>
+void sastre_poly_8_eval(T_scalar const * mc, T_scalar * ap, T_scalar * a2p,
+			T_scalar * m2p, T_scalar * m3p, int n) {
+  sp8::Matrix_proxy<T_scalar> A(ap,n);
+  sp8::Matrix_proxy<T_scalar> A2(a2p,n);
+  sp8::Matrix_proxy<T_scalar> M2(m2p,n);
+  sp8::Matrix_proxy<T_scalar> M3(m3p,n);
+  std::vector<T_scalar> mc_vec;
+  mc_vec.resize(9);
+  std::copy_n(mc, 9, mc_vec.begin());
+  sp8::sastre_poly_8_eval(mc_vec, A, A2, M2, M3);
+}
+
+template<typename T_scalar>
+void poly_8_eval(T_scalar const * mc, T_scalar * ap, T_scalar * a2p,
+		 T_scalar * m2p, T_scalar * m3p, int n) {
+  assert( none_is_equal(std::array<T_scalar*,4>({ap,a2p,m2p,m3p})) );
+  sp8::Matrix_proxy<T_scalar> A(ap,n);
+  sp8::Matrix_proxy<T_scalar> A2(a2p,n);
+  sp8::Matrix_proxy<T_scalar> M2(m2p,n);
+  sp8::Matrix_proxy<T_scalar> M3(m3p,n);
+  std::vector<T_scalar> mc_vec;
+  mc_vec.resize(9);
+  std::copy_n(mc, 9, mc_vec.begin());
+  sp8::poly_8_eval(mc_vec, A, A2, M2, M3);
+}
+
+template<typename T_scalar>
+T_scalar trace_XmX2(T_scalar const * ap, int n) {
+  sp8::Matrix_proxy<T_scalar const> const A(ap,n);
+  return A.trace_XmX2();
 }
 
 extern "C" {
@@ -70,11 +115,36 @@ extern "C" {
     return sp8::sp8_prim(v, x);
   }
 
-  void matmul_single(float * ap, float * bp, float * cp, int n) {
+  void matmul_single(float const * ap, float const * bp, float * cp, int n) {
     matrix_multiply(ap, bp, cp, n);
   }
-  void matmul_double(double * ap, double * bp, double * cp, int n) {
+  void matmul_double(double const * ap, double const * bp, double * cp, int n) {
     matrix_multiply(ap, bp, cp, n);
   }
 
-}
+  void sastre_poly_8_eval_single(float const * mc, float * ap, float * a2p,
+				 float * m2p, float * m3p, int n) {
+    sastre_poly_8_eval(mc, ap, a2p, m2p, m3p, n);
+  }
+  void sastre_poly_8_eval_double(double const * mc, double * ap, double * a2p,
+				 double * m2p, double * m3p, int n) {
+    sastre_poly_8_eval(mc, ap, a2p, m2p, m3p, n);
+  }
+
+  void poly_8_eval_single(float const * mc, float * ap, float * a2p,
+			  float * m2p, float * m3p, int n) {
+    poly_8_eval(mc, ap, a2p, m2p, m3p, n);
+  }
+  void poly_8_eval_double(double const * mc, double * ap, double * a2p,
+			  double * m2p, double * m3p, int n) {
+    poly_8_eval(mc, ap, a2p, m2p, m3p, n);
+  }
+  
+  float trace_XmX2_single(float const * ap, int n) {
+    return trace_XmX2(ap, n);
+  }
+  double trace_XmX2_double(double const * ap, int n) {
+    return trace_XmX2(ap, n);
+  }
+
+} // extern "C"

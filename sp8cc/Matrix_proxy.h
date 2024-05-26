@@ -27,19 +27,29 @@ void gemm(const char *ta,const char *tb,
 namespace sp8 {
   template<typename T_scalar>
   struct Matrix_proxy {
+    typedef T_scalar value_type;
     T_scalar* elements;
     int n;
     Matrix_proxy(T_scalar* elements, int n)
       :elements(elements), n(n)
     {}
-    Matrix_proxy(const Matrix_proxy&) = delete;
+    Matrix_proxy(Matrix_proxy<typename std::remove_const<T_scalar>::type> const & other)
+      :elements(other.elements),n(other.n) {}
+    //Matrix_proxy(const Matrix_proxy&) = delete;
     inline Matrix_proxy const & operator=(Matrix_proxy const & other) {
       assert(this->n == other.n);
       std::copy_n(other.elements, n*n, this->elements);
       return *this;
     }
-    inline void multiply(Matrix_proxy<T_scalar> const & A,
-			 Matrix_proxy<T_scalar> const & B) {
+    inline void print_elements() const {
+      for (int ind = 0; ind < n*n;ind++)
+	std::cout << elements[ind] << "  ";
+      std::cout << std::endl;
+    }
+    inline void multiply(Matrix_proxy<T_scalar const> const & A,
+			 Matrix_proxy<T_scalar const> const & B) {
+      assert(A.elements != this->elements);
+      assert(B.elements != this->elements);
       const T_scalar one  = 1.0;
       const T_scalar zero = 0.0;
       int n = this->n;
@@ -50,7 +60,7 @@ namespace sp8 {
     }
     inline void scale_and_add(T_scalar const a,
 			      T_scalar const b,
-			      Matrix_proxy<T_scalar> const & A) {
+			      Matrix_proxy<T_scalar const> const & A) {
       assert(this->n == A.n);
       for(unsigned int ind = 0; ind < this->n*this->n;ind++)
 	this->elements[ind] = a*this->elements[ind] + b*A.elements[ind];
@@ -62,6 +72,16 @@ namespace sp8 {
     inline void negate() {
       for(unsigned int ind = 0; ind < this->n*this->n; ind++)
 	this->elements[ind] = -this->elements[ind];
+    }
+    inline T_scalar trace_XmX2() const {
+      typename std::remove_const<T_scalar>::type sum = 0;
+      for(unsigned int i = 0; i < this->n; i++) {
+	typename std::remove_const<T_scalar>::type diag_el_X2 = 0;
+	for(unsigned int j = 0; j < this->n; j++)
+	  diag_el_X2 += this->elements[i+j*n] * this->elements[j+i*n];
+	sum += this->elements[i+i*n] - diag_el_X2;
+      }
+      return sum;
     }
   };
 
