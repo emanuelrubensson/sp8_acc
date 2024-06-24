@@ -4,6 +4,7 @@
 #include <cassert>
 #include "sp8_acc.h"
 #include "sastre_poly8_eval.h"
+#include "Scalar_proxy.h"
 
 /** Test checking that three different evaluations of an sp8 polynomial
     gives the same value. Polynomial evaluated directly from
@@ -25,10 +26,10 @@ static void test_sp8_evaluation(std::vector<T> const &  v, T const x) {
     x_pow = x_pow*x;
   }
   T diff_sp8_mono = std::abs(sp8_poly_value - sp8_poly_value_monomial);
-  T sp8_poly_value_sastre = x;
-  T x2 = x*x;
+  Scalar_proxy<T> sp8_poly_value_sastre = x;
+  Scalar_proxy<T> x2 = x*x;
   sp8::sastre_poly_8_eval(mc, sp8_poly_value_sastre, x2);
-  T diff_sp8_sastre = std::abs(sp8_poly_value - sp8_poly_value_sastre);
+  T diff_sp8_sastre = std::abs(sp8_poly_value - sp8_poly_value_sastre.x);
   //  std::cout << std::setprecision(15);
   //  std::cout << "sastre: " << sp8_poly_value_sastre << std::endl;
   //  std::cout << "monom : " << sp8_poly_value_monomial << std::endl;

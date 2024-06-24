@@ -4,102 +4,54 @@
 #include <cmath>
 
 namespace sp8 {
-
-  /** Proxy template for handling the special case where the 'matrix' is
-      a single floating point number. This template also provides a
-      template for the implementation of Matrix classes to be used with
-      sastre_poly_8_eval.
-    
-  */
-  template<typename T_matrix_scalar>
-  struct Scalar_proxy {
-    T_matrix_scalar x;
-    Scalar_proxy(T_matrix_scalar const x = T_matrix_scalar()) :x(x) {}
-    inline Scalar_proxy operator=(Scalar_proxy const & other) {
-      x = other.x;
-      return *this;
-    }
-    inline void multiply(Scalar_proxy<T_matrix_scalar> const & A,
-			 Scalar_proxy<T_matrix_scalar> const & B) {
-      this->x = A.x*B.x;
-    }
-    inline void scale_and_add(T_matrix_scalar const a,
-			      T_matrix_scalar const b,
-			      Scalar_proxy<T_matrix_scalar> const & M1) {
-      x = a*x + b*M1.x;
-    }
-    inline void add_scaled_identity(T_matrix_scalar const a) {
-      x = x+a;
-    }
-    inline void negate() {
-      x = -x;
-    }
-  };
-
-
-  template<typename T_matrix_scalar, typename T_scalar>
-  void sastre_poly_8_eval(std::vector<T_scalar> const & mc,
-			  T_matrix_scalar & x,
-			  std::true_type,
-			  T_matrix_scalar x2,
-			  T_matrix_scalar m2,
-			  T_matrix_scalar m3) {
-    Scalar_proxy X(x);
-    Scalar_proxy X2(x2);
-    Scalar_proxy M2(m2);
-    Scalar_proxy M3(m3);
-    sastre_poly_8_eval(mc, X, X2, M2, M3);
-    x = X.x;
-  }
-
   /** If the input matrix to sastre_poly_8_eval is symmetric, then all
       intermediate matrices and the output matrix are also symmetric. In
       this case symmetric matrix storage and computation may be used
       throughout.
   */
-  template<typename T_matrix, typename T_scalar>
-  void sastre_poly_8_eval(std::vector<T_scalar> const & mc,
+  template<typename T_matrix>
+  void sastre_poly_8_eval(std::vector<typename T_matrix::value_type> const & mc,
 			  T_matrix & A,
-			  std::false_type,
 			  T_matrix & A2,
 			  T_matrix & M2,
 			  T_matrix & M3) {
-    const T_scalar b0=mc[8], b1=mc[7], b2=mc[6];
-    const T_scalar b3=mc[5], b4=mc[4], b5=mc[3];
-    const T_scalar b6=mc[2], b7=mc[1], b8=mc[0];
+    typedef typename T_matrix::value_type scalar_type;
+    const scalar_type b0=mc[8], b1=mc[7], b2=mc[6];
+    const scalar_type b3=mc[5], b4=mc[4], b5=mc[3];
+    const scalar_type b6=mc[2], b7=mc[1], b8=mc[0];
     if (b8<0) {
       // Avoid complex numbers by switching evaluating with minus sign and
       // subsequently reversing
-      std::vector<T_scalar> mc_minus(9);
+      std::vector<scalar_type> mc_minus(9);
       for (unsigned int ind = 0; ind<9; ind++)      
 	mc_minus[ind]=-mc[ind];
-      sastre_poly_8_eval(mc_minus, A, std::is_floating_point<T_matrix>(), A2, M2, M3);
+      sastre_poly_8_eval(mc_minus, A, A2, M2, M3);
       A.negate();
       return;
     }
   
     // plus minus: Two options possible.
     // "Correct"  option leads to a e2_num_sqrt > 0 in code below?
-    const T_scalar c4 = std::sqrt(b8);
-    const T_scalar c3 = b7 / (2.0 * c4);
-    const T_scalar d2_plus_e2 = (b6 - c3*c3) / c4;
-    const T_scalar d1 = (b5 - c3 * d2_plus_e2) / c4;
+    const scalar_type c4 = std::sqrt(b8);
+    const scalar_type c3 = b7 / (2.0 * c4);
+    const scalar_type d2_plus_e2 = (b6 - c3*c3) / c4;
+    const scalar_type d1 = (b5 - c3 * d2_plus_e2) / c4;
   
-    const T_scalar e2_num_sqrt =  std::pow(d1 - (c3 / c4) * d2_plus_e2, 2) +
+    const scalar_type e2_num_sqrt =  std::pow(d1 - (c3 / c4) * d2_plus_e2, 2) +
       4.0 * (c3 / c4) * (b3 + (std::pow(c3,2) / c4) * d1 - (c3 / c4) * b4);
 
     // If e2_num_sqrt<0 we may want to try other sign in c4 ?
     // Here are two options on the square roor: plus minus
-    const T_scalar e2_num = (c3 / c4) * d2_plus_e2 - d1 + std::sqrt(e2_num_sqrt);
-    const T_scalar e2 = e2_num / (2 * c3 / c4);
-    const T_scalar d2 = d2_plus_e2 - e2;
-    const T_scalar f2 = b2;
-    const T_scalar f1 = b1;
-    const T_scalar f0 = b0;
+    const scalar_type e2_num = (c3 / c4) * d2_plus_e2 - d1 + std::sqrt(e2_num_sqrt);
+    const scalar_type e2 = e2_num / (2 * c3 / c4);
+    const scalar_type d2 = d2_plus_e2 - e2;
+    const scalar_type f2 = b2;
+    const scalar_type f1 = b1;
+    const scalar_type f0 = b0;
   
-    const T_scalar e0 = (b3 - d1 * e2) / c3; // Not explicitly
+    const scalar_type e0 = (b3 - d1 * e2) / c3; // Not explicitly
     // documented by sastre?
-    const T_scalar one = 1.0;
+    const scalar_type one = 1.0;
     M2 = A2;                                    // M2 = A2
     M2.scale_and_add(c4, c3, A);                // M2 = c4*M2 + c3*A
     M3.multiply(A2,M2);                         // M3 = A2*M2
@@ -114,17 +66,8 @@ namespace sp8 {
     A.scale_and_add(one, one, M3);              // A = A + M3
   }
 
-
-  template<typename T_matrix, typename T_scalar>
-  void sastre_poly_8_eval(std::vector<T_scalar> const & mc,
-			  T_matrix & A,
-			  T_matrix & A2,
-			  T_matrix & M2,
-			  T_matrix & M3) {
-    sastre_poly_8_eval(mc, A, std::is_floating_point<T_matrix>(), A2, M2, M3);
-  }
-  template<typename T_matrix, typename T_scalar>
-  void sastre_poly_8_eval(std::vector<T_scalar> const & mc,
+  template<typename T_matrix>
+  void sastre_poly_8_eval(std::vector<typename T_matrix::value_type> const & mc,
 			  T_matrix & A,
 			  T_matrix & A2) {
     T_matrix M2;
