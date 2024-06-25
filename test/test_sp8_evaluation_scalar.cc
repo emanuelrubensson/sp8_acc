@@ -4,6 +4,7 @@
 #include <cassert>
 #include "sp8_acc.h"
 #include "sastre_poly8_eval.h"
+#include "poly8_eval.h"
 #include "Scalar_proxy.h"
 
 /** Test checking that three different evaluations of an sp8 polynomial
@@ -15,27 +16,44 @@
 */
 template<typename T>
 static void test_sp8_evaluation(std::vector<T> const &  v, T const x) {
+  // evaluation directly from sp8 representation
   T sp8_poly_value = sp8::sp8_eval(v,x);
+    std::cout << std::setprecision(15);
+    // std::cout << "sp8       : " << sp8_poly_value << std::endl;
+  // Get monomial coefficients
   std::vector<T> mc;
   sp8::get_sp8_monomial_coefficients(v, mc);
   assert(mc.size() == 9);
-  T sp8_poly_value_monomial = 0;
-  T x_pow = 1;
-  for(int ind = 8; ind >= 0; ind--) {
-    sp8_poly_value_monomial += mc[ind]*x_pow;
-    x_pow = x_pow*x;
+  {
+    // Straightforward evaluation from canonical form
+    T sp8_poly_value_monomial = 0;
+    T x_pow = 1;
+    for(int ind = 8; ind >= 0; ind--) {
+      sp8_poly_value_monomial += mc[ind]*x_pow;
+      x_pow = x_pow*x;
+    }
+    //  std::cout << "monom     : " << sp8_poly_value_monomial << std::endl;
+    T diff_sp8_mono = std::abs(sp8_poly_value - sp8_poly_value_monomial);
+    assert(diff_sp8_mono   < std::sqrt(std::numeric_limits<T>::epsilon()));
   }
-  T diff_sp8_mono = std::abs(sp8_poly_value - sp8_poly_value_monomial);
-  Scalar_proxy<T> sp8_poly_value_sastre = x;
-  Scalar_proxy<T> x2 = x*x;
-  sp8::sastre_poly_8_eval(mc, sp8_poly_value_sastre, x2);
-  T diff_sp8_sastre = std::abs(sp8_poly_value - sp8_poly_value_sastre.x);
-  //  std::cout << std::setprecision(15);
-  //  std::cout << "sastre: " << sp8_poly_value_sastre << std::endl;
-  //  std::cout << "monom : " << sp8_poly_value_monomial << std::endl;
-  //  std::cout << "sp8   : " << sp8_poly_value << std::endl;
-  assert(diff_sp8_mono   < std::sqrt(std::numeric_limits<T>::epsilon()));
-  assert(diff_sp8_sastre < std::sqrt(std::numeric_limits<T>::epsilon()));
+  {
+    // Sastre evalution
+    Scalar_proxy<T> sp8_poly_value_sastre = x;
+    Scalar_proxy<T> x2 = x*x;
+    sp8::sastre_poly_8_eval(mc, sp8_poly_value_sastre, x2);
+    // std::cout << "sastre    : " << sp8_poly_value_sastre.x << std::endl;
+    T diff_sp8_sastre = std::abs(sp8_poly_value - sp8_poly_value_sastre.x);
+    assert(diff_sp8_sastre < std::sqrt(std::numeric_limits<T>::epsilon()));
+  }
+  {
+    // New scheme
+    Scalar_proxy<T> sp8_poly_value_new_scheme = x;
+    Scalar_proxy<T> x2 = x*x;
+    sp8::poly_8_eval(mc, sp8_poly_value_new_scheme, x2);
+    // std::cout << "new scheme: " << sp8_poly_value_new_scheme.x << std::endl;
+    T diff_sp8_new_scheme = std::abs(sp8_poly_value - sp8_poly_value_new_scheme.x);
+    assert(diff_sp8_new_scheme < std::sqrt(std::numeric_limits<T>::epsilon()));
+  }
 }
 
 int main(int argc, char* const  argv[]){
