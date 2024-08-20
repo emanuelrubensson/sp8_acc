@@ -9,6 +9,7 @@ from .sp8cc_wrappers import (
     matmul,
     sastre_poly_8_eval,
     poly_8_eval,
+    poly_8_eval_low_mem,
     trace_XmX2
 )
 #from .sp2 import *

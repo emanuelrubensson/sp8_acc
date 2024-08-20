@@ -3,6 +3,7 @@
 #include "Matrix_proxy.h"
 #include "sastre_poly8_eval.h"
 #include "poly8_eval.h"
+#include "poly8_eval_low_mem.h"
 
 template<typename T_scalar>
 void matrix_multiply(T_scalar const * ap, T_scalar const * bp, T_scalar * cp, int n) {
@@ -46,6 +47,19 @@ void poly_8_eval(T_scalar const * mc, T_scalar * ap, T_scalar * a2p,
   mc_vec.resize(9);
   std::copy_n(mc, 9, mc_vec.begin());
   sp8::poly_8_eval(mc_vec, A, A2, M2, M3);
+}
+
+template<typename T_scalar>
+void poly_8_eval_low_mem(T_scalar const * mc, T_scalar * ap, T_scalar * a2p,
+		 T_scalar * t1p, int n) {
+  assert( none_is_equal(std::array<T_scalar*,4>({ap,a2p,t1p})) );
+  sp8::Matrix_proxy<T_scalar> A(ap,n);
+  sp8::Matrix_proxy<T_scalar> A2(a2p,n);
+  sp8::Matrix_proxy<T_scalar> T1(t1p,n);
+  std::vector<T_scalar> mc_vec;
+  mc_vec.resize(9);
+  std::copy_n(mc, 9, mc_vec.begin());
+  sp8::poly_8_eval_low_mem(mc_vec, A, A2, T1);
 }
 
 template<typename T_scalar>
@@ -147,6 +161,15 @@ extern "C" {
   void poly_8_eval_double(double const * mc, double * ap, double * a2p,
 			  double * m2p, double * m3p, int n) {
     poly_8_eval(mc, ap, a2p, m2p, m3p, n);
+  }
+
+  void poly_8_eval_low_mem_single(float const * mc, float * ap, float * a2p,
+			  float * m2p, int n) {
+    poly_8_eval_low_mem(mc, ap, a2p, m2p, n);
+  }
+  void poly_8_eval_low_mem_double(double const * mc, double * ap, double * a2p,
+			  double * m2p, int n) {
+    poly_8_eval_low_mem(mc, ap, a2p, m2p, n);
   }
   
   float trace_XmX2_single(float const * ap, int n) {

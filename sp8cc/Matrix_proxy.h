@@ -47,16 +47,18 @@ namespace sp8 {
       std::cout << std::endl;
     }
     inline void multiply(Matrix_proxy<T_scalar const> const & A,
-			 Matrix_proxy<T_scalar const> const & B) {
+			 Matrix_proxy<T_scalar const> const & B,
+        const T_scalar &alpha = 1.0,
+        const T_scalar &beta = 0.0) {
       assert(A.elements != this->elements);
       assert(B.elements != this->elements);
-      const T_scalar one  = 1.0;
-      const T_scalar zero = 0.0;
+      //const T_scalar one  = 1.0;
+      //const T_scalar zero = 0.0;
       int n = this->n;
       assert(n   == A.n);
       assert(B.n == A.n);
-      gemm("N", "N", &n, &n, &n, &one, A.elements, &n,
-	   B.elements, &n, &zero, this->elements, &n);
+      gemm("N", "N", &n, &n, &n, &alpha, A.elements, &n,
+	   B.elements, &n, &beta, this->elements, &n);
     }
     inline void scale_and_add(T_scalar const a,
 			      T_scalar const b,

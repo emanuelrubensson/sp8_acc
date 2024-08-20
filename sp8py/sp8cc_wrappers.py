@@ -137,6 +137,23 @@ poly_8_eval_double_helper.argtypes = [ndpointer(ctypes.c_double, ndim=1, shape=(
                                       ndpointer(ctypes.c_double, ndim=2, flags="F_CONTIGUOUS"),
                                       ndpointer(ctypes.c_double, ndim=2, flags="F_CONTIGUOUS"),
                                       ctypes.c_int]
+
+poly_8_eval_low_mem_single_helper = sp8_cwrappers_lib.poly_8_eval_low_mem_single
+poly_8_eval_low_mem_single_helper.restype = None
+poly_8_eval_low_mem_single_helper.argtypes = [ndpointer(ctypes.c_float, ndim=1, shape=(9), flags="C_CONTIGUOUS"),
+                                      ndpointer(ctypes.c_float, ndim=2, flags="F_CONTIGUOUS"),
+                                      ndpointer(ctypes.c_float, ndim=2, flags="F_CONTIGUOUS"),
+                                      ndpointer(ctypes.c_float, ndim=2, flags="F_CONTIGUOUS"),
+                                      ctypes.c_int]
+poly_8_eval_low_mem_double_helper = sp8_cwrappers_lib.poly_8_eval_low_mem_double
+poly_8_eval_low_mem_double_helper.restype = None
+poly_8_eval_low_mem_double_helper.argtypes = [ndpointer(ctypes.c_double, ndim=1, shape=(9), flags="C_CONTIGUOUS"),
+                                      ndpointer(ctypes.c_double, ndim=2, flags="F_CONTIGUOUS"),
+                                      ndpointer(ctypes.c_double, ndim=2, flags="F_CONTIGUOUS"),
+                                      ndpointer(ctypes.c_double, ndim=2, flags="F_CONTIGUOUS"),
+                                      ctypes.c_int]
+
+
 def poly_8_eval(mc, X, X2, M2, M3):
     assert( none_is_another( (X, X2, M2, M3) ) )
     assert(np.ndim(X)==np.ndim(X2)==np.ndim(M2)==np.ndim(M3)==2)
@@ -151,6 +168,21 @@ def poly_8_eval(mc, X, X2, M2, M3):
     if isinstance(X[0][0], np.float32):
         mc = np.asanyarray(mc, dtype=np.float32)
         poly_8_eval_single_helper(mc, X, X2, M2, M3, nX)
+        return
+
+def poly_8_eval_low_mem(mc, X, X2, T1):
+    assert( none_is_another( (X, X2, T1) ) )
+    assert(np.ndim(X)==np.ndim(X2)==np.ndim(T1)==2)
+    mX,nX   = np.shape(X)
+    mX2,nX2 = np.shape(X2)
+    mT1,nT1 = np.shape(T1)
+    assert(mX == nX == mX2 == nX2 == mT1 == nT1)
+    if isinstance(X[0][0], float):
+        poly_8_eval_low_mem_double_helper(mc, X, X2, T1, nX)
+        return
+    if isinstance(X[0][0], np.float32):
+        mc = np.asanyarray(mc, dtype=np.float32)
+        poly_8_eval_low_mem_single_helper(mc, X, X2, T1, nX)
         return
 
 trace_XmX2_single_helper = sp8_cwrappers_lib.trace_XmX2_single
