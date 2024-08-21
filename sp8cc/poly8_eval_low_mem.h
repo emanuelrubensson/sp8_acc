@@ -4,6 +4,23 @@
 #include <cmath>
 namespace sp8 {   
 
+  //helper function for more efficient memory usage
+  template<typename T_matrix>
+    void set_lincomb(T_matrix & X,
+                     T_matrix & X2,
+                     T_matrix & T1,
+                     double f1,
+                     double f2,
+                     double e1,
+                     double d1,
+                     double d2) {
+    T1.scale_and_add(1.0, d1, X);
+    T1.scale_and_add(1.0, d2, X2);
+    X2.scale_and_add(1.0, e1-d1, X);
+    X.scale_and_add(f1 - f2*(e1-d1),f2,X2);
+    X2.scale_and_add(1.0, 1.0, T1);
+  }
+
 template<typename T_matrix>
     void poly_8_eval_low_mem(std::vector<typename T_matrix::value_type> const & mc,
 		     T_matrix & X,
@@ -64,25 +81,7 @@ template<typename T_matrix>
 		     T_matrix & X,
 		     T_matrix & X2) {
     T_matrix T1;
-    T_matrix T2;
     poly_8_eval_low_mem(mc, X, X2, T1);
   }
-  //helper function for more efficient memory usage
-  template<typename T_matrix>
-    void set_lincomb(T_matrix & X,
-		     T_matrix & X2,
-		     T_matrix & T1,
-          double f1, 
-          double f2, 
-          double e1, 
-          double d1, 
-          double d2)
-          {
-            T1.scale_and_add(1.0, d1, X);
-            T1.scale_and_add(1.0, d2, X2);
-            X2.scale_and_add(1.0, e1-d1, X);
-            X.scale_and_add(f1 - f2*(e1-d1),f2,X2);
-            X2.scale_and_add(1.0, 1.0, T1);
-          }
 } // end namespace sp8
 #endif
