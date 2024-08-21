@@ -5,6 +5,7 @@
 #include "sastre_poly8_eval.h"
 #include "poly8_eval.h"
 #include "poly8_eval_low_mem.h"
+#include "test_utils.h"
 extern "C" void dgemm_(const char *ta,const char *tb,
 		       const int *n, const int *k, const int *l,
 		       const double *alpha,const double *A,const int *lda,
@@ -53,8 +54,12 @@ struct Matrix {
 		value_type const alpha = 1.0,
 		value_type const beta = 0.0) {
     int n = A.n;
-    this->n = n;
-    this->elements.resize(n*n);
+    if (beta == 0.0) {
+      this->n = n;
+      this->elements.resize(n*n);
+    }
+    else
+      assert(this->n == n);
     gemm("N", "N", &n, &n, &n, &alpha, &A.elements[0], &n,
 	 &B.elements[0], &n, &beta, &this->elements[0], &n);
   }
@@ -74,18 +79,6 @@ struct Matrix {
       this->elements[ind] = -this->elements[ind];
   }
 };
-
-template<typename T>
-static T maxabs_diff(std::vector<T> const & x, std::vector<T> const & y) {
-  T maxdiff = 0;
-  assert( x.size() == y.size() );
-  for(unsigned int ind = 0; ind < x.size(); ind++) {
-    T diff = std::abs(x[ind] - y[ind]);
-    if (diff > maxdiff)
-      maxdiff = diff;
-  }
-  return maxdiff;
-}
 
 template<typename T>
 static void test_poly8_evaluation(std::vector<T> const & mc, Matrix<T> const & A, Matrix<T> const & sol_ref) {

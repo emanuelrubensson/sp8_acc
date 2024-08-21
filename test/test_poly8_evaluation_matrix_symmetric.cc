@@ -3,6 +3,9 @@
 #include <iomanip>
 #include <algorithm>
 #include "sastre_poly8_eval.h"
+#include "poly8_eval.h"
+#include "poly8_eval_low_mem.h"
+#include "test_utils.h"
 
 template<typename T_scalar>
 struct Matrix_symmetric {
@@ -29,15 +32,23 @@ struct Matrix_symmetric {
     return this->elements[j+i*this->n];
   }
   void multiply(Matrix_symmetric<T_scalar> const & A,
-		Matrix_symmetric<T_scalar> const & B) {
+		Matrix_symmetric<T_scalar> const & B,
+		T_scalar const alpha = 1.0,
+		T_scalar const beta = 0.0) {
     int n = A.n;
-    this->n = n;
-    this->elements.resize(n*n);
-    std::fill(this->elements.begin(), this->elements.end(), 0.0);
+    if (beta == 0.0) {
+      this->n = n;
+      this->elements.resize(n*n);
+      std::fill(this->elements.begin(), this->elements.end(), 0.0);
+    }
+    else
+      assert(this->n == n);
     for (int colC = 0; colC<n; colC++)
-      for (int rowC = 0; rowC<=colC; rowC++)
+      for (int rowC = 0; rowC<=colC; rowC++) {
+	(*this)(rowC,colC) *= beta;
 	for (int k = 0; k<n; k++)
-	  (*this)(rowC,colC) += A(rowC,k)*B(k,colC);
+	  (*this)(rowC,colC) += alpha*A(rowC,k)*B(k,colC);
+      }
   }
   void scale_and_add(T_scalar const a,
 		     T_scalar const b,
@@ -56,21 +67,43 @@ struct Matrix_symmetric {
       for (int row = 0; row<=col; row++)
 	(*this)(row,col) = -(*this)(row,col);
   }
-  void print_matrix() const {
+  void print_elements() const {
+    std::cout << std::setprecision(15);
     for(unsigned int ind = 0; ind < this->n*this->n;ind++) 
-      std::cout << std::setprecision(15) << this->elements[ind] << std::endl;      
+      std::cout << std::setprecision(15) << this->elements[ind] << "  ";
+    std::cout << std::endl;
   }
 };
 
 template<typename T>
 static void test_poly8_evaluation(std::vector<T> const & mc, Matrix_symmetric<T> const & A, Matrix_symmetric<T> const & sol_ref) {
-  Matrix_symmetric<T> sp8_poly_value_sastre = A;
-  Matrix_symmetric<T> A2;
-  A2.multiply(A, A);                          // A2 = A*A  
-  sp8::sastre_poly_8_eval(mc, sp8_poly_value_sastre, A2);
-  for(unsigned int ind = 0; ind < A.n*A.n;ind++) {
-    // std::cout << std::setprecision(15) << sp8_poly_value_sastre.elements[ind] << std::endl;
-    assert(std::abs(sp8_poly_value_sastre.elements[ind] - sol_ref.elements[ind]) < std::sqrt(std::numeric_limits<T>::epsilon()));
+  bool verbose_output = true;
+  {
+    Matrix_symmetric<T> sp8_poly_value_sastre = A;
+    Matrix_symmetric<T> A2;
+    A2.multiply(A, A);                          // A2 = A*A
+    sp8::sastre_poly_8_eval(mc, sp8_poly_value_sastre, A2);
+    if (verbose_output)
+      sp8_poly_value_sastre.print_elements();
+    assert( maxabs_diff(sp8_poly_value_sastre.elements, sol_ref.elements) < std::sqrt(std::numeric_limits<T>::epsilon()) );
+  }
+  {
+    Matrix_symmetric<T> sp8_poly_value = A;
+    Matrix_symmetric<T> A2;
+    A2.multiply(A, A);                          // A2 = A*A
+    sp8::poly_8_eval(mc, sp8_poly_value, A2);
+    if (verbose_output)
+      sp8_poly_value.print_elements();
+    assert( maxabs_diff(sp8_poly_value.elements, sol_ref.elements) < std::sqrt(std::numeric_limits<T>::epsilon()) );
+  }
+  {
+    Matrix_symmetric<T> sp8_poly_value_low_mem = A;
+    Matrix_symmetric<T> A2;
+    A2.multiply(A, A);                          // A2 = A*A
+    sp8::poly_8_eval_low_mem(mc, sp8_poly_value_low_mem, A2);
+    if (verbose_output)
+      sp8_poly_value_low_mem.print_elements();
+    assert( maxabs_diff(sp8_poly_value_low_mem.elements, sol_ref.elements) < std::sqrt(std::numeric_limits<T>::epsilon()) );
   }
 }
 
