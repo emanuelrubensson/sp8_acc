@@ -12,4 +12,4 @@ from .sp8cc_wrappers import (
     poly_8_eval_low_mem,
     trace_XmX2
 )
-#from .sp2 import *
+from .sp2 import *

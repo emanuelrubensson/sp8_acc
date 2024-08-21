@@ -9,6 +9,7 @@ uninstall:
 
 check:
 	(cd test && $(MAKE) check)
+	(cd testpy && $(MAKE) check)
 
 clean:
 	rm sp8cc/sp8cc.so
