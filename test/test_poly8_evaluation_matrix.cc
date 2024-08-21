@@ -3,6 +3,8 @@
 #include <iomanip>
 #include <algorithm>
 #include "sastre_poly8_eval.h"
+#include "poly8_eval.h"
+#include "poly8_eval_low_mem.h"
 extern "C" void dgemm_(const char *ta,const char *tb,
 		       const int *n, const int *k, const int *l,
 		       const double *alpha,const double *A,const int *lda,
@@ -40,15 +42,21 @@ struct Matrix {
     std::copy_n(other.elements.begin(), n*n, this->elements.begin());
     return *this;
   }  
+  inline void print_elements() const {
+    std::cout << std::setprecision(15);
+    for (int ind = 0; ind < n*n;ind++)
+      std::cout << elements[ind] << "  ";
+    std::cout << std::endl;
+  }
   void multiply(Matrix<T_scalar> const & A,
-		Matrix<T_scalar> const & B) {
-    const T_scalar one=1.0;
-    const T_scalar zero=0.0;
+		Matrix<T_scalar> const & B,
+		value_type const alpha = 1.0,
+		value_type const beta = 0.0) {
     int n = A.n;
     this->n = n;
     this->elements.resize(n*n);
-    gemm("N", "N", &n, &n, &n, &one, &A.elements[0], &n,
-	 &B.elements[0], &n, &zero, &this->elements[0], &n);
+    gemm("N", "N", &n, &n, &n, &alpha, &A.elements[0], &n,
+	 &B.elements[0], &n, &beta, &this->elements[0], &n);
   }
   void scale_and_add(T_scalar const a,
 		     T_scalar const b,
@@ -67,16 +75,47 @@ struct Matrix {
   }
 };
 
+template<typename T>
+static T maxabs_diff(std::vector<T> const & x, std::vector<T> const & y) {
+  T maxdiff = 0;
+  assert( x.size() == y.size() );
+  for(unsigned int ind = 0; ind < x.size(); ind++) {
+    T diff = std::abs(x[ind] - y[ind]);
+    if (diff > maxdiff)
+      maxdiff = diff;
+  }
+  return maxdiff;
+}
 
 template<typename T>
 static void test_poly8_evaluation(std::vector<T> const & mc, Matrix<T> const & A, Matrix<T> const & sol_ref) {
-  Matrix<T> poly_value_sastre = A;
-  Matrix<T> A2;
-  A2.multiply(A, A);                          // A2 = A*A
-  sp8::sastre_poly_8_eval(mc, poly_value_sastre, A2);
-  for(unsigned int ind = 0; ind < A.n*A.n;ind++) {
-    assert(std::abs(poly_value_sastre.elements[ind] - sol_ref.elements[ind]) < std::sqrt(std::numeric_limits<T>::epsilon()));
-    std::cout << std::setprecision(15) << poly_value_sastre.elements[ind] << std::endl;
+  bool verbose_output = false;
+  {
+    Matrix<T> poly_value_sastre = A;
+    Matrix<T> A2;
+    A2.multiply(A, A);                          // A2 = A*A
+    sp8::sastre_poly_8_eval(mc, poly_value_sastre, A2);
+    if (verbose_output)
+      poly_value_sastre.print_elements();
+    assert( maxabs_diff(poly_value_sastre.elements, sol_ref.elements) < std::sqrt(std::numeric_limits<T>::epsilon()) );
+  }
+  {
+    Matrix<T> poly_value = A;
+    Matrix<T> A2;
+    A2.multiply(A, A);                          // A2 = A*A
+    sp8::poly_8_eval(mc, poly_value, A2);
+    if (verbose_output)
+      poly_value.print_elements();
+    assert( maxabs_diff(poly_value.elements, sol_ref.elements) < std::sqrt(std::numeric_limits<T>::epsilon()) );
+  }
+  {
+    Matrix<T> poly_value_low_mem = A;
+    Matrix<T> A2;
+    A2.multiply(A, A);                          // A2 = A*A
+    sp8::poly_8_eval_low_mem(mc, poly_value_low_mem, A2);
+    if (verbose_output)
+      poly_value_low_mem.print_elements();
+    assert( maxabs_diff(poly_value_low_mem.elements, sol_ref.elements) < std::sqrt(std::numeric_limits<T>::epsilon()) );
   }
 }
 
