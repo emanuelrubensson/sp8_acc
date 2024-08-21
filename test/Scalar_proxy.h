@@ -16,8 +16,10 @@ Scalar_proxy(T_scalar const x = T_scalar()) :x(x) {}
     return *this;
   }
     inline void multiply(Scalar_proxy<T_scalar> const & A,
-			 Scalar_proxy<T_scalar> const & B) {
-      this->x = A.x*B.x;
+			 Scalar_proxy<T_scalar> const & B,
+			 value_type const alpha = 1.0,
+			 value_type const beta = 0.0) {
+      this->x = beta*this->x + alpha*A.x*B.x;
     }
   inline void scale_and_add(T_scalar const a,
 			    T_scalar const b,
