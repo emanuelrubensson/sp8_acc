@@ -18,7 +18,7 @@ def maxabs(A):
 
 def run_test_sp2_acc(X, l_outer, l_inner, h_inner, h_outer, Dref, verbose_output):
     nmin,nmax,p,alpha = sp8py.get_sp2_polys(l_outer, l_inner, h_inner, h_outer)
-    D,nmul,polys,nmul_vec,idem_err = sp8py.sp2_acc(X,nmin,nmax,p,alpha)
+    D,nmul,polys,nmul_vec,idem_err_trace = sp8py.sp2_acc(X,nmin,nmax,p,alpha)
     norm_diff_fro = np.linalg.norm(D - Dref, ord = 'fro')
     norm_diff_max = maxabs(D - Dref) 
     if verbose_output:

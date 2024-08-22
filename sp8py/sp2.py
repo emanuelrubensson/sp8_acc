@@ -12,7 +12,7 @@ def sp2_acc(X,nmin,nmax,p,alpha):
     # check properties with I.flags
     X2 = np.empty_like(X)
     nmul_vec = [nmul]
-    idem_err = [sp8py.trace_XmX2(X)]
+    idem_err_trace = [sp8py.trace_XmX2(X)]
     polys = []
     for i in range(nmax):
         a = alpha[i]
@@ -27,12 +27,12 @@ def sp2_acc(X,nmin,nmax,p,alpha):
             X = 2*a*X - (a**2)*X2
             polys.append([-a**2, 2*a, 0])
         nmul_vec.append(nmul)
-        idem_err.append(sp8py.trace_XmX2(X))
-        if idem_err[-1] <= 0:
+        idem_err_trace.append(sp8py.trace_XmX2(X))
+        if idem_err_trace[-1] <= 0:
             break
-        if i >= nmin and p[i] != p[i-1] and idem_err[-1] > Csp2*idem_err[-3]**2:
+        if i >= nmin and p[i] != p[i-1] and idem_err_trace[-1] > Csp2*idem_err_trace[-3]**2:
             break
-    return X,nmul,polys,nmul_vec,idem_err
+    return X,nmul,polys,nmul_vec,idem_err_trace
 
 def get_sp2_polys(L_outer, L_inner, H_inner, H_outer):
     """ 
