@@ -44,3 +44,9 @@ if verbose_output:
     print('Running SP2-ACC without acceleration')
 run_test_sp2_acc(X, 0,    lumo, homo, 1.0,  Dref, verbose_output)
 
+# Make sure method does not fail with trivial input
+X = np.array([[1.0,0],[0,1.0]])
+X = np.asanyarray(X, order='F', dtype=float_type)
+nmin,nmax,p,alpha = sp8py.get_sp2_polys(0.0, 0.0, 1.0, 1.0)
+D,nmul,polys,nmul_vec,idem_err_trace = sp8py.sp2_acc(X,nmin,nmax,p,alpha)
+print(nmul,idem_err_trace)

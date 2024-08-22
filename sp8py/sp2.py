@@ -49,7 +49,7 @@ def get_sp2_polys(L_outer, L_inner, H_inner, H_outer):
     p     = []
     alpha = []
     i = 0
-    while h_up-h_up**2 > eps*eps or l_up-l_up**2 > eps*eps:
+    while i < 2 or h_up-h_up**2 > eps*eps or l_up-l_up**2 > eps*eps:
         i += 1
         if h_lo < delta and l_lo < delta:
             h_lo = 0
