@@ -2,7 +2,7 @@ import numpy as np
 import sp8py
 import matplotlib.pyplot as plt
 
-def sp2_acc(X,nmin,nmax,p,alpha,expensive_output=0):
+def sp2_acc(X,nmin,nmax,p,alpha,expensive_output=0, no_break=0):
     """
     X: input matrix with all eigenvalues in [0,1]
     """
@@ -31,6 +31,8 @@ def sp2_acc(X,nmin,nmax,p,alpha,expensive_output=0):
             polys.append([-a**2, 2*a, 0])
         nmul_vec.append(nmul)
         idem_err_trace.append(sp8py.trace_XmX2(X))
+        if no_break:
+            continue
         if idem_err_trace[-1] <= 0:
             break
         if i >= nmin and p[i] != p[i-1] and idem_err_trace[-1] > Csp2*idem_err_trace[-3]**2:
