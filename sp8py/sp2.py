@@ -2,7 +2,7 @@ import numpy as np
 import sp8py
 import matplotlib.pyplot as plt
 
-def sp2_acc(X,nmin,nmax,p,alpha):
+def sp2_acc(X,nmin,nmax,p,alpha,expensive_output=0):
     """
     X: input matrix with all eigenvalues in [0,1]
     """
@@ -13,12 +13,15 @@ def sp2_acc(X,nmin,nmax,p,alpha):
     X2 = np.empty_like(X)
     nmul_vec = [nmul]
     idem_err_trace = [sp8py.trace_XmX2(X)]
+    idem_err_maxabs = []
     polys = []
     for i in range(nmax):
         a = alpha[i]
         # Using own multiply to make sure same routine is used throughout. 
         # (rather than np.matmul(X,X,out=X2))
         sp8py.matmul(X,X,X2)
+        if expensive_output:
+            idem_err_maxabs.append(sp8py.maxabs(X-X2))
         nmul += 1
         if p[i]:
             X = ((1-a)**2)*I + 2*(1-a)*a*X + (a**2)*X2
@@ -32,6 +35,10 @@ def sp2_acc(X,nmin,nmax,p,alpha):
             break
         if i >= nmin and p[i] != p[i-1] and idem_err_trace[-1] > Csp2*idem_err_trace[-3]**2:
             break
+    if expensive_output:
+        sp8py.matmul(X,X,X2)
+        idem_err_maxabs.append(sp8py.maxabs(X-X2))
+        return X,nmul,polys,nmul_vec,idem_err_trace,idem_err_maxabs
     return X,nmul,polys,nmul_vec,idem_err_trace
 
 def get_sp2_polys(L_outer, L_inner, H_inner, H_outer):
