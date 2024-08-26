@@ -5,7 +5,7 @@ import sp8py.sp2 as sp2
 import sp8py.test_utils
 
 def run_test_sp2_acc(X, l_outer, l_inner, h_inner, h_outer, Dref, verbose_output):
-    nmin,nmax,p,alpha = sp2.get_sp2_polys(l_outer, l_inner, h_inner, h_outer)
+    nmin,nmax,p,alpha,gap = sp2.get_sp2_polys(l_outer, l_inner, h_inner, h_outer)
     D,nmul,polys,nmul_vec,idem_err_trace = sp2.sp2_acc(X,nmin,nmax,p,alpha)
     norm_diff_fro = np.linalg.norm(D - Dref, ord = 'fro')
     norm_diff_max = sp8py.maxabs(D - Dref) 
@@ -35,5 +35,5 @@ run_test_sp2_acc(X, 0,    lumo, homo, 1.0,  Dref, verbose_output)
 # Make sure method does not fail with trivial input
 X = np.array([[1.0,0],[0,1.0]])
 X = np.asanyarray(X, order='F', dtype=float_type)
-nmin,nmax,p,alpha = sp2.get_sp2_polys(0.0, 0.0, 1.0, 1.0)
+nmin,nmax,p,alpha,gap = sp2.get_sp2_polys(0.0, 0.0, 1.0, 1.0)
 D,nmul,polys,nmul_vec,idem_err_trace = sp2.sp2_acc(X,nmin,nmax,p,alpha)

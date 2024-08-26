@@ -6,7 +6,6 @@ import sp8py.test_utils
 import matplotlib.pyplot as plt
 
 float_type = np.float64
-eps   = np.finfo(float_type).eps
 n    = 4
 nocc = 2
 L_outer = 0.494
@@ -16,7 +15,7 @@ H_outer = 0.506
 
 X0,D = sp8py.test_utils.get_random_X(n,nocc,L_inner,H_inner,float_type)
 # Get SP2-ACC polynomials
-nmin,nmax,p,alpha = sp2.get_sp2_polys(L_outer, L_inner, H_inner, H_outer)
+nmin,nmax,p,alpha,gap = sp2.get_sp2_polys(L_outer, L_inner, H_inner, H_outer)
 X = X0
 # Run SP2-ACC
 sp2_out = sp2.sp2_acc(X,nmin,nmax,p,alpha,expensive_output=1)
@@ -28,12 +27,13 @@ sp2_out_nobreak = sp2.sp2_acc(X,nmin,nmax,p,alpha,expensive_output=1,no_break=1)
 nmul_vec_poststop = sp2_out_nobreak[3][len(nmul_vec)-1:]
 idem_err_maxabs_poststop = sp2_out_nobreak[5][len(nmul_vec)-1:]
 
-
-fig, ax = plt.subplots()
-ax.semilogy(nmul_vec_poststop[0:2],idem_err_maxabs_poststop[0:2],'r-')
-ax.semilogy(nmul_vec_poststop[1:],idem_err_maxabs_poststop[1:],'sr-')
-ax.semilogy(nmul_vec,idem_err_maxabs,'xb-')
-ax.grid('on')
-ax.set_title('SP2-ACC')
+fig, (ax1,ax2) = plt.subplots(nrows = 2)
+ax1.semilogy(nmul_vec,[1/x for x in gap[0:len(nmul_vec)]],'xb-')
+ax2.semilogy(nmul_vec_poststop[0:2],idem_err_maxabs_poststop[0:2],'r-')
+ax2.semilogy(nmul_vec_poststop[1:],idem_err_maxabs_poststop[1:],'sr-')
+ax2.semilogy(nmul_vec,idem_err_maxabs,'xb-')
+ax1.grid('on')
+ax2.grid('on')
+ax1.set_xlim( ax2.get_xlim() )
+ax1.set_title('SP2-ACC')
 fig.savefig('plot_convergence.pdf', bbox_inches='tight')
-

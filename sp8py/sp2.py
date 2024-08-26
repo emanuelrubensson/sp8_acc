@@ -57,6 +57,7 @@ def get_sp2_polys(L_outer, L_inner, H_inner, H_outer):
     delta = 0.01
     p     = []
     alpha = []
+    gap   = [1-(h_up+l_up)]
     i = 0
     while i < 2 or h_up-h_up**2 > eps*eps or l_up-l_up**2 > eps*eps:
         i += 1
@@ -82,5 +83,6 @@ def get_sp2_polys(L_outer, L_inner, H_inner, H_outer):
             l_lo = 2*a*l_lo - (a*l_lo)**2
             l_up = 2*a*l_up - (a*l_up)**2
         alpha.append(a)
+        gap.append( 1-(h_up+l_up) )
     nmax = i
-    return (nmin,nmax,p,alpha)
+    return (nmin,nmax,p,alpha,gap)
