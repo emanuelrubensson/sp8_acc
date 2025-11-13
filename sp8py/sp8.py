@@ -1,6 +1,5 @@
 import numpy as np
 import sp8py
-#import sp2
 import matplotlib.pyplot as plt
 
 def poly8_simple(mc,X):
@@ -14,7 +13,7 @@ def poly8_simple(mc,X):
     Y = np.asanyarray(Y, order='F', dtype=type(X[0][0]))
     return Y
 
-def sp8_acc(X, L_outer, L_inner, H_inner, H_outer, expensive_output=0):
+def sp8_acc(X, L_outer, L_inner, H_inner, H_outer, expensive_output=0, fixed_niter=0, sp2_purification=0):
     Csp8 = 85
     qsp8 = 4
     Csp8sp2 = 275
@@ -63,12 +62,23 @@ def sp8_acc(X, L_outer, L_inner, H_inner, H_outer, expensive_output=0):
     # Purification phase
     print('Purification phase')
 
-# ALTERNATIVE TO RUN SP2 IN PURIFICATION PHASE
-#    nmin,nmax,p,alpha = sp2.get_sp2_polys(L_outer, L_inner, H_inner, H_outer)
-#    X,npuri,polys_puri = sp2.sp2_acc(X,nmin,nmax,p,alpha)
-#    n+=npuri
-#    return X,n
-    
+    # ALTERNATIVE TO RUN SP2 IN PURIFICATION PHASE
+    if sp2_purification:
+        nmin,nmax,p,alpha,gap = sp8py.sp2.get_sp2_polys(L_outer, L_inner, H_inner, H_outer)
+        sp2_out = sp8py.sp2.sp2_acc(X,nmin,nmax,p,alpha,expensive_output=1,no_break=fixed_niter)
+        # sp2_out= X, nmul, polys, nmul_vec, idem_err_trace, idem_err_maxabs
+        #          0  1     2      3         4               5
+        nmul_vec.pop()
+        idem_err_trace.pop()
+        X = sp2_out[0]
+        polys += sp2_out[2]
+        nmul_vec += [n+nmul for n in sp2_out[3]]
+        nmul += sp2_out[1]
+        idem_err_trace += sp2_out[4]
+        idem_err_maxabs += sp2_out[5]
+        return X,nmul,polys,nmul_vec,idem_err_trace,idem_err_maxabs
+
+    # DEFAULT PURIFICATION
     sp8py.matmul(X, X, X2)
     if expensive_output:
         idem_err_maxabs.append(sp8py.maxabs(X-X2))
@@ -95,6 +105,16 @@ def sp8_acc(X, L_outer, L_inner, H_inner, H_outer, expensive_output=0):
         # Compute Tr[X-X**2] (without computing X**2)
         nmul_vec.append(nmul)
         idem_err_trace.append( sp8py.trace_XmX2(X) )
+
+        if fixed_niter:
+            if len(nmul_vec) >= fixed_niter:
+                break
+            sp8py.matmul(X, X, X2)
+            if expensive_output:
+                idem_err_maxabs.append(sp8py.maxabs(X-X2))
+            nmul += 1
+            continue
+
         print(f'IDEM: {idem_err_trace[-1]}')
         if idem_err_trace[-1] <= 0:
             break
@@ -108,11 +128,12 @@ def sp8_acc(X, L_outer, L_inner, H_inner, H_outer, expensive_output=0):
         if expensive_output:
             idem_err_maxabs.append(sp8py.maxabs(X-X2))
         nmul += 1
+        # REST OF LOOP: ATTEMPT TO BREAK AFTER ADDING A SINGLE X**2 OR 2*X-X**2 STEP
         # if (L_inner + H_inner < 1):
         if left == 4:    # attempt with 2x - x**2
             # M2 = 2*X-X2
             np.multiply(2.0,X,out=M3)
-            np.subtract(M3,X2,out=M2)            
+            np.subtract(M3,X2,out=M2)
             poly = [-1, 2, 0]
         else:            # attempt with x**2
             # M2 = X2
@@ -127,7 +148,7 @@ def sp8_acc(X, L_outer, L_inner, H_inner, H_outer, expensive_output=0):
             X = np.copy(M2)
             nmul_vec.append(nmul)
             idem_err_trace.append(M2_idem_err_trace)
-            polys.append(poly)            
+            polys.append(poly)
             break
         # continue
         print(idem_err_trace[-1],L_inner,H_inner)
