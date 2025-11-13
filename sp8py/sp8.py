@@ -21,7 +21,7 @@ def sp8_acc(X, L_outer, L_inner, H_inner, H_outer, expensive_output=0, fixed_nit
     precond_limit = 0.01
     X2 = np.empty_like(X)
     M2 = np.empty_like(X)
-    M3 = np.empty_like(X)
+    #    M3 = np.empty_like(X)
     v  = np.empty(9)
     mc = np.empty(9)
     idem_err_trace = [sp8py.trace_XmX2(X)]
@@ -42,7 +42,8 @@ def sp8_acc(X, L_outer, L_inner, H_inner, H_outer, expensive_output=0, fixed_nit
         if expensive_output:
             idem_err_maxabs.append(sp8py.maxabs(X-X2))
         nmul += 1
-        sp8py.poly_8_eval(mc, X, X2, M2, M3)        
+        sp8py.poly_8_eval_low_mem(mc, X, X2, M2)
+        # sp8py.poly_8_eval(mc, X, X2, M2, M3)
         # X = poly8_simple(mc,X)
         nmul += 2
         polys.append(list(mc))
@@ -95,7 +96,8 @@ def sp8_acc(X, L_outer, L_inner, H_inner, H_outer, expensive_output=0, fixed_nit
         assert(info==0)
         sp8py.get_sp8_monomial_coefficients(v, mc)
         # Evaluate SP8 for X
-        sp8py.poly_8_eval(mc, X, X2, M2, M3)
+        sp8py.poly_8_eval_low_mem(mc, X, X2, M2)
+        # sp8py.poly_8_eval(mc, X, X2, M2, M3)
         # X = poly8_simple(mc,X)
         nmul += 2
         polys.append(list(mc))
@@ -132,8 +134,8 @@ def sp8_acc(X, L_outer, L_inner, H_inner, H_outer, expensive_output=0, fixed_nit
         # if (L_inner + H_inner < 1):
         if left == 4:    # attempt with 2x - x**2
             # M2 = 2*X-X2
-            np.multiply(2.0,X,out=M3)
-            np.subtract(M3,X2,out=M2)
+            np.multiply(2.0,X,out=M2)
+            np.subtract(M2,X2,out=M2)
             poly = [-1, 2, 0]
         else:            # attempt with x**2
             # M2 = X2
