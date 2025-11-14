@@ -8,7 +8,7 @@ def sp2_acc(X,nmin,nmax,p,alpha,expensive_output=0, no_break=0):
     """
     nmul = 0
     Csp2 = 4.5    
-    I = np.eye(X.shape[0],order='F',dtype=type(X[0][0]))
+    #    I = np.eye(X.shape[0],order='F',dtype=type(X[0][0]))
     # check properties with I.flags
     X2 = np.empty_like(X)
     nmul_vec = [nmul]
@@ -24,10 +24,20 @@ def sp2_acc(X,nmin,nmax,p,alpha,expensive_output=0, no_break=0):
             idem_err_maxabs.append(sp8py.maxabs(X-X2))
         nmul += 1
         if p[i]:
-            X = ((1-a)**2)*I + 2*(1-a)*a*X + (a**2)*X2
+            # X = ((1-a)**2)*I + 2*(1-a)*a*X + (a**2)*X2
+            # memory efficient evaluation below (only two matrices in memory)
+            # (Alternatively use daxpby from scipy.linalg.blas,
+            #  can avoid overwriting X2 if needed.)
+            np.multiply(X, 2*(1-a)*a, out=X)
+            np.multiply(X2, a**2, out=X2)
+            np.add(X, X2, out=X)
+            np.fill_diagonal(X, np.diag(X) + (1-a)**2)
             polys.append([a**2, 2*(1-a)*a, (1-a)**2])
         else:
-            X = 2*a*X - (a**2)*X2
+            # X = 2*a*X - (a**2)*X2
+            np.multiply(X, 2*a, out=X)
+            np.multiply(X2, a**2, out=X2)
+            np.subtract(X, X2, out=X)
             polys.append([-a**2, 2*a, 0])
         nmul_vec.append(nmul)
         idem_err_trace.append(sp8py.trace_XmX2(X))
