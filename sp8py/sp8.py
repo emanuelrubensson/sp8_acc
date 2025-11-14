@@ -29,10 +29,8 @@ def sp8_acc(X, L_outer, L_inner, H_inner, H_outer, expensive_output=0, fixed_nit
     precond_phase = (L_inner > precond_limit) or (H_inner < 1-precond_limit)
     polys = []
     gap   = [H_inner - L_inner]
-    print(idem_err_trace[-1])
 
     # Preconditioning phase
-    print('Preconditioning phase')
     nmul = 0
     nmul_vec = [nmul]
     while precond_phase:
@@ -61,9 +59,7 @@ def sp8_acc(X, L_outer, L_inner, H_inner, H_outer, expensive_output=0, fixed_nit
         idem_err_trace.append( sp8py.trace_XmX2(X) )
         precond_phase = ((L_inner > precond_limit) or
                          (H_inner < 1-precond_limit))
-        print(idem_err_trace[-1],L_inner,H_inner)
     # Purification phase
-    print('Purification phase')
 
     # ALTERNATIVE TO RUN SP2 IN PURIFICATION PHASE
     if sp2_purification:
@@ -122,13 +118,11 @@ def sp8_acc(X, L_outer, L_inner, H_inner, H_outer, expensive_output=0, fixed_nit
             nmul += 1
             continue
 
-        print(f'IDEM: {idem_err_trace[-1]}')
         if idem_err_trace[-1] <= 0:
             break
         # First convergence check, error reduction with applied 8th-degree
-        print(f'A-test: {idem_err_trace[-1]} >? {Csp8*idem_err_trace[-2]**qsp8} ---- {idem_err_trace[-2]}')
         if idem_err_trace[-1] > Csp8*idem_err_trace[-2]**qsp8:
-            print(f'A: {idem_err_trace[-1]} > {Csp8*idem_err_trace[-2]**qsp8} ---- {idem_err_trace[-2]}')
+            # print(f'A: {idem_err_trace[-1]} > {Csp8*idem_err_trace[-2]**qsp8} ---- {idem_err_trace[-2]}')
             break
         # Attempt with only one more multiply
         sp8py.matmul(X, X, X2)
@@ -149,9 +143,8 @@ def sp8_acc(X, L_outer, L_inner, H_inner, H_outer, expensive_output=0, fixed_nit
         M2_idem_err_trace = sp8py.trace_XmX2(M2)
         # Second convergence check,
         # error reduction with applied 8th-degree + 2nd degree
-        print(f'B-test: {M2_idem_err_trace} >? {Csp8sp2*idem_err_trace[-2]**qsp8sp2} ---- {idem_err_trace[-2]}')
         if M2_idem_err_trace <= 0 or M2_idem_err_trace > Csp8sp2*idem_err_trace[-2]**qsp8sp2:
-            print(f'B: {M2_idem_err_trace} > {Csp8sp2*idem_err_trace[-2]**qsp8sp2} ---- {idem_err_trace[-2]}')
+            # print(f'B: {M2_idem_err_trace} > {Csp8sp2*idem_err_trace[-2]**qsp8sp2} ---- {idem_err_trace[-2]}')
             X = np.copy(M2)
             nmul_vec.append(nmul)
             idem_err_trace.append(M2_idem_err_trace)
@@ -162,7 +155,6 @@ def sp8_acc(X, L_outer, L_inner, H_inner, H_outer, expensive_output=0, fixed_nit
             gap.append(H_inner - L_inner)
             break
         # continue
-        print(idem_err_trace[-1],L_inner,H_inner)
     if expensive_output:
         sp8py.matmul(X,X,X2)
         idem_err_maxabs.append(sp8py.maxabs(X-X2))
