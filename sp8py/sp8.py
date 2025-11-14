@@ -28,6 +28,7 @@ def sp8_acc(X, L_outer, L_inner, H_inner, H_outer, expensive_output=0, fixed_nit
     idem_err_maxabs = []    
     precond_phase = (L_inner > precond_limit) or (H_inner < 1-precond_limit)
     polys = []
+    gap   = [H_inner - L_inner]
     print(idem_err_trace[-1])
 
     # Preconditioning phase
@@ -54,6 +55,7 @@ def sp8_acc(X, L_outer, L_inner, H_inner, H_outer, expensive_output=0, fixed_nit
         H_outer = np.polyval(mc, H_outer)
         L_outer = max(L_outer,0.0)
         H_outer = min(H_outer,1.0)
+        gap.append(H_inner - L_inner)
         # Compute Tr[X-X**2] (without computing X**2)
         nmul_vec.append(nmul)
         idem_err_trace.append( sp8py.trace_XmX2(X) )
@@ -65,19 +67,21 @@ def sp8_acc(X, L_outer, L_inner, H_inner, H_outer, expensive_output=0, fixed_nit
 
     # ALTERNATIVE TO RUN SP2 IN PURIFICATION PHASE
     if sp2_purification:
-        nmin,nmax,p,alpha,gap = sp8py.sp2.get_sp2_polys(L_outer, L_inner, H_inner, H_outer)
+        nmin,nmax,p,alpha,gap_sp2 = sp8py.sp2.get_sp2_polys(L_outer, L_inner, H_inner, H_outer)
         sp2_out = sp8py.sp2.sp2_acc(X,nmin,nmax,p,alpha,expensive_output=1,no_break=fixed_niter)
         # sp2_out= X, nmul, polys, nmul_vec, idem_err_trace, idem_err_maxabs
         #          0  1     2      3         4               5
         nmul_vec.pop()
         idem_err_trace.pop()
+        gap.pop()
+        gap += gap_sp2
         X = sp2_out[0]
         polys += sp2_out[2]
         nmul_vec += [n+nmul for n in sp2_out[3]]
         nmul += sp2_out[1]
         idem_err_trace += sp2_out[4]
         idem_err_maxabs += sp2_out[5]
-        return X,nmul,polys,nmul_vec,idem_err_trace,idem_err_maxabs
+        return X,nmul,polys,gap,nmul_vec,idem_err_trace,idem_err_maxabs
 
     # DEFAULT PURIFICATION
     sp8py.matmul(X, X, X2)
@@ -104,6 +108,7 @@ def sp8_acc(X, L_outer, L_inner, H_inner, H_outer, expensive_output=0, fixed_nit
         # Update inner homo lumo bounds accordingly
         L_inner = np.polyval(mc, L_inner)
         H_inner = np.polyval(mc, H_inner)
+        gap.append(H_inner - L_inner)
         # Compute Tr[X-X**2] (without computing X**2)
         nmul_vec.append(nmul)
         idem_err_trace.append( sp8py.trace_XmX2(X) )
@@ -151,11 +156,15 @@ def sp8_acc(X, L_outer, L_inner, H_inner, H_outer, expensive_output=0, fixed_nit
             nmul_vec.append(nmul)
             idem_err_trace.append(M2_idem_err_trace)
             polys.append(poly)
+            # Update inner homo lumo bounds accordingly
+            L_inner = np.polyval(poly, L_inner)
+            H_inner = np.polyval(poly, H_inner)
+            gap.append(H_inner - L_inner)
             break
         # continue
         print(idem_err_trace[-1],L_inner,H_inner)
     if expensive_output:
         sp8py.matmul(X,X,X2)
         idem_err_maxabs.append(sp8py.maxabs(X-X2))
-        return X,nmul,polys,nmul_vec,idem_err_trace,idem_err_maxabs
-    return X,nmul,polys,nmul_vec,idem_err_trace
+        return X,nmul,polys,gap,nmul_vec,idem_err_trace,idem_err_maxabs
+    return X,nmul,polys,gap,nmul_vec,idem_err_trace
