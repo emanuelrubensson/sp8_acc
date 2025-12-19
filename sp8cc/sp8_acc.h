@@ -203,17 +203,18 @@ namespace sp8 {
 	// max step length half distance to closest root
 	value_type max_step_L = (L - root_near_L)/2;
 	value_type max_step_H = (root_near_H - H)/2;
-	if (L_target < L)
+	value_type L_save = L;
+	if (L_target <= L)
 	  L = std::max(L_target, L - max_step_L);
-	if (H_target > H)
-	  H = std::min(H_target, H + max_step_H);
-	if (L_target > L)
+	else
 	  L = std::min({L_target,
 	      std::max(L, H-0.9*gap_target), // keep distance to H
 	      L + max_step_L});
-	if (H_target < H)
+	if (H_target >= H)
+	  H = std::min(H_target, H + max_step_H);
+	else
 	  H = std::max({H_target,
-	      std::min(H, L+0.9*gap_target), // keep distance to L
+	      std::min(H, L_save+0.9*gap_target), // keep distance to L
 	      H - max_step_H});
 	objfun.L = L;
 	objfun.H = H;
