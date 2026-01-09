@@ -8,7 +8,7 @@ def run_test_sp2_acc(X, l_outer, l_inner, h_inner, h_outer, Dref, verbose_output
     nmin,nmax,p,alpha,gap = sp2.get_sp2_polys(l_outer, l_inner, h_inner, h_outer)
     D,nmul,polys,nmul_vec,idem_err_trace = sp2.sp2_acc(X,nmin,nmax,p,alpha)
     norm_diff_fro = np.linalg.norm(D - Dref, ord = 'fro')
-    norm_diff_max = sp8py.maxabs(D - Dref) 
+    norm_diff_max = np.max(np.abs(D - Dref)) 
     if verbose_output:
         print(f'SP2-ACC converged using {nmul} multiplications.')
         print(f'||D-Dref||_F   = {norm_diff_fro}')

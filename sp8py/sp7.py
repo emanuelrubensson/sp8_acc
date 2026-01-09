@@ -115,7 +115,7 @@ def sp7_acc(X, L_outer, L_inner, H_inner, H_outer, expensive_output=0, fixed_nit
     idem_err_maxabs = []    
     if expensive_output:
         sp8py.matmul(X, X, X2)
-        idem_err_maxabs.append(sp8py.maxabs(X-X2))
+        idem_err_maxabs.append(np.max(np.abs(X-X2)))
     if mu > 0.5:        
         X = np.multiply(X,0.5/mu, out=X) # X = (0.5/mu)*X
         L_inner = (0.5/mu)*L_inner
@@ -139,7 +139,7 @@ def sp7_acc(X, L_outer, L_inner, H_inner, H_outer, expensive_output=0, fixed_nit
     idem_err_trace.append( sp8py.trace_XmX2(X) )
     if expensive_output:
         sp8py.matmul(X, X, X2)
-        idem_err_maxabs.append(sp8py.maxabs(X-X2))
+        idem_err_maxabs.append(np.max(np.abs(X-X2)))
     while L_outer > precond_limit:
         mc7,params = sp7_polynomial_coeffs(L_outer)
         mc7_prim = np.polyder(mc7)
@@ -159,7 +159,7 @@ def sp7_acc(X, L_outer, L_inner, H_inner, H_outer, expensive_output=0, fixed_nit
         idem_err_trace.append( sp8py.trace_XmX2(X) )
         if expensive_output:
             sp8py.matmul(X, X, X2)
-            idem_err_maxabs.append(sp8py.maxabs(X-X2))
+            idem_err_maxabs.append(np.max(np.abs(X-X2)))
 
     mc7 = [-20., 70., -84., 35., 0., 0., 0., 0.]
     while 1:
@@ -175,7 +175,7 @@ def sp7_acc(X, L_outer, L_inner, H_inner, H_outer, expensive_output=0, fixed_nit
         idem_err_trace.append( sp8py.trace_XmX2(X) )
         if expensive_output:
             sp8py.matmul(X, X, X2)
-            idem_err_maxabs.append(sp8py.maxabs(X-X2))
+            idem_err_maxabs.append(np.max(np.abs(X-X2)))
         if fixed_niter:
             if len(nmul_vec) >= fixed_niter:
                 break

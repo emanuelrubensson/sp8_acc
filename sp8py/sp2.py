@@ -21,7 +21,7 @@ def sp2_acc(X,nmin,nmax,p,alpha,expensive_output=0, no_break=0):
         # (rather than np.matmul(X,X,out=X2))
         sp8py.matmul(X,X,X2)
         if expensive_output:
-            idem_err_maxabs.append(sp8py.maxabs(X-X2))
+            idem_err_maxabs.append(np.max(np.abs(X-X2)))
         nmul += 1
         if p[i]:
             # X = ((1-a)**2)*I + 2*(1-a)*a*X + (a**2)*X2
@@ -49,7 +49,7 @@ def sp2_acc(X,nmin,nmax,p,alpha,expensive_output=0, no_break=0):
             break
     if expensive_output:
         sp8py.matmul(X,X,X2)
-        idem_err_maxabs.append(sp8py.maxabs(X-X2))
+        idem_err_maxabs.append(np.max(np.abs(X-X2)))
         return X,nmul,polys,nmul_vec,idem_err_trace,idem_err_maxabs
     return X,nmul,polys,nmul_vec,idem_err_trace
 

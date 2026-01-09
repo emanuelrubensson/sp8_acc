@@ -34,12 +34,13 @@ def sp8_acc(X, L_outer, L_inner, H_inner, H_outer, expensive_output=0, fixed_nit
     nmul = 0
     nmul_vec = [nmul]
     while precond_phase:
+#        sp8py.get_sp8_params_max_slope(L_outer, H_outer, v)
         sp8py.get_sp8_params_max_gap(L_outer, L_inner, H_inner, H_outer, v)
         sp8py.get_sp8_monomial_coefficients(v, mc)
         # Evaluate SP8 for X
         sp8py.matmul(X, X, X2)
         if expensive_output:
-            idem_err_maxabs.append(sp8py.maxabs(X-X2))
+            idem_err_maxabs.append(np.max(np.abs(X-X2)))
         nmul += 1
         sp8py.poly_8_eval_low_mem(mc, X, X2, M2)
         # sp8py.poly_8_eval(mc, X, X2, M2, M3)
@@ -82,7 +83,7 @@ def sp8_acc(X, L_outer, L_inner, H_inner, H_outer, expensive_output=0, fixed_nit
     # DEFAULT PURIFICATION
     sp8py.matmul(X, X, X2)
     if expensive_output:
-        idem_err_maxabs.append(sp8py.maxabs(X-X2))
+        idem_err_maxabs.append(np.max(np.abs(X-X2)))
     nmul += 1
     while 1:
         # Need to do at least 1 iteration in purification phase
@@ -114,7 +115,7 @@ def sp8_acc(X, L_outer, L_inner, H_inner, H_outer, expensive_output=0, fixed_nit
                 break
             sp8py.matmul(X, X, X2)
             if expensive_output:
-                idem_err_maxabs.append(sp8py.maxabs(X-X2))
+                idem_err_maxabs.append(np.max(np.abs(X-X2)))
             nmul += 1
             continue
 
@@ -127,7 +128,7 @@ def sp8_acc(X, L_outer, L_inner, H_inner, H_outer, expensive_output=0, fixed_nit
         # Attempt with only one more multiply
         sp8py.matmul(X, X, X2)
         if expensive_output:
-            idem_err_maxabs.append(sp8py.maxabs(X-X2))
+            idem_err_maxabs.append(np.max(np.abs(X-X2)))
         nmul += 1
         # REST OF LOOP: ATTEMPT TO BREAK AFTER ADDING A SINGLE X**2 OR 2*X-X**2 STEP
         # if (L_inner + H_inner < 1):
@@ -157,6 +158,6 @@ def sp8_acc(X, L_outer, L_inner, H_inner, H_outer, expensive_output=0, fixed_nit
         # continue
     if expensive_output:
         sp8py.matmul(X,X,X2)
-        idem_err_maxabs.append(sp8py.maxabs(X-X2))
+        idem_err_maxabs.append(np.max(np.abs(X-X2)))
         return X,nmul,polys,gap,nmul_vec,idem_err_trace,idem_err_maxabs
     return X,nmul,polys,gap,nmul_vec,idem_err_trace
