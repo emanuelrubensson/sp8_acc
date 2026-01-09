@@ -12,6 +12,3 @@ from .sp8cc_wrappers import (
     poly_8_eval_low_mem,
     trace_XmX2
 )
-from .utils import (
-    maxabs
-)
