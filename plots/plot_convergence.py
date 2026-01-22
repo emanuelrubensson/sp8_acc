@@ -135,6 +135,9 @@ H_outer = (lmax-H_outer)/(lmax-lmin)
 L_inner = (lmax-L_inner)/(lmax-lmin)
 L_outer = (lmax-L_outer)/(lmax-lmin)
 
+plt.rc('font', size=12)
+plt.rc('text', usetex=True)
+plt.rc('font', family='serif')
 fig, (ax1,ax2) = plt.subplots(nrows = 2)
 
 plot_convergence_sp2(X0, D, Z, L_outer, L_inner, H_inner, H_outer, ax1, ax2,'D','tab:green', 'solid', 'SP2-ACC')
@@ -155,7 +158,7 @@ plot_convergence_sp7(X0, D, Z, 0.0, L_inner, H_inner, 1.0, ax1, ax2, 's', 'tab:r
 ax1.grid('on')
 ax2.grid('on')
 ax1.set_xlim( ax2.get_xlim() )
-ax1.set_title('SP2-ACC')
+#ax1.set_title('SP2-ACC')
 ax1.legend()
 ax2.set_xlabel('No. of multiplications')
 ax1.set_ylabel('Condition number')
