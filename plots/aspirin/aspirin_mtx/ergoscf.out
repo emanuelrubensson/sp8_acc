@@ -1,0 +1,1401 @@
+INMA 
+  Ergo, version 3.8.2, a program for linear scaling electronic structure
+  calculations.
+  Copyright (C) 2023 Elias Rudberg, Emanuel H. Rubensson, Pawel Salek,
+  and Anastasia Kruchinina.
+  
+  This program is free software: you can redistribute it and/or modify
+  it under the terms of the GNU General Public License as published by
+  the Free Software Foundation, either version 3 of the License, or
+  (at your option) any later version.
+  
+  This program is distributed in the hope that it will be useful,
+  but WITHOUT ANY WARRANTY; without even the implied warranty of
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  GNU General Public License for more details.
+  
+  You should have received a copy of the GNU General Public License
+  along with this program.  If not, see <http://www.gnu.org/licenses/>.
+  
+  Primary academic reference:
+  Ergo: An open-source program for linear-scaling electronic structure
+  calculations,
+  Elias Rudberg, Emanuel H. Rubensson, Pawel Salek, and Anastasia
+  Kruchinina,
+  SoftwareX 7, 107 (2018),
+  <http://dx.doi.org/10.1016/j.softx.2018.03.005>
+  
+  For further information about Ergo, see <http://www.ergoscf.org>.
+
+INMA  threads_J := 8
+
+INMA  threads_K := 8
+
+INMA  threads := 8
+
+INMA  no_of_threads_for_V := 8
+
+INMA  threads := 1
+
+INMA ERGO version 3.8.2
+
+INMA Reading molecule file: /home/emanuel/clones/articles/sp8_acc_project/sp8_acc/plots/aspirin/aspirin.xyz
+
+INMA read_molecule_file_in_xyz_format: File '/home/emanuel/clones/articles/sp8_acc_project/sp8_acc/plots/aspirin/aspirin.xyz' read OK, nBytes = 715
+INMA read_molecule_file_in_xyz_format: nAtoms =     21
+INMA Not using CHT, so values numWorkers_CHT=1 and numThreads_CHT=1 will be ignored.
+INMA  initial_density := density.bin
+
+INMA  basis := 6-311++Gss
+
+INMA Basis really set to 6-311++Gss
+
+INMA  calculation_identifier := Aspirin
+
+INMA  create_mtx_file_S := 1
+
+INMA  create_mtx_files_F := 1
+
+INMA  create_mtx_files_D := 1
+
+INMA running HF
+
+ININ IntegralInfo::init() calling boysFunctionManager.init().
+TIIN BoysFunctionManager::init took      0.02 usr cpu s       0.03 sys cpu s       0.01 wall s
+ININ IntegralInfo::init() calling multipolePrep.init().
+ININ IntegralInfo::init() calling mmLimitTable.init().
+ININ IntegralInfo::init() calling monomial_info.init().
+ININ IntegralInfo::init() calling hermite_conversion_info.init().
+TIIN hermite_conversion_info_struct constructor took      0.09 usr cpu s       0.21 sys cpu s       0.12 wall s
+ININ IntegralInfo::init() calling setup_basis_func_polys
+WAIN Trying basis set file './6-311++Gss'...
+WAIN Trying basis set file './6-311++Gss'...
+WAIN Trying basis set file 'basis/6-311++Gss'...
+WAIN Trying basis set file 'basis/6-311++Gss'...
+WAIN Trying basis set file '../basis/6-311++Gss'...
+WAIN Trying basis set file '../basis/6-311++Gss'...
+WAIN Trying basis set file '/usr/local/share/ergo/basis/6-311++Gss'...
+WAIN Trying basis set file '/usr/local/share/ergo/basis/6-311++Gss'...
+WAIN Trying basis set file '/usr/local/share/ergo/6-311++Gss'...
+WAIN Trying basis set file '/usr/local/share/ergo/6-311++Gss'...
+WAIN Trying basis set file '/home/emanuel/clones/articles/sp8_acc_project/sp8_acc/plots/aspirin/ergo-3.8.2/basis/6-311++Gss'...
+ININ total number of shells in basis set: 87
+ININ Basis set file '6-311++Gss' processed OK, noOfAtomTypes = 10
+ININ setup_shells_multi_basis_getcount, noOfShells = 170
+ININ BasisInfoStruct::addBasisfuncsForAtomList, noOfShellsNew = 170
+ININ BasisInfoStruct::normalizeShells finished, normalizationFactor min max :   0.99999981795   1.00000070408
+ININ get_basis_funcs returned OK, number of basis funcs: 342
+ININ getSimplePrimitivesAll returned OK, n = 566
+ERMA Variable store_all_eigenvalues_to_file not found.
+
+ERMA Undefined integer variable store_all_eigenvalues_to_file
+
+IN   creating matrix SizesAndBlocks using blockSizeVector:
+IN   blockSizeVector[0] =        65536
+IN   blockSizeVector[1] =         8192
+IN   blockSizeVector[2] =         1024
+IN   blockSizeVector[3] =           32
+IN   blockSizeVector[4] =            1
+IN   creating matrix permutation using blockSizeVector:
+IN   blockSizeVector[0] =        65536
+IN   blockSizeVector[1] =         8192
+IN   blockSizeVector[2] =         1024
+IN   blockSizeVector[3] =           32
+IN   blockSizeVector[4] =            1
+INMA OpenMP not used in matrix library. Number of threads set to 1.
+INMA Calling grid_set_tmpdir with tmpdir = '/tmp'
+INMA Running HF (restarted)
+INDE Create object from GetDensFromFock.
+INSC SCF_general constructor, number of basis functions: 342
+INSC ************** Some general info here **********************
+INSC VERSION: 3.8.2  time :  Fri Jan  9 14:16:30 2026
+INSC machine_epsilon =   1.1e-16
+INSC sizeof(ergo_real) = 8
+INSC sizeof(size_t)    = 8
+INSC sizeof(int)       = 4
+INSC sizeof(long)      = 8
+INSC sizeof(char*)     = 8
+INSC Host name:         'cheetah'
+INSC Working directory: '/home/emanuel/clones/articles/sp8_acc_project/sp8_acc/plots/aspirin/aspirin_mtx'
+INSC Process ID (PID):    2506998
+INSC ************************************************************
+INSC Min internuclear distance:      1.85385 a.u.  =      0.98101 Angstrom
+INSC Max internuclear distance:     15.20283 a.u.  =      8.04499 Angstrom
+ININ compute_operator_matrix_sparse, nBastA =    342, nBastB =    342, pows (x y z) = (0 0 0)
+ININ create_box_system end OK, toplevelBoxSize:   7.0, #levels:  3, #boxes at top level:      6
+ININ compute_operator_matrix_sparse finished.
+TIIN compute_operator_matrix_sparse took      0.05 usr cpu s       0.00 sys cpu s       0.05 wall s
+IN   diag elements of ovl matrix differ from 1 by at most 4.44089e-16
+INSC Matrix 'S_symm before trunc' ( symm ): n =    342, nnz =       116964 <-> 100.00 %, mem usage  0.0005 G
+INSC truncating S using threshold value  1e-09
+INSC Truncated S (eucl), selected threshold =      1e-09, returned error =          0, nnz before = 100.0000 %, nnz after = 100.0000 %
+INSC Computing Euclidean norm of overlap matrix (just for fun)...
+TISC S_symm.eucl() took      0.00 usr cpu s       0.01 sys cpu s       0.00 wall s
+INSC Euclidean norm of overlap matrix =         15.36732802770  (acc 1.49e-08)
+INSC Calling invCholFactor.inch with matOpts.threshold_inch = 1e-10
+TISC invCholFactor.inch took      0.01 usr cpu s       0.02 sys cpu s       0.00 wall s
+INSC Matrix 'invCholFactor before truncation' (triang): n =    342, nnz =        63844 <->  54.58 %, mem usage  0.0005 G
+INSC truncating Z using threshold value  1e-08
+INSC Truncated Z (eucl), selected threshold =      1e-08, returned error =          0, nnz before = 54.5843 %, nnz after = 54.5843 %
+INSC Matrix 'invCholFactor after truncation' (triang): n =    342, nnz =        63844 <->  54.58 %, mem usage  0.0005 G
+INSC Frobenius norm of invCholFactor after truncation =       1534.98128408718
+INSC Euclidean norm of invCholFactor after truncation =       1185.38986007010
+TISC invCholFactor.eucl() took      0.00 usr cpu s       0.01 sys cpu s       0.00 wall s
+INSC testing invCholFactor by computing ZT*S*Z
+INSC Truncating tmp matrix S*Z using eucl_thresh() with threshold value  1e-08
+INSC frobenius_error for ZT*S*Z is 4.9096e-08
+TISC testing invCholFactor by computing ZT*S*Z took      0.01 usr cpu s       0.01 sys cpu s       0.00 wall s
+INSC entering compute_h_core_matrix_sparse, nAtoms = 21, n = 342, threshold = 1e-12
+ININ get_basis_func_pair_list_simple, n =    342
+ININ create_box_system end OK, toplevelBoxSize:   6.5, #levels:  3, #boxes at top level:      6
+TIIN get_basis_func_pair_list_simple took      0.01 usr cpu s       0.02 sys cpu s       0.00 wall s
+ININ get_basis_func_pair_list_simple, n =    342
+ININ create_box_system end OK, toplevelBoxSize:   6.5, #levels:  3, #boxes at top level:      6
+TIIN get_basis_func_pair_list_simple took      0.01 usr cpu s       0.02 sys cpu s       0.00 wall s
+IN   compute_T_matrix_sparse_linear: n = 342, threshold = 1e-12, boxSize = 6.500000
+IN   compute_T_matrix_sparse_linear: noOfBasisFuncIndexPairs = 57201 ==> storing  48.90 % of a full matrix
+INSC compute_T_sparse_linear returned OK.
+TISC compute_T_sparse_linear took      0.28 usr cpu s       0.38 sys cpu s       0.22 wall s
+IN   compute_V_sparse, no of atoms =    21, maxCharge =   8.00
+ININ get_basis_func_pair_list_1el_for_V, n =    342
+ININ create_box_system end OK, toplevelBoxSize:   6.5, #levels:  3, #boxes at top level:      6
+TIIN get_basis_func_pair_list_1el_for_V took      0.02 usr cpu s       0.00 sys cpu s       0.02 wall s
+ININ get_basis_func_pair_list_1el_for_V, n =    342
+ININ create_box_system end OK, toplevelBoxSize:   6.5, #levels:  3, #boxes at top level:      6
+TIIN get_basis_func_pair_list_1el_for_V took      0.02 usr cpu s       0.00 sys cpu s       0.02 wall s
+IN   noOfBasisFuncIndexPairs = 52378 ==> storing  44.78 % of a full matrix
+ININ compute_V_and_gradient_linear start, compute_gradient_also = 0.
+ININ compute_V_and_gradient_linear nDistrs    =    360064
+ININ compute_V_and_gradient_linear groupCount =     14531
+ININ create_box_system end OK, toplevelBoxSize:   6.5, #levels:  3, #boxes at top level:      6
+TIIN compute_V_and_gradient_linear init part (including create_nuclei_mm_tree) took      0.08 usr cpu s       0.01 sys cpu s       0.09 wall s
+ININ get_nucl_repulsion_energy_using_multipoles() gave nuclRepEnergy =        782.16048385763
+TIIN get_nucl_repulsion_energy_using_multipoles took      0.00 usr cpu s       0.00 sys cpu s       0.00 wall s
+TIIN compute_V_and_gradient_linear main part took      0.42 usr cpu s       0.00 sys cpu s       0.42 wall s
+TIIN compute_V_and_gradient_linear total took      0.50 usr cpu s       0.01 sys cpu s       0.51 wall s
+TISC Computation of V took      0.55 usr cpu s       0.01 sys cpu s       0.56 wall s
+INSC compute_h_core_matrix_sparse ending OK.
+TISC compute_h_core_matrix_sparse took      0.83 usr cpu s       0.39 sys cpu s       0.77 wall s
+INSC Matrix 'H_core_Matrix before trunc' ( symm ): n =    342, nnz =       116964 <-> 100.00 %, mem usage  0.0005 G
+INSC Truncated H_core_Matrix (eucl with Z), selected threshold =      5e-11, returned error =          0, nnz before = 100.0000 %, nnz after = 100.0000 %
+INSC Matrix 'H_core_Matrix after trunc' ( symm ): n =    342, nnz =       116964 <-> 100.00 %, mem usage  0.0005 G
+INMA get_nuclear_electric_field_energy, N = 21
+INMA get_nuclear_electric_field_energy returning energy          0.0000000000000000000000
+INSC SCF_general::do_SCF_iterations
+INSC getting starting guess density from file 'density.bin'
+INMA ddf_load_density_sparse("density.bin")
+INMA get_basis_funcs for starting guess basis set returned OK, number of basis funcs: 342
+INMA getSimplePrimitivesAll for starting guess basis set returned OK, n = 566
+IN   creating matrix SizesAndBlocks using blockSizeVector:
+IN   blockSizeVector[0] =        10240
+IN   blockSizeVector[1] =         1280
+IN   blockSizeVector[2] =          160
+IN   blockSizeVector[3] =           20
+IN   blockSizeVector[4] =            1
+IN   creating matrix permutation using blockSizeVector:
+IN   blockSizeVector[0] =        10240
+IN   blockSizeVector[1] =         1280
+IN   blockSizeVector[2] =          160
+IN   blockSizeVector[3] =           20
+IN   blockSizeVector[4] =            1
+ININ compute_operator_matrix_sparse, nBastA =    342, nBastB =    342, pows (x y z) = (0 0 0)
+ININ create_box_system end OK, toplevelBoxSize:   7.0, #levels:  3, #boxes at top level:      6
+ININ compute_operator_matrix_sparse finished.
+TIIN compute_operator_matrix_sparse took      0.15 usr cpu s       0.23 sys cpu s       0.11 wall s
+IN   trying to create PR_sparse
+TI   PR_sparse = P * R multiplication took      0.04 usr cpu s       0.05 sys cpu s       0.02 wall s
+IN   calling get_dens_from_fock_general for SDS to force idempotency and correct trace of starting guess
+INDE get_dens_from_fock_general, n = 342, use_diagonalization = 0, use_diag_on_error = 0
+INDE Before writeAndReadAll(): AllocatorManager statistics:  noOfRealsPerBuffer: 1024 noOfBuffers: 20000 list.size(): 1. Allocated: 0.164 GB, Used: 0.0027 GB, Peak alloc: 0.164 GB.
+TIDE FileWritable::writeAndReadAll took      0.00 usr cpu s       0.00 sys cpu s       0.00 wall s
+INDE writeAndReadAll sizesStr: '0 MB (2 MatrixGeneral, 0 > 1 MB) + 0 MB (15 MatrixSymmetric, 0 > 1 MB) = 0 MB (17 total, 0 > 1 MB)
+INDE After writeAndReadAll(): AllocatorManager statistics:  noOfRealsPerBuffer: 1024 noOfBuffers: 20000 list.size(): 1. Allocated: 0.164 GB, Used: 0.0027 GB, Peak alloc: 0.164 GB.
+INDE calling get_dens_from_fock_sparse, n =    342, subspaceErrorLimit = 1e-06
+INDE get_dens_from_fock_sparse() start!
+INDE After F.readFromFile(): AllocatorManager statistics:  noOfRealsPerBuffer: 1024 noOfBuffers: 20000 list.size(): 1. Allocated: 0.164 GB, Used: 0.00315 GB, Peak alloc: 0.164 GB.
+INDE After creating wrapper MatrixType F_w(F): AllocatorManager statistics:  noOfRealsPerBuffer: 1024 noOfBuffers: 20000 list.size(): 1. Allocated: 0.164 GB, Used: 0.0036 GB, Peak alloc: 0.164 GB.
+TIDE  F_w to orthogonal basis took      0.02 usr cpu s       0.05 sys cpu s       0.01 wall s
+TIDE MatrixType::mixed_diff for maxEigValMovement_mixed took      0.00 usr cpu s       0.00 sys cpu s       0.00 wall s
+TIDE symmMatrixWrap::eucl_diff for maxEigValMovement_eucl  took      0.00 usr cpu s       0.02 sys cpu s       0.00 wall s
+INDE maxEigValMovement_frob  =         13.71130920079
+INDE maxEigValMovement_mixed =         10.38996866607
+INDE maxEigValMovement_eucl  =          2.00000001048
+INDE lumo before truncation: [ -10000000000000000000000.000000000000 , 10000000000000000000000.000000000000 ]
+INDE homo before truncation: [ -10000000000000000000000.000000000000 , 10000000000000000000000.000000000000 ]
+INDE Truncate matrix F and update intervals for homo and lumo.
+INDE Truncating F_ort ( mixed ), selected threshold =      5e-09
+INDE Truncated F_ort ( mixed ), selected threshold =      5e-09, returned error =          0, nnz before = 100.0000 %, nnz after = 100.0000 %
+TIDE Truncation of F_ort took      0.00 usr cpu s       0.00 sys cpu s       0.00 wall s
+INDE Chosen Ergo Wrapper
+INDE Creating purification object: N = 342 , nocc = 47 , NNZ = 116964  <-> 100.00000 %
+INDE Chosen norm for the truncation: 
+INDE mixed
+INDE Chosen norm for the stopping criterion: 
+INDE mixed
+INDE Chosen the NEW stopping criterion.
+INDE Allowed error in subspace 7.000000e-07
+INDE Chosen SP2 purification method
+INDE calling Puri->PurificationStart(), number of threads = 1, trunc norm 'mixed'
+TIDE gershgorin took      0.00 usr cpu s       0.00 sys cpu s       0.00 wall s
+INDE Gershgorin bounds: [ -12.277973798052 , 10.774275361469 ]
+INDE EXPANDED Gershgorin bounds: [ -12.277973812953 , 10.774275376370 ]
+INDE Trying to impove bounds using Lanczos algorithm...
+TIDE compute_spectrum_bounds took      0.01 usr cpu s       0.02 sys cpu s       0.01 wall s
+INDE Spectrum of F: 	 [ -2.000014901155 , 0.000014901164 ]
+INDE Transform homo and lumo bounds...
+INDE Bounds for homo and lumo of F are overlapping.
+INDE HOMO bounds of X: 	 [ 0.000000000000 , 1.000000000000 ]
+INDE LUMO bounds of X: 	 [ -0.000000000000 , 1.000000000000 ]
+INDE ESTIMATED NUMBER OF ITERATIONS IS 100
+INDE Put eigenvalues of F to the interval [0,1] in reverse order.
+TIDE compute_X() took      0.00 usr cpu s       0.00 sys cpu s       0.00 wall s
+TIDE prepare_to_purification() took      0.01 usr cpu s       0.02 sys cpu s       0.01 wall s
+INDE (EIGV,PARAMS) Requested 0 occipied eigenpair(s).
+INDE (EIGV,PARAMS) Requested 0 unoccipied eigenpair(s).
+TIDE prepare_to_purification_eigenvectors() took      0.00 usr cpu s       0.00 sys cpu s       0.00 wall s
+INDE Starting recursive expansion
+INDE     BEFORE ITERATIONS:
+TIDE truncate_matrix took      0.00 usr cpu s       0.00 sys cpu s       0.00 wall s
+INDE Actual introduced error   0.000000e+00 : nnz before  116964 <-> 100.00 % , nnz after  116964 <-> 100.00 %
+TIDE square took      0.01 usr cpu s       0.10 sys cpu s       0.02 wall s
+INDE NNZ Xsq = 116964 <-> 100.00 %
+TIDE Frobenius norm of X-X^2 took      0.00 usr cpu s       0.00 sys cpu s       0.00 wall s
+TIDE Mixed norm of X-X^2 took      0.00 usr cpu s       0.01 sys cpu s       0.00 wall s
+TIDE Trace of X-X^2 took      0.00 usr cpu s       0.00 sys cpu s       0.00 wall s
+INDE ||X-X^2||_F = 1.377824e-04 , ||X-X^2||_mixed = 4.214687e-05
+INDE trace(X-X^2) = 2.548043e-03
+INDE trace(X) = 4.700185e+01
+TIDE Iteration 0 took      0.01 usr cpu s       0.10 sys cpu s       0.02 wall s
+TIDE FileWritable::writeAndReadAll took      0.00 usr cpu s       0.00 sys cpu s       0.00 wall s
+INDE writeAndReadAll sizesStr: '0 MB (2 MatrixGeneral, 0 > 1 MB) + 0 MB (21 MatrixSymmetric, 0 > 1 MB) + 0 MB (2 VectorGeneral, 0 > 1 MB) = 0 MB (25 total, 0 > 1 MB)
+INDE     ITERATION 1 :
+TIDE purify_X took      0.00 usr cpu s       0.00 sys cpu s       0.00 wall s
+TIDE truncate_matrix took      0.00 usr cpu s       0.00 sys cpu s       0.00 wall s
+INDE Actual introduced error   0.000000e+00 : nnz before  116964 <-> 100.00 % , nnz after  116964 <-> 100.00 %
+TIDE square took      0.01 usr cpu s       0.06 sys cpu s       0.01 wall s
+INDE NNZ Xsq = 116964 <-> 100.00 %
+TIDE Frobenius norm of X-X^2 took      0.00 usr cpu s       0.00 sys cpu s       0.00 wall s
+TIDE Mixed norm of X-X^2 took      0.00 usr cpu s       0.01 sys cpu s       0.00 wall s
+TIDE Trace of X-X^2 took      0.00 usr cpu s       0.00 sys cpu s       0.00 wall s
+INDE ||X-X^2||_F = 1.021538e-04 , ||X-X^2||_mixed = 7.740854e-05
+INDE trace(X-X^2) = 7.003473e-04
+INDE trace(X) = 4.699930e+01
+TIDE Iteration 1 took      0.02 usr cpu s       0.07 sys cpu s       0.01 wall s
+INDE     ITERATION 2 :
+TIDE purify_X took      0.00 usr cpu s       0.00 sys cpu s       0.00 wall s
+TIDE truncate_matrix took      0.00 usr cpu s       0.00 sys cpu s       0.00 wall s
+INDE Actual introduced error   0.000000e+00 : nnz before  116964 <-> 100.00 % , nnz after  116964 <-> 100.00 %
+TIDE square took      0.01 usr cpu s       0.05 sys cpu s       0.01 wall s
+INDE NNZ Xsq = 116964 <-> 100.00 %
+TIDE Frobenius norm of X-X^2 took      0.00 usr cpu s       0.00 sys cpu s       0.00 wall s
+TIDE Mixed norm of X-X^2 took      0.00 usr cpu s       0.00 sys cpu s       0.00 wall s
+TIDE Trace of X-X^2 took      0.00 usr cpu s       0.00 sys cpu s       0.00 wall s
+INDE ||X-X^2||_F = 2.439888e-09 , ||X-X^2||_mixed = 1.125833e-09
+INDE trace(X-X^2) = 4.318634e-08
+INDE trace(X) = 4.700000e+01
+INDE Checking stopping criterion...   
+INDE e_i =1.125833e-09, C*e_{i-1}^q = 1.223414e-08
+INDE Order of convergence = 2.236810, stop = 0
+TIDE stopping_criterion took      0.00 usr cpu s       0.00 sys cpu s       0.00 wall s
+TIDE Iteration 2 took      0.02 usr cpu s       0.06 sys cpu s       0.01 wall s
+INDE     ITERATION 3 :
+TIDE purify_X took      0.00 usr cpu s       0.00 sys cpu s       0.00 wall s
+TIDE truncate_matrix took      0.00 usr cpu s       0.00 sys cpu s       0.00 wall s
+INDE Actual introduced error   0.000000e+00 : nnz before  116964 <-> 100.00 % , nnz after  116964 <-> 100.00 %
+TIDE square took      0.01 usr cpu s       0.04 sys cpu s       0.01 wall s
+INDE NNZ Xsq = 116964 <-> 100.00 %
+TIDE Frobenius norm of X-X^2 took      0.00 usr cpu s       0.00 sys cpu s       0.00 wall s
+TIDE Mixed norm of X-X^2 took      0.00 usr cpu s       0.00 sys cpu s       0.00 wall s
+TIDE Trace of X-X^2 took      0.00 usr cpu s       0.00 sys cpu s       0.00 wall s
+INDE ||X-X^2||_F = 3.044407e-09 , ||X-X^2||_mixed = 2.306949e-09
+INDE trace(X-X^2) = 2.087140e-08
+INDE trace(X) = 4.700000e+01
+INDE Checking stopping criterion...   
+INDE e_i =2.306949e-09, C*e_{i-1}^q = 4.126867e-08
+INDE Order of convergence = 2.304675, stop = 0
+TIDE stopping_criterion took      0.00 usr cpu s       0.00 sys cpu s       0.00 wall s
+TIDE Iteration 3 took      0.02 usr cpu s       0.05 sys cpu s       0.01 wall s
+INDE     ITERATION 4 :
+TIDE purify_X took      0.00 usr cpu s       0.00 sys cpu s       0.00 wall s
+TIDE truncate_matrix took      0.00 usr cpu s       0.00 sys cpu s       0.00 wall s
+INDE Actual introduced error   0.000000e+00 : nnz before  116964 <-> 100.00 % , nnz after  116964 <-> 100.00 %
+TIDE square took      0.01 usr cpu s       0.07 sys cpu s       0.01 wall s
+INDE NNZ Xsq = 116964 <-> 100.00 %
+TIDE Frobenius norm of X-X^2 took      0.00 usr cpu s       0.00 sys cpu s       0.00 wall s
+TIDE Mixed norm of X-X^2 took      0.00 usr cpu s       0.00 sys cpu s       0.00 wall s
+TIDE Trace of X-X^2 took      0.00 usr cpu s       0.00 sys cpu s       0.00 wall s
+INDE ||X-X^2||_F = 2.399407e-15 , ||X-X^2||_mixed = 0.000000e+00
+INDE trace(X-X^2) = -7.105427e-15
+INDE trace(X) = 4.700000e+01
+INDE Checking stopping criterion...   
+INDE ************************************************************************************************************
+INDE The norm value went much below machine precision, therefore we stop here since n_max can be underestimated.
+INDE ************************************************************************************************************
+INDE e_i =0.000000e+00, C*e_{i-1}^q = 8.729525e-18
+INDE Order of convergence = inf, stop = 1
+TIDE stopping_criterion took      0.00 usr cpu s       0.00 sys cpu s       0.00 wall s
+INDE PURIFICATION CONVERGED after 4 iterations
+TIDE Iteration 4 took      0.02 usr cpu s       0.07 sys cpu s       0.01 wall s
+INDE Number of non-zeros in D is  116964 <-> 100.00 %
+TIDE FileWritable::writeAndReadAll took      0.00 usr cpu s       0.00 sys cpu s       0.00 wall s
+INDE writeAndReadAll sizesStr: '0 MB (2 MatrixGeneral, 0 > 1 MB) + 0 MB (21 MatrixSymmetric, 0 > 1 MB) + 0 MB (2 VectorGeneral, 0 > 1 MB) = 0 MB (25 total, 0 > 1 MB)
+INDE TOTAL X square time: 0.059120 wall s
+INDE TOTAL X trunction time: 0.000575 wall s
+INDE TOTAL X purify (exl. X^2 computation) time: 0.000463 wall s
+INDE TOTAL time to get number of non-zero elements: 0.000104 wall s
+INDE TOTAL time to get mixed norm: 0.004523 wall s
+INDE TOTAL time to get Frobenius norm: 0.000601 wall s
+INDE TOTAL time for stopping criterion: 0.000104 wall s
+INDE TOTAL time to get matrix trace: 0.000075 wall s
+INDE Estimated bounds for the eigenvalues for the Fock matrix:
+INDE LUMO: [ -0.000032551266 , -0.000000000006 ]
+INDE HOMO: [ -2.000003160173 , -1.999981346939 ]
+TIDE eigenvalue_bounds_estimation() took      0.00 usr cpu s       0.00 sys cpu s       0.00 wall s
+TIDE Recursive expansion took      0.09 usr cpu s       0.38 sys cpu s       0.07 wall s
+TIDE Puri->PurificationStart() took      0.09 usr cpu s       0.38 sys cpu s       0.07 wall s
+TIDE Accumulated wall times for writeToFile in PurificationStart()          : 0 s (MatrixGeneral) + 1.9e-06 s (MatrixSymmetric) + 4.8e-06 s (VectorGeneral) = 6.7e-06 s
+TIDE Accumulated wall times for readFromFile in PurificationStart()         : 1.2e-06 s (MatrixGeneral) + 9.5e-07 s (MatrixSymmetric) + 0 s (VectorGeneral) = 2.1e-06 s
+TIDE Accumulated wall times for copy and assign in PurificationStart()      : 9.5e-07 s (MatrixSymmetric) + 5.7e-06 s (VectorGeneral) = 6.7e-06 s
+INDE Number of calls to writeToFile in PurificationStart()                  : 4 (MatrixGeneral) + 43 (MatrixSymmetric) + 104 (VectorGeneral) = 151 
+INDE Number of calls to readFromFile in PurificationStart()                 : 4 (MatrixGeneral) + 42 (MatrixSymmetric) + 40 (VectorGeneral) = 86 
+INDE Number of calls to FileWritable copy and assign in PurificationStart() : 2 (MatrixSymmetric) + 6 (VectorGeneral) = 8 
+TIDE mat::Gblas::time after purification :     0.386769
+INDE Created .m files with results of the purification
+INDE Purification converged OK
+INDE E(LUMO) - E(HOMO) >=          1.99994879567 =         54.42137941138 eV
+INDE E(LUMO) - E(HOMO) <=          2.00000316017 =         54.42285874464 eV
+INDE HOMO interval : [   -2.000003160173   -1.999981346939 ]
+INDE LUMO interval : [   -0.000032551266   -0.000000000006 ]
+INDE Trace of resulting density matrix is         47.00000000000, error is   0.00000000000000.
+INDE Truncated D_ort ( mixed ), selected threshold = 9.99999e-08, returned error =          0, nnz before = 116964 <-> 100.0000 %, nnz after = 116964 <-> 100.0000 %
+TIDE FileWritable::writeAndReadAll took      0.00 usr cpu s       0.00 sys cpu s       0.00 wall s
+INDE writeAndReadAll sizesStr: '0 MB (2 MatrixGeneral, 0 > 1 MB) + 0 MB (20 MatrixSymmetric, 0 > 1 MB) + 0 MB (1 MatrixTriangular, 0 > 1 MB) = 0 MB (23 total, 0 > 1 MB)
+TIDE D_w to non-orthogonal basis took      0.02 usr cpu s       0.05 sys cpu s       0.01 wall s
+INDE Truncated D_S (eucl with Z), selected threshold = 9.99999e-08, returned error =          0, nnz before = 100.0000 %, nnz after = 100.0000 %
+INDE get_dens_from_fock_sparse ending OK
+TIDE get_dens_from_fock_sparse took      0.27 usr cpu s       1.04 sys cpu s       0.21 wall s
+ERDE get_dens_from_fock  (GetDensFromFock class) : purification finished OK.
+TIDE get_dens_from_fock took      0.27 usr cpu s       1.04 sys cpu s       0.21 wall s
+IN   get_dens_from_fock_general finished OK.
+TI   load_density_and_project_sparse took      0.48 usr cpu s       1.41 sys cpu s       0.35 wall s
+INSC Matrix 'starting guess density matrix' ( symm ): n =    342, nnz =       116964 <-> 100.00 %, mem usage  0.0005 G
+INSC Beginning of SCF cycle 1:  Fri Jan  9 14:16:31 2026
+INDE compute_J_by_boxes_sparse() start.
+TIDE FileWritable::writeAndReadAll took      0.00 usr cpu s       0.00 sys cpu s       0.00 wall s
+INDE writeAndReadAll: '0 MB (1 MatrixGeneral, 0 > 1 MB) + 0 MB (11 MatrixSymmetric, 0 > 1 MB) = 0 MB (12 total, 0 > 1 MB)
+IN   compute_J_by_boxes_sparse, maxDensityMatrixElement =         22.35795635560
+ININ get_basis_func_pair_list, n =    342
+ININ create_box_system end OK, toplevelBoxSize:   7.0, #levels:  3, #boxes at top level:      6
+TIIN get_basis_func_pair_list_2el took      0.18 usr cpu s       0.28 sys cpu s       0.12 wall s
+IN   compute_J_by_boxes_sparse: noOfBasisFuncIndexPairs = 52606 ==> storing  44.98 % of a full matrix
+ININ entering compute_J_by_boxes_linear, no of basis funcs =   342, threshold_J =   1e-12
+ININ use_fmm = 1, fmm_box_size =   5.00
+TIIN Compute extent for all distrs took      0.24 usr cpu s       0.00 sys cpu s       0.24 wall s
+ININ extent_min =    0.000, extent_max =   19.778
+ININ Creating list of distributions etc done, distrCount =    353701
+TIIN Creating list of distributions etc took      0.36 usr cpu s       0.01 sys cpu s       0.37 wall s
+ININ create_box_system end OK, toplevelBoxSize:   5.0, #levels:  3, #boxes at top level:     10
+TIIN Creating boxes took      0.02 usr cpu s       0.01 sys cpu s       0.03 wall s
+ININ noOfBranches = 5, splitters:  10.00  5.00  2.50  0.00
+ININ J org done, groupCount =    15565
+TIIN J org took      0.86 usr cpu s       0.00 sys cpu s       0.86 wall s
+TIIN Generate group multipoles took      0.36 usr cpu s       0.00 sys cpu s       0.36 wall s
+ININ totChargeWholeSystem =          0.00000000000
+ININ Generating multipole for each branch at top level, MAX_MULTIPOLE_DEGREE = 15
+TIIN Translate multipoles (step 1) took      0.25 usr cpu s       0.00 sys cpu s       0.25 wall s
+TIIN Translate multipoles (step 2) took      0.05 usr cpu s       0.00 sys cpu s       0.05 wall s
+ININ job lists for J created OK, noOfJobs_J_standard =     1255, noOfJobs_J_multipole =       40
+TIIN Creating job lists for J took      0.00 usr cpu s       0.00 sys cpu s       0.00 wall s
+ININ execute_joblist_J_std_threaded, noOfThreads =  8
+ININ 8 threads started OK.
+ININ all 8 threads have finished.
+TIIN execute_joblist_J_std_threaded took    110.43 usr cpu s       0.31 sys cpu s      20.17 wall s
+TIIN sort_list_of_multipole_jobs init part took      0.00 usr cpu s       0.00 sys cpu s       0.00 wall s
+TIIN sort_list_of_multipole_jobs complete took      0.00 usr cpu s       0.00 sys cpu s       0.00 wall s
+TIIN sort_list_of_multipole_jobs took      0.00 usr cpu s       0.00 sys cpu s       0.00 wall s
+ININ execute_joblist_J_fmm_shared: Allocating multipoleList_4, maxnoOfMinimalDistrsPerBoxBranch =     65422
+ININ execute_joblist_J_fmm_shared: Allocating multipoleList_4, maxnoOfMinimalDistrsPerBoxBranch =     65422
+ININ execute_joblist_J_fmm_shared: jobIndexLo =            5, jobIndexHi =           10
+ININ execute_joblist_J_fmm_shared: Allocating multipoleList_4, maxnoOfMinimalDistrsPerBoxBranch =     65422
+ININ execute_joblist_J_fmm_shared: jobIndexLo =            0, jobIndexHi =            5
+ININ execute_joblist_J_fmm_shared: jobIndexLo =           10, jobIndexHi =           15
+ININ execute_joblist_J_fmm_shared: Allocating multipoleList_4, maxnoOfMinimalDistrsPerBoxBranch =     65422
+ININ execute_joblist_J_fmm_shared: jobIndexLo =           15, jobIndexHi =           20
+ININ execute_joblist_J_fmm_shared: Allocating multipoleList_4, maxnoOfMinimalDistrsPerBoxBranch =     65422
+ININ execute_joblist_J_fmm_shared: jobIndexLo =           25, jobIndexHi =           30
+ININ execute_joblist_J_fmm_shared: Allocating multipoleList_4, maxnoOfMinimalDistrsPerBoxBranch =     65422
+ININ execute_joblist_J_fmm_shared: jobIndexLo =           30, jobIndexHi =           35
+ININ execute_joblist_J_fmm_shared: Allocating multipoleList_4, maxnoOfMinimalDistrsPerBoxBranch =     65422
+ININ execute_joblist_J_fmm_shared: jobIndexLo =           20, jobIndexHi =           25
+ININ execute_joblist_J_fmm_shared: Allocating multipoleList_4, maxnoOfMinimalDistrsPerBoxBranch =     65422
+ININ execute_joblist_J_fmm_shared: jobIndexLo =           35, jobIndexHi =           40
+ININ execute_joblist_J_fmm_shared: done!
+ININ execute_joblist_J_fmm_shared: done!
+ININ execute_joblist_J_fmm_shared: done!
+ININ execute_joblist_J_fmm_shared: done!
+ININ execute_joblist_J_fmm_shared: done!
+ININ execute_joblist_J_fmm_shared: done!
+ININ execute_joblist_J_fmm_shared: done!
+ININ execute_joblist_J_fmm_shared: done!
+ININ multipole job list for J executed, largest L used: 12
+TIIN Executing multipole job list for J took      0.19 usr cpu s       0.07 sys cpu s       0.10 wall s
+ININ compute_J_by_boxes_linear ending OK.
+TIIN compute_J_by_boxes_linear took    112.53 usr cpu s       0.39 sys cpu s      22.20 wall s
+TI   compute_J_by_boxes_sparse total took    112.71 usr cpu s       0.68 sys cpu s      22.32 wall s
+ININ entering create_CSR_for_K, no of basis funcs =   342, threshold_K =   1e-12
+ININ create_box_system end OK, toplevelBoxSize:   7.0, #levels:  3, #boxes at top level:      6
+ININ create_box_system end OK, toplevelBoxSize:   7.0, #levels:  3, #boxes at top level:      6
+ININ create_box_system end OK, toplevelBoxSize:   7.0, #levels:  3, #boxes at top level:      6
+TIIN create_CSR_for_K getting list of distrs took      0.25 usr cpu s       0.01 sys cpu s       0.27 wall s
+ININ list of neighbors complete.
+TIIN create_CSR_for_K getting list of neighbors took      0.00 usr cpu s       0.00 sys cpu s       0.00 wall s
+TIIN create_CSR_for_K sort each list of neighbors took      0.03 usr cpu s       0.00 sys cpu s       0.03 wall s
+ININ 8 threads started OK.
+TIIN identify_needed_elements() took    302.35 usr cpu s       0.38 sys cpu s      41.40 wall s
+ININ computing nnz..
+ININ create_CSR_for_K: predicted nnz =        58653, <->  50.15% of a full matrix
+TIIN create_CSR_for_K last part took      0.00 usr cpu s       0.00 sys cpu s       0.00 wall s
+TIIN create_CSR_for_K total took    302.65 usr cpu s       0.39 sys cpu s      41.71 wall s
+ININ entering compute_K_by_boxes, no of basis funcs =   342, threshold_K =   1e-12, exchange_box_size =   5.00
+ININ create_box_system end OK, toplevelBoxSize:   7.0, #levels:  3, #boxes at top level:      6
+ININ create_box_system end OK, toplevelBoxSize:   7.0, #levels:  3, #boxes at top level:      6
+ININ create_box_system end OK, toplevelBoxSize:   7.0, #levels:  3, #boxes at top level:      6
+TIIN Compute extent for all distrs took      0.24 usr cpu s       0.00 sys cpu s       0.24 wall s
+ININ Creating list of distributions done, distrCountTot =    353701
+TIIN Creating list of distributions took      0.37 usr cpu s       0.01 sys cpu s       0.38 wall s
+ININ create_box_system end OK, toplevelBoxSize:   5.0, #levels:  3, #boxes at top level:     10
+ININ create_box_system end OK, toplevelBoxSize:   2.5, #levels:  4, #boxes at top level:     16
+ININ noOfLevelsBasisFuncs = 4, noOfLevelsDiff = 1
+TIIN Creating boxes etc took      0.02 usr cpu s       0.01 sys cpu s       0.03 wall s
+TIIN getting multipoleNormVectorList took      0.36 usr cpu s       0.00 sys cpu s       0.36 wall s
+TIIN K organize_distributions for all boxes took      1.00 usr cpu s       0.01 sys cpu s       1.01 wall s
+ININ starting loop to setup basisFuncGroupInfoList, with added index checks.
+TIIN GetLimitsAllLevels took      0.15 usr cpu s       0.00 sys cpu s       0.15 wall s
+ININ getDmatLimitMatrixCSRList start.
+TIIN getting densityMatrixLimitMatrixList took      0.01 usr cpu s       0.00 sys cpu s       0.01 wall s
+ININ job list for K created,       55 jobs
+TIIN creating job list for K took      0.00 usr cpu s       0.00 sys cpu s       0.00 wall s
+ININ execute_joblist_K_threaded, noOfThreads =  8, basisFuncListCount_max =   325
+ININ 8 threads started OK.
+ININ all 8 threads have finished, took       16 wall s.
+TIIN Executing job list for K took     70.97 usr cpu s       0.05 sys cpu s      15.54 wall s
+TIIN compute_K_by_boxes took     72.89 usr cpu s       0.08 sys cpu s      17.49 wall s
+TI   compute_K_by_boxes_sparse total took    375.55 usr cpu s       0.47 sys cpu s      59.21 wall s
+INSC About to truncate FockMatrix, gap of Fprev >= -20000000000000000000000.00000000000
+TISC symmMatrix::mixed_diff for F vs Fprev maxEigValMovement_mixed took      0.00 usr cpu s       0.00 sys cpu s       0.00 wall s
+TISC symmMatrix::eucl_diff for maxEigValMovement_eucl  took      0.04 usr cpu s       0.16 sys cpu s       0.03 wall s
+INSC maxEigValMovement_frob  =        122.52159005490
+INSC maxEigValMovement_mixed =         74.83371647711
+INSC maxEigValMovement_eucl  =         45.29865280452
+TISC FockMatrix.eucl_thresh() (with Z) took      0.07 usr cpu s       0.24 sys cpu s       0.05 wall s
+INSC Truncated FockMatrix (eucl with Z), selected threshold =      5e-09, returned error =          0, nnz before = 100.0000 %, nnz after = 100.0000 %
+INSC Matrix 'S' ( symm ): n =    342, nnz =       116964 <-> 100.00 %, mem usage  0.0005 G
+INSC Matrix 'F' ( symm ): n =    342, nnz =       116964 <-> 100.00 %, mem usage  0.0005 G
+INSC Matrix 'D' ( symm ): n =    342, nnz =       116964 <-> 100.00 %, mem usage  0.0005 G
+INSC nuclearEnergy, energy_2el, energy = 782.160484, 1007.253420, -645.112846
+INSC Energy   1 =       -645.11284581277
+INSC calling compute_FDSminusSDF_sparse, n = 342
+INDE compute_FDSminusSDF_sparse() start.
+TIDE FileWritable::writeAndReadAll took      0.00 usr cpu s       0.00 sys cpu s       0.00 wall s
+INDE writeAndReadAll: '0 MB (1 MatrixGeneral, 0 > 1 MB) + 0 MB (9 MatrixSymmetric, 0 > 1 MB) = 0 MB (10 total, 0 > 1 MB)
+TISC compute_FDSminusSDF_sparse, F*D mult took      0.02 usr cpu s       0.07 sys cpu s       0.01 wall s
+INSC Matrix 'FD before eucl truncation' (normal): n =    342, nnz =       116964 <-> 100.00 %, mem usage  0.0009 G
+INSC Matrix 'FD after  eucl truncation' (normal): n =    342, nnz =       116964 <-> 100.00 %, mem usage  0.0009 G
+INSC Matrix 'FDS before eucl truncation' (normal): n =    342, nnz =       116964 <-> 100.00 %, mem usage  0.0009 G
+INSC Matrix 'FDS after  eucl truncation' (normal): n =    342, nnz =       116964 <-> 100.00 %, mem usage  0.0009 G
+INSC compute_FDSminusSDF_sparse ending OK.
+TISC compute_FDSminusSDF_sparse took      0.10 usr cpu s       0.32 sys cpu s       0.06 wall s
+INSC Matrix 'FDS-SDF' (normal): n =    342, nnz =       114852 <->  98.19 %, mem usage  0.0009 G
+INSC SCF_restricted::get_FDSminusSDF finished.
+TISC get_FDSminusSDF took      0.10 usr cpu s       0.32 sys cpu s       0.06 wall s
+INSC maxabs FDS-SDF is 1.16e-07
+INSC frob   FDS-SDF is 1.51e-06
+TISC get_error_measure took      0.00 usr cpu s       0.00 sys cpu s       0.00 wall s
+INSC entering DIISManagerRestricted::AddIterationToList, IterCount =  0
+INSC DIISManagerRestricted::AddIterationToList ending OK.
+TISC DIISManagerRestricted::AddIterationToList took      0.00 usr cpu s       0.00 sys cpu s       0.00 wall s
+TISC clear_error_matrices took      0.00 usr cpu s       0.00 sys cpu s       0.00 wall s
+TISC save_current_fock_as_fprev took      0.00 usr cpu s       0.00 sys cpu s       0.00 wall s
+INDE get_dens_from_fock_general, n = 342, use_diagonalization = 0, use_diag_on_error = 1
+INDE Before writeAndReadAll(): AllocatorManager statistics:  noOfRealsPerBuffer: 1024 noOfBuffers: 20000 list.size(): 1. Allocated: 0.164 GB, Used: 0.00532 GB, Peak alloc: 0.164 GB.
+TIDE FileWritable::writeAndReadAll took      0.00 usr cpu s       0.00 sys cpu s       0.00 wall s
+INDE writeAndReadAll sizesStr: '0 MB (1 MatrixGeneral, 0 > 1 MB) + 0 MB (7 MatrixSymmetric, 0 > 1 MB) = 0 MB (8 total, 0 > 1 MB)
+INDE After writeAndReadAll(): AllocatorManager statistics:  noOfRealsPerBuffer: 1024 noOfBuffers: 20000 list.size(): 1. Allocated: 0.164 GB, Used: 0.00532 GB, Peak alloc: 0.164 GB.
+INDE calling get_dens_from_fock_sparse, n =    342, subspaceErrorLimit = 1e-06
+INDE get_dens_from_fock_sparse() start!
+INDE After F.readFromFile(): AllocatorManager statistics:  noOfRealsPerBuffer: 1024 noOfBuffers: 20000 list.size(): 1. Allocated: 0.164 GB, Used: 0.00532 GB, Peak alloc: 0.164 GB.
+INDE After creating wrapper MatrixType F_w(F): AllocatorManager statistics:  noOfRealsPerBuffer: 1024 noOfBuffers: 20000 list.size(): 1. Allocated: 0.164 GB, Used: 0.00578 GB, Peak alloc: 0.164 GB.
+TIDE  F_w to orthogonal basis took      0.02 usr cpu s       0.02 sys cpu s       0.00 wall s
+TIDE MatrixType::mixed_diff for maxEigValMovement_mixed took      0.00 usr cpu s       0.01 sys cpu s       0.00 wall s
+TIDE symmMatrixWrap::eucl_diff for maxEigValMovement_eucl  took      0.02 usr cpu s       0.11 sys cpu s       0.02 wall s
+INDE maxEigValMovement_frob  =        144.34576942014
+INDE maxEigValMovement_mixed =         82.08512718199
+INDE maxEigValMovement_eucl  =         51.71518459167
+INDE lumo before truncation: [ -10000000000000000000000.000000000000 , 10000000000000000000000.000000000000 ]
+INDE homo before truncation: [ -10000000000000000000000.000000000000 , 10000000000000000000000.000000000000 ]
+INDE Truncate matrix F and update intervals for homo and lumo.
+INDE Truncating F_ort ( mixed ), selected threshold =      5e-09
+INDE Truncated F_ort ( mixed ), selected threshold =      5e-09, returned error =          0, nnz before = 100.0000 %, nnz after = 100.0000 %
+TIDE Truncation of F_ort took      0.00 usr cpu s       0.00 sys cpu s       0.00 wall s
+INDE Chosen Ergo Wrapper
+INDE Creating purification object: N = 342 , nocc = 47 , NNZ = 116964  <-> 100.00000 %
+INDE Chosen norm for the truncation: 
+INDE mixed
+INDE Chosen norm for the stopping criterion: 
+INDE mixed
+INDE Chosen the NEW stopping criterion.
+INDE Allowed error in subspace 7.000000e-07
+INDE Chosen SP2 purification method
+INDE calling Puri->PurificationStart(), number of threads = 1, trunc norm 'mixed'
+TIDE gershgorin took      0.00 usr cpu s       0.01 sys cpu s       0.00 wall s
+INDE Gershgorin bounds: [ -59.820858782590 , 100.436330601899 ]
+INDE EXPANDED Gershgorin bounds: [ -59.820858797491 , 100.436330616800 ]
+INDE Trying to impove bounds using Lanczos algorithm...
+TIDE compute_spectrum_bounds took      0.05 usr cpu s       0.23 sys cpu s       0.04 wall s
+INDE Spectrum of F: 	 [ -20.624838831932 , 51.715199482352 ]
+INDE Transform homo and lumo bounds...
+INDE Bounds for homo and lumo of F are overlapping.
+INDE HOMO bounds of X: 	 [ 0.000000000000 , 1.000000000000 ]
+INDE LUMO bounds of X: 	 [ -0.000000000000 , 1.000000000000 ]
+INDE ESTIMATED NUMBER OF ITERATIONS IS 100
+INDE Put eigenvalues of F to the interval [0,1] in reverse order.
+TIDE compute_X() took      0.00 usr cpu s       0.00 sys cpu s       0.00 wall s
+TIDE prepare_to_purification() took      0.05 usr cpu s       0.23 sys cpu s       0.04 wall s
+INDE (EIGV,PARAMS) Requested 0 occipied eigenpair(s).
+INDE (EIGV,PARAMS) Requested 0 unoccipied eigenpair(s).
+TIDE prepare_to_purification_eigenvectors() took      0.00 usr cpu s       0.00 sys cpu s       0.00 wall s
+INDE Starting recursive expansion
+INDE     BEFORE ITERATIONS:
+TIDE truncate_matrix took      0.00 usr cpu s       0.00 sys cpu s       0.00 wall s
+INDE Actual introduced error   0.000000e+00 : nnz before  116964 <-> 100.00 % , nnz after  116964 <-> 100.00 %
+TIDE square took      0.01 usr cpu s       0.02 sys cpu s       0.00 wall s
+INDE NNZ Xsq = 116964 <-> 100.00 %
+TIDE Frobenius norm of X-X^2 took      0.00 usr cpu s       0.00 sys cpu s       0.00 wall s
+TIDE Mixed norm of X-X^2 took      0.00 usr cpu s       0.01 sys cpu s       0.00 wall s
+TIDE Trace of X-X^2 took      0.00 usr cpu s       0.00 sys cpu s       0.00 wall s
+INDE ||X-X^2||_F = 3.852014e+00 , ||X-X^2||_mixed = 1.286053e+00
+INDE trace(X-X^2) = 7.012956e+01
+INDE trace(X) = 2.342456e+02
+TIDE Iteration 0 took      0.01 usr cpu s       0.03 sys cpu s       0.01 wall s
+TIDE FileWritable::writeAndReadAll took      0.00 usr cpu s       0.00 sys cpu s       0.00 wall s
+INDE writeAndReadAll sizesStr: '0 MB (1 MatrixGeneral, 0 > 1 MB) + 0 MB (13 MatrixSymmetric, 0 > 1 MB) + 0 MB (2 VectorGeneral, 0 > 1 MB) = 0 MB (16 total, 0 > 1 MB)
+INDE     ITERATION 1 :
+TIDE purify_X took      0.00 usr cpu s       0.00 sys cpu s       0.00 wall s
+TIDE truncate_matrix took      0.00 usr cpu s       0.00 sys cpu s       0.00 wall s
+INDE Actual introduced error   0.000000e+00 : nnz before  116964 <-> 100.00 % , nnz after  116964 <-> 100.00 %
+TIDE square took      0.00 usr cpu s       0.02 sys cpu s       0.00 wall s
+INDE NNZ Xsq = 116964 <-> 100.00 %
+TIDE Frobenius norm of X-X^2 took      0.00 usr cpu s       0.00 sys cpu s       0.00 wall s
+TIDE Mixed norm of X-X^2 took      0.00 usr cpu s       0.01 sys cpu s       0.00 wall s
+TIDE Trace of X-X^2 took      0.00 usr cpu s       0.00 sys cpu s       0.00 wall s
+INDE ||X-X^2||_F = 4.467938e+00 , ||X-X^2||_mixed = 1.460677e+00
+INDE trace(X-X^2) = 8.127625e+01
+INDE trace(X) = 1.641160e+02
+TIDE Iteration 1 took      0.01 usr cpu s       0.03 sys cpu s       0.00 wall s
+INDE     ITERATION 2 :
+TIDE purify_X took      0.00 usr cpu s       0.00 sys cpu s       0.00 wall s
+TIDE truncate_matrix took      0.00 usr cpu s       0.00 sys cpu s       0.00 wall s
+INDE Actual introduced error   0.000000e+00 : nnz before  116964 <-> 100.00 % , nnz after  116964 <-> 100.00 %
+TIDE square took      0.00 usr cpu s       0.03 sys cpu s       0.00 wall s
+INDE NNZ Xsq = 116964 <-> 100.00 %
+TIDE Frobenius norm of X-X^2 took      0.00 usr cpu s       0.00 sys cpu s       0.00 wall s
+TIDE Mixed norm of X-X^2 took      0.00 usr cpu s       0.01 sys cpu s       0.00 wall s
+TIDE Trace of X-X^2 took      0.00 usr cpu s       0.00 sys cpu s       0.00 wall s
+INDE ||X-X^2||_F = 3.254698e+00 , ||X-X^2||_mixed = 1.135626e+00
+INDE trace(X-X^2) = 5.849020e+01
+INDE trace(X) = 8.283977e+01
+INDE Checking stopping criterion...   
+INDE Order of convergence cannot be computed
+TIDE stopping_criterion took      0.00 usr cpu s       0.00 sys cpu s       0.00 wall s
+TIDE Iteration 2 took      0.01 usr cpu s       0.03 sys cpu s       0.01 wall s
+INDE     ITERATION 3 :
+TIDE purify_X took      0.00 usr cpu s       0.00 sys cpu s       0.00 wall s
+TIDE truncate_matrix took      0.00 usr cpu s       0.00 sys cpu s       0.00 wall s
+INDE Actual introduced error   0.000000e+00 : nnz before  116964 <-> 100.00 % , nnz after  116964 <-> 100.00 %
+TIDE square took      0.01 usr cpu s       0.02 sys cpu s       0.00 wall s
+INDE NNZ Xsq = 116964 <-> 100.00 %
+TIDE Frobenius norm of X-X^2 took      0.00 usr cpu s       0.00 sys cpu s       0.00 wall s
+TIDE Mixed norm of X-X^2 took      0.00 usr cpu s       0.01 sys cpu s       0.00 wall s
+TIDE Trace of X-X^2 took      0.00 usr cpu s       0.00 sys cpu s       0.00 wall s
+INDE ||X-X^2||_F = 1.155666e+00 , ||X-X^2||_mixed = 5.157223e-01
+INDE trace(X-X^2) = 1.837812e+01
+INDE trace(X) = 2.434956e+01
+INDE Checking stopping criterion...   
+INDE Order of convergence cannot be computed
+TIDE stopping_criterion took      0.00 usr cpu s       0.00 sys cpu s       0.00 wall s
+TIDE Iteration 3 took      0.01 usr cpu s       0.03 sys cpu s       0.00 wall s
+INDE     ITERATION 4 :
+TIDE purify_X took      0.00 usr cpu s       0.00 sys cpu s       0.00 wall s
+TIDE truncate_matrix took      0.00 usr cpu s       0.00 sys cpu s       0.00 wall s
+INDE Actual introduced error   0.000000e+00 : nnz before  116964 <-> 100.00 % , nnz after  116964 <-> 100.00 %
+TIDE square took      0.00 usr cpu s       0.02 sys cpu s       0.00 wall s
+INDE NNZ Xsq = 116964 <-> 100.00 %
+TIDE Frobenius norm of X-X^2 took      0.00 usr cpu s       0.00 sys cpu s       0.00 wall s
+TIDE Mixed norm of X-X^2 took      0.00 usr cpu s       0.01 sys cpu s       0.00 wall s
+TIDE Trace of X-X^2 took      0.00 usr cpu s       0.00 sys cpu s       0.00 wall s
+INDE ||X-X^2||_F = 1.874952e+00 , ||X-X^2||_mixed = 7.598124e-01
+INDE trace(X-X^2) = 3.216480e+01
+INDE trace(X) = 4.272769e+01
+INDE Checking stopping criterion...   
+INDE Order of convergence cannot be computed
+TIDE stopping_criterion took      0.00 usr cpu s       0.00 sys cpu s       0.00 wall s
+TIDE Iteration 4 took      0.01 usr cpu s       0.03 sys cpu s       0.00 wall s
+INDE     ITERATION 5 :
+TIDE purify_X took      0.00 usr cpu s       0.00 sys cpu s       0.00 wall s
+TIDE truncate_matrix took      0.00 usr cpu s       0.00 sys cpu s       0.00 wall s
+INDE Actual introduced error   0.000000e+00 : nnz before  116964 <-> 100.00 % , nnz after  116964 <-> 100.00 %
+TIDE square took      0.01 usr cpu s       0.02 sys cpu s       0.00 wall s
+INDE NNZ Xsq = 116964 <-> 100.00 %
+TIDE Frobenius norm of X-X^2 took      0.00 usr cpu s       0.00 sys cpu s       0.00 wall s
+TIDE Mixed norm of X-X^2 took      0.00 usr cpu s       0.01 sys cpu s       0.00 wall s
+TIDE Trace of X-X^2 took      0.00 usr cpu s       0.00 sys cpu s       0.00 wall s
+INDE ||X-X^2||_F = 2.906759e+00 , ||X-X^2||_mixed = 1.090417e+00
+INDE trace(X-X^2) = 5.163281e+01
+INDE trace(X) = 7.489249e+01
+INDE Checking stopping criterion...   
+INDE Order of convergence cannot be computed
+TIDE stopping_criterion took      0.00 usr cpu s       0.00 sys cpu s       0.00 wall s
+TIDE Iteration 5 took      0.01 usr cpu s       0.03 sys cpu s       0.01 wall s
+INDE     ITERATION 6 :
+TIDE purify_X took      0.00 usr cpu s       0.00 sys cpu s       0.00 wall s
+TIDE truncate_matrix took      0.00 usr cpu s       0.00 sys cpu s       0.00 wall s
+INDE Actual introduced error   0.000000e+00 : nnz before  116964 <-> 100.00 % , nnz after  116964 <-> 100.00 %
+TIDE square took      0.00 usr cpu s       0.02 sys cpu s       0.00 wall s
+INDE NNZ Xsq = 116964 <-> 100.00 %
+TIDE Frobenius norm of X-X^2 took      0.00 usr cpu s       0.00 sys cpu s       0.00 wall s
+TIDE Mixed norm of X-X^2 took      0.00 usr cpu s       0.01 sys cpu s       0.00 wall s
+TIDE Trace of X-X^2 took      0.00 usr cpu s       0.00 sys cpu s       0.00 wall s
+INDE ||X-X^2||_F = 1.040179e+00 , ||X-X^2||_mixed = 5.107546e-01
+INDE trace(X-X^2) = 1.488955e+01
+INDE trace(X) = 2.325968e+01
+INDE Checking stopping criterion...   
+INDE e_i =5.107546e-01, C*e_{i-1}^q = 3.976083e+00
+INDE Order of convergence = 9.471006, stop = 0
+TIDE stopping_criterion took      0.00 usr cpu s       0.00 sys cpu s       0.00 wall s
+TIDE Iteration 6 took      0.01 usr cpu s       0.03 sys cpu s       0.01 wall s
+INDE     ITERATION 7 :
+TIDE purify_X took      0.00 usr cpu s       0.00 sys cpu s       0.00 wall s
+TIDE truncate_matrix took      0.00 usr cpu s       0.00 sys cpu s       0.00 wall s
+INDE Actual introduced error   0.000000e+00 : nnz before  116964 <-> 100.00 % , nnz after  116964 <-> 100.00 %
+TIDE square took      0.01 usr cpu s       0.01 sys cpu s       0.00 wall s
+INDE NNZ Xsq = 116964 <-> 100.00 %
+TIDE Frobenius norm of X-X^2 took      0.00 usr cpu s       0.00 sys cpu s       0.00 wall s
+TIDE Mixed norm of X-X^2 took      0.00 usr cpu s       0.01 sys cpu s       0.00 wall s
+TIDE Trace of X-X^2 took      0.00 usr cpu s       0.00 sys cpu s       0.00 wall s
+INDE ||X-X^2||_F = 1.468399e+00 , ||X-X^2||_mixed = 6.554610e-01
+INDE trace(X-X^2) = 2.476192e+01
+INDE trace(X) = 3.814923e+01
+INDE Checking stopping criterion...   
+INDE Order of convergence cannot be computed
+TIDE stopping_criterion took      0.00 usr cpu s       0.00 sys cpu s       0.00 wall s
+TIDE Iteration 7 took      0.02 usr cpu s       0.02 sys cpu s       0.00 wall s
+INDE     ITERATION 8 :
+TIDE purify_X took      0.00 usr cpu s       0.00 sys cpu s       0.00 wall s
+TIDE truncate_matrix took      0.00 usr cpu s       0.00 sys cpu s       0.00 wall s
+INDE Actual introduced error   0.000000e+00 : nnz before  116964 <-> 100.00 % , nnz after  116964 <-> 100.00 %
+TIDE square took      0.00 usr cpu s       0.03 sys cpu s       0.00 wall s
+INDE NNZ Xsq = 116964 <-> 100.00 %
+TIDE Frobenius norm of X-X^2 took      0.00 usr cpu s       0.00 sys cpu s       0.00 wall s
+TIDE Mixed norm of X-X^2 took      0.00 usr cpu s       0.00 sys cpu s       0.00 wall s
+TIDE Trace of X-X^2 took      0.00 usr cpu s       0.00 sys cpu s       0.00 wall s
+INDE ||X-X^2||_F = 2.424101e+00 , ||X-X^2||_mixed = 1.059033e+00
+INDE trace(X-X^2) = 4.102937e+01
+INDE trace(X) = 6.291115e+01
+INDE Checking stopping criterion...   
+INDE Order of convergence cannot be computed
+TIDE stopping_criterion took      0.00 usr cpu s       0.00 sys cpu s       0.00 wall s
+TIDE Iteration 8 took      0.01 usr cpu s       0.03 sys cpu s       0.00 wall s
+INDE     ITERATION 9 :
+TIDE purify_X took      0.00 usr cpu s       0.00 sys cpu s       0.00 wall s
+TIDE truncate_matrix took      0.00 usr cpu s       0.00 sys cpu s       0.00 wall s
+INDE Actual introduced error   0.000000e+00 : nnz before  116964 <-> 100.00 % , nnz after  116964 <-> 100.00 %
+TIDE square took      0.01 usr cpu s       0.02 sys cpu s       0.00 wall s
+INDE NNZ Xsq = 116964 <-> 100.00 %
+TIDE Frobenius norm of X-X^2 took      0.00 usr cpu s       0.00 sys cpu s       0.00 wall s
+TIDE Mixed norm of X-X^2 took      0.00 usr cpu s       0.01 sys cpu s       0.00 wall s
+TIDE Trace of X-X^2 took      0.00 usr cpu s       0.00 sys cpu s       0.00 wall s
+INDE ||X-X^2||_F = 6.067041e-01 , ||X-X^2||_mixed = 3.356274e-01
+INDE trace(X-X^2) = 9.068063e+00
+INDE trace(X) = 2.188178e+01
+INDE Checking stopping criterion...   
+INDE e_i =3.356274e-01, C*e_{i-1}^q = 2.958941e+00
+INDE Order of convergence = 7.152699, stop = 0
+TIDE stopping_criterion took      0.00 usr cpu s       0.00 sys cpu s       0.00 wall s
+TIDE Iteration 9 took      0.01 usr cpu s       0.03 sys cpu s       0.00 wall s
+INDE     ITERATION 10 :
+TIDE purify_X took      0.00 usr cpu s       0.00 sys cpu s       0.00 wall s
+TIDE truncate_matrix took      0.00 usr cpu s       0.00 sys cpu s       0.00 wall s
+INDE Actual introduced error   0.000000e+00 : nnz before  116964 <-> 100.00 % , nnz after  116964 <-> 100.00 %
+TIDE square took      0.00 usr cpu s       0.02 sys cpu s       0.00 wall s
+INDE NNZ Xsq = 116964 <-> 100.00 %
+TIDE Frobenius norm of X-X^2 took      0.00 usr cpu s       0.00 sys cpu s       0.00 wall s
+TIDE Mixed norm of X-X^2 took      0.00 usr cpu s       0.01 sys cpu s       0.00 wall s
+TIDE Trace of X-X^2 took      0.00 usr cpu s       0.00 sys cpu s       0.00 wall s
+INDE ||X-X^2||_F = 1.104575e+00 , ||X-X^2||_mixed = 6.044799e-01
+INDE trace(X-X^2) = 1.645123e+01
+INDE trace(X) = 3.094984e+01
+INDE Checking stopping criterion...   
+INDE Order of convergence cannot be computed
+TIDE stopping_criterion took      0.00 usr cpu s       0.00 sys cpu s       0.00 wall s
+TIDE Iteration 10 took      0.01 usr cpu s       0.03 sys cpu s       0.00 wall s
+INDE     ITERATION 11 :
+TIDE purify_X took      0.00 usr cpu s       0.00 sys cpu s       0.00 wall s
+TIDE truncate_matrix took      0.00 usr cpu s       0.00 sys cpu s       0.00 wall s
+INDE Actual introduced error   0.000000e+00 : nnz before  116964 <-> 100.00 % , nnz after  116964 <-> 100.00 %
+TIDE square took      0.01 usr cpu s       0.02 sys cpu s       0.00 wall s
+INDE NNZ Xsq = 116964 <-> 100.00 %
+TIDE Frobenius norm of X-X^2 took      0.00 usr cpu s       0.00 sys cpu s       0.00 wall s
+TIDE Mixed norm of X-X^2 took      0.00 usr cpu s       0.01 sys cpu s       0.00 wall s
+TIDE Trace of X-X^2 took      0.00 usr cpu s       0.00 sys cpu s       0.00 wall s
+INDE ||X-X^2||_F = 1.892340e+00 , ||X-X^2||_mixed = 9.862648e-01
+INDE trace(X-X^2) = 2.894319e+01
+INDE trace(X) = 4.740107e+01
+INDE Checking stopping criterion...   
+INDE Order of convergence cannot be computed
+TIDE stopping_criterion took      0.00 usr cpu s       0.00 sys cpu s       0.00 wall s
+TIDE Iteration 11 took      0.01 usr cpu s       0.03 sys cpu s       0.00 wall s
+INDE     ITERATION 12 :
+TIDE purify_X took      0.00 usr cpu s       0.00 sys cpu s       0.00 wall s
+TIDE truncate_matrix took      0.00 usr cpu s       0.00 sys cpu s       0.00 wall s
+INDE Actual introduced error   0.000000e+00 : nnz before  116964 <-> 100.00 % , nnz after  116964 <-> 100.00 %
+TIDE square took      0.00 usr cpu s       0.03 sys cpu s       0.00 wall s
+INDE NNZ Xsq = 116964 <-> 100.00 %
+TIDE Frobenius norm of X-X^2 took      0.00 usr cpu s       0.00 sys cpu s       0.00 wall s
+TIDE Mixed norm of X-X^2 took      0.00 usr cpu s       0.01 sys cpu s       0.00 wall s
+TIDE Trace of X-X^2 took      0.00 usr cpu s       0.00 sys cpu s       0.00 wall s
+INDE ||X-X^2||_F = 4.521455e-01 , ||X-X^2||_mixed = 3.125166e-01
+INDE trace(X-X^2) = 5.224730e+00
+INDE trace(X) = 1.845788e+01
+INDE Checking stopping criterion...   
+INDE e_i =3.125166e-01, C*e_{i-1}^q = 2.516555e+00
+INDE Order of convergence = 6.143907, stop = 0
+TIDE stopping_criterion took      0.00 usr cpu s       0.00 sys cpu s       0.00 wall s
+TIDE Iteration 12 took      0.01 usr cpu s       0.04 sys cpu s       0.01 wall s
+INDE     ITERATION 13 :
+TIDE purify_X took      0.00 usr cpu s       0.00 sys cpu s       0.00 wall s
+TIDE truncate_matrix took      0.00 usr cpu s       0.00 sys cpu s       0.00 wall s
+INDE Actual introduced error   0.000000e+00 : nnz before  116964 <-> 100.00 % , nnz after  116964 <-> 100.00 %
+TIDE square took      0.01 usr cpu s       0.02 sys cpu s       0.00 wall s
+INDE NNZ Xsq = 116964 <-> 100.00 %
+TIDE Frobenius norm of X-X^2 took      0.00 usr cpu s       0.00 sys cpu s       0.00 wall s
+TIDE Mixed norm of X-X^2 took      0.00 usr cpu s       0.01 sys cpu s       0.00 wall s
+TIDE Trace of X-X^2 took      0.00 usr cpu s       0.00 sys cpu s       0.00 wall s
+INDE ||X-X^2||_F = 8.234259e-01 , ||X-X^2||_mixed = 5.540401e-01
+INDE trace(X-X^2) = 9.808558e+00
+INDE trace(X) = 2.368261e+01
+INDE Checking stopping criterion...   
+INDE e_i =5.540401e-01, C*e_{i-1}^q = 6.699305e+00
+INDE Order of convergence = 182.220750, stop = 0
+TIDE stopping_criterion took      0.00 usr cpu s       0.00 sys cpu s       0.00 wall s
+TIDE Iteration 13 took      0.01 usr cpu s       0.03 sys cpu s       0.01 wall s
+INDE     ITERATION 14 :
+TIDE purify_X took      0.00 usr cpu s       0.00 sys cpu s       0.00 wall s
+TIDE truncate_matrix took      0.00 usr cpu s       0.00 sys cpu s       0.00 wall s
+INDE Actual introduced error   0.000000e+00 : nnz before  116964 <-> 100.00 % , nnz after  116964 <-> 100.00 %
+TIDE square took      0.01 usr cpu s       0.02 sys cpu s       0.00 wall s
+INDE NNZ Xsq = 116964 <-> 100.00 %
+TIDE Frobenius norm of X-X^2 took      0.00 usr cpu s       0.00 sys cpu s       0.00 wall s
+TIDE Mixed norm of X-X^2 took      0.00 usr cpu s       0.01 sys cpu s       0.00 wall s
+TIDE Trace of X-X^2 took      0.00 usr cpu s       0.00 sys cpu s       0.00 wall s
+INDE ||X-X^2||_F = 1.387323e+00 , ||X-X^2||_mixed = 8.849298e-01
+INDE trace(X-X^2) = 1.740304e+01
+INDE trace(X) = 3.349117e+01
+INDE Checking stopping criterion...   
+INDE Order of convergence cannot be computed
+TIDE stopping_criterion took      0.00 usr cpu s       0.00 sys cpu s       0.00 wall s
+TIDE Iteration 14 took      0.01 usr cpu s       0.03 sys cpu s       0.00 wall s
+INDE     ITERATION 15 :
+TIDE purify_X took      0.00 usr cpu s       0.00 sys cpu s       0.00 wall s
+TIDE truncate_matrix took      0.00 usr cpu s       0.00 sys cpu s       0.00 wall s
+INDE Actual introduced error   0.000000e+00 : nnz before  116964 <-> 100.00 % , nnz after  116964 <-> 100.00 %
+TIDE square took      0.01 usr cpu s       0.02 sys cpu s       0.00 wall s
+INDE NNZ Xsq = 116964 <-> 100.00 %
+TIDE Frobenius norm of X-X^2 took      0.00 usr cpu s       0.00 sys cpu s       0.00 wall s
+TIDE Mixed norm of X-X^2 took      0.00 usr cpu s       0.01 sys cpu s       0.00 wall s
+TIDE Trace of X-X^2 took      0.00 usr cpu s       0.00 sys cpu s       0.00 wall s
+INDE ||X-X^2||_F = 2.078314e+00 , ||X-X^2||_mixed = 1.205585e+00
+INDE trace(X-X^2) = 2.804870e+01
+INDE trace(X) = 5.089420e+01
+INDE Checking stopping criterion...   
+INDE Order of convergence cannot be computed
+TIDE stopping_criterion took      0.00 usr cpu s       0.00 sys cpu s       0.00 wall s
+TIDE Iteration 15 took      0.01 usr cpu s       0.03 sys cpu s       0.00 wall s
+INDE     ITERATION 16 :
+TIDE purify_X took      0.00 usr cpu s       0.00 sys cpu s       0.00 wall s
+TIDE truncate_matrix took      0.00 usr cpu s       0.00 sys cpu s       0.00 wall s
+INDE Actual introduced error   0.000000e+00 : nnz before  116964 <-> 100.00 % , nnz after  116964 <-> 100.00 %
+TIDE square took      0.01 usr cpu s       0.02 sys cpu s       0.00 wall s
+INDE NNZ Xsq = 116964 <-> 100.00 %
+TIDE Frobenius norm of X-X^2 took      0.00 usr cpu s       0.00 sys cpu s       0.00 wall s
+TIDE Mixed norm of X-X^2 took      0.00 usr cpu s       0.00 sys cpu s       0.00 wall s
+TIDE Trace of X-X^2 took      0.00 usr cpu s       0.00 sys cpu s       0.00 wall s
+INDE ||X-X^2||_F = 9.365994e-01 , ||X-X^2||_mixed = 7.231819e-01
+INDE trace(X-X^2) = 8.327460e+00
+INDE trace(X) = 2.284550e+01
+INDE Checking stopping criterion...   
+INDE e_i =7.231819e-01, C*e_{i-1}^q = 5.393371e+00
+INDE Order of convergence = 18.436111, stop = 0
+TIDE stopping_criterion took      0.00 usr cpu s       0.00 sys cpu s       0.00 wall s
+TIDE Iteration 16 took      0.01 usr cpu s       0.02 sys cpu s       0.00 wall s
+INDE     ITERATION 17 :
+TIDE purify_X took      0.00 usr cpu s       0.00 sys cpu s       0.00 wall s
+TIDE truncate_matrix took      0.00 usr cpu s       0.00 sys cpu s       0.00 wall s
+INDE Actual introduced error   0.000000e+00 : nnz before  116964 <-> 100.00 % , nnz after  116964 <-> 100.00 %
+TIDE square took      0.01 usr cpu s       0.02 sys cpu s       0.00 wall s
+INDE NNZ Xsq = 116964 <-> 100.00 %
+TIDE Frobenius norm of X-X^2 took      0.00 usr cpu s       0.00 sys cpu s       0.00 wall s
+TIDE Mixed norm of X-X^2 took      0.00 usr cpu s       0.01 sys cpu s       0.00 wall s
+TIDE Trace of X-X^2 took      0.00 usr cpu s       0.00 sys cpu s       0.00 wall s
+INDE ||X-X^2||_F = 1.354728e+00 , ||X-X^2||_mixed = 9.789934e-01
+INDE trace(X-X^2) = 1.349626e+01
+INDE trace(X) = 3.117296e+01
+INDE Checking stopping criterion...   
+INDE Order of convergence cannot be computed
+TIDE stopping_criterion took      0.00 usr cpu s       0.00 sys cpu s       0.00 wall s
+TIDE Iteration 17 took      0.01 usr cpu s       0.03 sys cpu s       0.01 wall s
+INDE     ITERATION 18 :
+TIDE purify_X took      0.00 usr cpu s       0.00 sys cpu s       0.00 wall s
+TIDE truncate_matrix took      0.00 usr cpu s       0.00 sys cpu s       0.00 wall s
+INDE Actual introduced error   0.000000e+00 : nnz before  116964 <-> 100.00 % , nnz after  116964 <-> 100.00 %
+TIDE square took      0.01 usr cpu s       0.03 sys cpu s       0.00 wall s
+INDE NNZ Xsq = 116964 <-> 100.00 %
+TIDE Frobenius norm of X-X^2 took      0.00 usr cpu s       0.00 sys cpu s       0.00 wall s
+TIDE Mixed norm of X-X^2 took      0.00 usr cpu s       0.01 sys cpu s       0.00 wall s
+TIDE Trace of X-X^2 took      0.00 usr cpu s       0.00 sys cpu s       0.00 wall s
+INDE ||X-X^2||_F = 1.728891e+00 , ||X-X^2||_mixed = 1.128074e+00
+INDE trace(X-X^2) = 1.953712e+01
+INDE trace(X) = 4.466922e+01
+INDE Checking stopping criterion...   
+INDE Order of convergence cannot be computed
+TIDE stopping_criterion took      0.00 usr cpu s       0.00 sys cpu s       0.00 wall s
+TIDE Iteration 18 took      0.01 usr cpu s       0.04 sys cpu s       0.01 wall s
+INDE     ITERATION 19 :
+TIDE purify_X took      0.00 usr cpu s       0.00 sys cpu s       0.00 wall s
+TIDE truncate_matrix took      0.00 usr cpu s       0.00 sys cpu s       0.00 wall s
+INDE Actual introduced error   0.000000e+00 : nnz before  116964 <-> 100.00 % , nnz after  116964 <-> 100.00 %
+TIDE square took      0.00 usr cpu s       0.02 sys cpu s       0.00 wall s
+INDE NNZ Xsq = 116964 <-> 100.00 %
+TIDE Frobenius norm of X-X^2 took      0.00 usr cpu s       0.00 sys cpu s       0.00 wall s
+TIDE Mixed norm of X-X^2 took      0.00 usr cpu s       0.01 sys cpu s       0.00 wall s
+TIDE Trace of X-X^2 took      0.00 usr cpu s       0.00 sys cpu s       0.00 wall s
+INDE ||X-X^2||_F = 2.058298e+00 , ||X-X^2||_mixed = 1.243368e+00
+INDE trace(X-X^2) = 2.538247e+01
+INDE trace(X) = 6.420634e+01
+INDE Checking stopping criterion...   
+INDE Order of convergence cannot be computed
+TIDE stopping_criterion took      0.00 usr cpu s       0.00 sys cpu s       0.00 wall s
+TIDE Iteration 19 took      0.01 usr cpu s       0.03 sys cpu s       0.00 wall s
+INDE     ITERATION 20 :
+TIDE purify_X took      0.00 usr cpu s       0.00 sys cpu s       0.00 wall s
+TIDE truncate_matrix took      0.00 usr cpu s       0.00 sys cpu s       0.00 wall s
+INDE Actual introduced error   0.000000e+00 : nnz before  116964 <-> 100.00 % , nnz after  116964 <-> 100.00 %
+TIDE square took      0.00 usr cpu s       0.02 sys cpu s       0.00 wall s
+INDE NNZ Xsq = 116964 <-> 100.00 %
+TIDE Frobenius norm of X-X^2 took      0.00 usr cpu s       0.00 sys cpu s       0.00 wall s
+TIDE Mixed norm of X-X^2 took      0.00 usr cpu s       0.01 sys cpu s       0.00 wall s
+TIDE Trace of X-X^2 took      0.00 usr cpu s       0.00 sys cpu s       0.00 wall s
+INDE ||X-X^2||_F = 1.383899e+00 , ||X-X^2||_mixed = 1.015238e+00
+INDE trace(X-X^2) = 1.217761e+01
+INDE trace(X) = 3.882387e+01
+INDE Checking stopping criterion...   
+INDE Order of convergence cannot be computed
+TIDE stopping_criterion took      0.00 usr cpu s       0.00 sys cpu s       0.00 wall s
+TIDE Iteration 20 took      0.01 usr cpu s       0.03 sys cpu s       0.00 wall s
+INDE     ITERATION 21 :
+TIDE purify_X took      0.00 usr cpu s       0.00 sys cpu s       0.00 wall s
+TIDE truncate_matrix took      0.00 usr cpu s       0.00 sys cpu s       0.00 wall s
+INDE Actual introduced error   0.000000e+00 : nnz before  116964 <-> 100.00 % , nnz after  116964 <-> 100.00 %
+TIDE square took      0.01 usr cpu s       0.02 sys cpu s       0.00 wall s
+INDE NNZ Xsq = 116964 <-> 100.00 %
+TIDE Frobenius norm of X-X^2 took      0.00 usr cpu s       0.00 sys cpu s       0.00 wall s
+TIDE Mixed norm of X-X^2 took      0.00 usr cpu s       0.01 sys cpu s       0.00 wall s
+TIDE Trace of X-X^2 took      0.00 usr cpu s       0.00 sys cpu s       0.00 wall s
+INDE ||X-X^2||_F = 1.397800e+00 , ||X-X^2||_mixed = 9.600669e-01
+INDE trace(X-X^2) = 1.419357e+01
+INDE trace(X) = 5.100148e+01
+INDE Checking stopping criterion...   
+INDE Order of convergence cannot be computed
+TIDE stopping_criterion took      0.00 usr cpu s       0.00 sys cpu s       0.00 wall s
+TIDE Iteration 21 took      0.01 usr cpu s       0.03 sys cpu s       0.01 wall s
+INDE     ITERATION 22 :
+TIDE purify_X took      0.00 usr cpu s       0.00 sys cpu s       0.00 wall s
+TIDE truncate_matrix took      0.00 usr cpu s       0.00 sys cpu s       0.00 wall s
+INDE Actual introduced error   0.000000e+00 : nnz before  116964 <-> 100.00 % , nnz after  116964 <-> 100.00 %
+TIDE square took      0.01 usr cpu s       0.02 sys cpu s       0.00 wall s
+INDE NNZ Xsq = 116964 <-> 100.00 %
+TIDE Frobenius norm of X-X^2 took      0.00 usr cpu s       0.00 sys cpu s       0.00 wall s
+TIDE Mixed norm of X-X^2 took      0.00 usr cpu s       0.00 sys cpu s       0.00 wall s
+TIDE Trace of X-X^2 took      0.00 usr cpu s       0.00 sys cpu s       0.00 wall s
+INDE ||X-X^2||_F = 1.173780e+00 , ||X-X^2||_mixed = 9.247935e-01
+INDE trace(X-X^2) = 7.481621e+00
+INDE trace(X) = 3.680791e+01
+INDE Checking stopping criterion...   
+INDE Order of convergence cannot be computed
+TIDE stopping_criterion took      0.00 usr cpu s       0.00 sys cpu s       0.00 wall s
+TIDE Iteration 22 took      0.01 usr cpu s       0.02 sys cpu s       0.00 wall s
+INDE     ITERATION 23 :
+TIDE purify_X took      0.00 usr cpu s       0.00 sys cpu s       0.00 wall s
+TIDE truncate_matrix took      0.00 usr cpu s       0.00 sys cpu s       0.00 wall s
+INDE Actual introduced error   0.000000e+00 : nnz before  116964 <-> 100.00 % , nnz after  116964 <-> 100.00 %
+TIDE square took      0.01 usr cpu s       0.01 sys cpu s       0.00 wall s
+INDE NNZ Xsq = 116964 <-> 100.00 %
+TIDE Frobenius norm of X-X^2 took      0.00 usr cpu s       0.00 sys cpu s       0.00 wall s
+TIDE Mixed norm of X-X^2 took      0.00 usr cpu s       0.00 sys cpu s       0.00 wall s
+TIDE Trace of X-X^2 took      0.00 usr cpu s       0.00 sys cpu s       0.00 wall s
+INDE ||X-X^2||_F = 9.246335e-01 , ||X-X^2||_mixed = 7.275792e-01
+INDE trace(X-X^2) = 6.681722e+00
+INDE trace(X) = 4.428953e+01
+INDE Checking stopping criterion...   
+INDE e_i =7.275792e-01, C*e_{i-1}^q = 6.348128e+00
+INDE Order of convergence = 55.155068, stop = 0
+TIDE stopping_criterion took      0.00 usr cpu s       0.00 sys cpu s       0.00 wall s
+TIDE Iteration 23 took      0.02 usr cpu s       0.02 sys cpu s       0.00 wall s
+INDE     ITERATION 24 :
+TIDE purify_X took      0.00 usr cpu s       0.00 sys cpu s       0.00 wall s
+TIDE truncate_matrix took      0.00 usr cpu s       0.00 sys cpu s       0.00 wall s
+INDE Actual introduced error   0.000000e+00 : nnz before  116964 <-> 100.00 % , nnz after  116964 <-> 100.00 %
+TIDE square took      0.00 usr cpu s       0.02 sys cpu s       0.00 wall s
+INDE NNZ Xsq = 116964 <-> 100.00 %
+TIDE Frobenius norm of X-X^2 took      0.00 usr cpu s       0.00 sys cpu s       0.00 wall s
+TIDE Mixed norm of X-X^2 took      0.00 usr cpu s       0.00 sys cpu s       0.00 wall s
+TIDE Trace of X-X^2 took      0.00 usr cpu s       0.00 sys cpu s       0.00 wall s
+INDE ||X-X^2||_F = 7.806427e-01 , ||X-X^2||_mixed = 5.907430e-01
+INDE trace(X-X^2) = 6.470706e+00
+INDE trace(X) = 5.097126e+01
+INDE Checking stopping criterion...   
+INDE Order of convergence cannot be computed
+TIDE stopping_criterion took      0.00 usr cpu s       0.00 sys cpu s       0.00 wall s
+TIDE Iteration 24 took      0.01 usr cpu s       0.03 sys cpu s       0.00 wall s
+INDE     ITERATION 25 :
+TIDE purify_X took      0.00 usr cpu s       0.00 sys cpu s       0.00 wall s
+TIDE truncate_matrix took      0.00 usr cpu s       0.00 sys cpu s       0.00 wall s
+INDE Actual introduced error   0.000000e+00 : nnz before  116964 <-> 100.00 % , nnz after  116964 <-> 100.00 %
+TIDE square took      0.02 usr cpu s       0.01 sys cpu s       0.00 wall s
+INDE NNZ Xsq = 116964 <-> 100.00 %
+TIDE Frobenius norm of X-X^2 took      0.00 usr cpu s       0.00 sys cpu s       0.00 wall s
+TIDE Mixed norm of X-X^2 took      0.00 usr cpu s       0.01 sys cpu s       0.00 wall s
+TIDE Trace of X-X^2 took      0.00 usr cpu s       0.00 sys cpu s       0.00 wall s
+INDE ||X-X^2||_F = 6.048008e-01 , ||X-X^2||_mixed = 5.193016e-01
+INDE trace(X-X^2) = 2.910180e+00
+INDE trace(X) = 4.450055e+01
+INDE Checking stopping criterion...   
+INDE e_i =5.193016e-01, C*e_{i-1}^q = 3.645887e+00
+INDE Order of convergence = 8.127897, stop = 0
+TIDE stopping_criterion took      0.00 usr cpu s       0.00 sys cpu s       0.00 wall s
+TIDE Iteration 25 took      0.02 usr cpu s       0.02 sys cpu s       0.00 wall s
+INDE     ITERATION 26 :
+TIDE purify_X took      0.00 usr cpu s       0.00 sys cpu s       0.00 wall s
+TIDE truncate_matrix took      0.00 usr cpu s       0.00 sys cpu s       0.00 wall s
+INDE Actual introduced error   0.000000e+00 : nnz before  116964 <-> 100.00 % , nnz after  116964 <-> 100.00 %
+TIDE square took      0.01 usr cpu s       0.02 sys cpu s       0.00 wall s
+INDE NNZ Xsq = 116964 <-> 100.00 %
+TIDE Frobenius norm of X-X^2 took      0.00 usr cpu s       0.00 sys cpu s       0.00 wall s
+TIDE Mixed norm of X-X^2 took      0.00 usr cpu s       0.00 sys cpu s       0.00 wall s
+TIDE Trace of X-X^2 took      0.00 usr cpu s       0.00 sys cpu s       0.00 wall s
+INDE ||X-X^2||_F = 3.340588e-01 , ||X-X^2||_mixed = 2.946308e-01
+INDE trace(X-X^2) = 1.822845e+00
+INDE trace(X) = 4.741073e+01
+INDE Checking stopping criterion...   
+INDE e_i =2.946308e-01, C*e_{i-1}^q = 2.403476e+00
+INDE Order of convergence = 5.987559, stop = 0
+TIDE stopping_criterion took      0.00 usr cpu s       0.00 sys cpu s       0.00 wall s
+TIDE Iteration 26 took      0.01 usr cpu s       0.03 sys cpu s       0.00 wall s
+INDE     ITERATION 27 :
+TIDE purify_X took      0.00 usr cpu s       0.00 sys cpu s       0.00 wall s
+TIDE truncate_matrix took      0.00 usr cpu s       0.00 sys cpu s       0.00 wall s
+INDE Actual introduced error   0.000000e+00 : nnz before  116964 <-> 100.00 % , nnz after  116964 <-> 100.00 %
+TIDE square took      0.00 usr cpu s       0.02 sys cpu s       0.00 wall s
+INDE NNZ Xsq = 116964 <-> 100.00 %
+TIDE Frobenius norm of X-X^2 took      0.00 usr cpu s       0.00 sys cpu s       0.00 wall s
+TIDE Mixed norm of X-X^2 took      0.00 usr cpu s       0.00 sys cpu s       0.00 wall s
+TIDE Trace of X-X^2 took      0.00 usr cpu s       0.00 sys cpu s       0.00 wall s
+INDE ||X-X^2||_F = 3.985502e-01 , ||X-X^2||_mixed = 3.709499e-01
+INDE trace(X-X^2) = 1.160109e+00
+INDE trace(X) = 4.558788e+01
+INDE Checking stopping criterion...   
+INDE e_i =3.709499e-01, C*e_{i-1}^q = 1.857300e+00
+INDE Order of convergence = 4.458240, stop = 0
+TIDE stopping_criterion took      0.00 usr cpu s       0.00 sys cpu s       0.00 wall s
+TIDE Iteration 27 took      0.01 usr cpu s       0.03 sys cpu s       0.00 wall s
+INDE     ITERATION 28 :
+TIDE purify_X took      0.00 usr cpu s       0.00 sys cpu s       0.00 wall s
+TIDE truncate_matrix took      0.00 usr cpu s       0.00 sys cpu s       0.00 wall s
+INDE Actual introduced error   0.000000e+00 : nnz before  116964 <-> 100.00 % , nnz after  116964 <-> 100.00 %
+TIDE square took      0.01 usr cpu s       0.02 sys cpu s       0.00 wall s
+INDE NNZ Xsq = 116964 <-> 100.00 %
+TIDE Frobenius norm of X-X^2 took      0.00 usr cpu s       0.00 sys cpu s       0.00 wall s
+TIDE Mixed norm of X-X^2 took      0.00 usr cpu s       0.00 sys cpu s       0.00 wall s
+TIDE Trace of X-X^2 took      0.00 usr cpu s       0.00 sys cpu s       0.00 wall s
+INDE ||X-X^2||_F = 1.763210e-01 , ||X-X^2||_mixed = 1.731218e-01
+INDE trace(X-X^2) = 3.964213e-01
+INDE trace(X) = 4.674799e+01
+INDE Checking stopping criterion...   
+INDE e_i =1.731218e-01, C*e_{i-1}^q = 5.978593e-01
+INDE Order of convergence = 3.014179, stop = 0
+TIDE stopping_criterion took      0.00 usr cpu s       0.00 sys cpu s       0.00 wall s
+TIDE Iteration 28 took      0.01 usr cpu s       0.03 sys cpu s       0.00 wall s
+INDE     ITERATION 29 :
+TIDE purify_X took      0.00 usr cpu s       0.00 sys cpu s       0.00 wall s
+TIDE truncate_matrix took      0.00 usr cpu s       0.00 sys cpu s       0.00 wall s
+INDE Actual introduced error   0.000000e+00 : nnz before  116964 <-> 100.00 % , nnz after  116964 <-> 100.00 %
+TIDE square took      0.00 usr cpu s       0.02 sys cpu s       0.00 wall s
+INDE NNZ Xsq = 116964 <-> 100.00 %
+TIDE Frobenius norm of X-X^2 took      0.00 usr cpu s       0.00 sys cpu s       0.00 wall s
+TIDE Mixed norm of X-X^2 took      0.00 usr cpu s       0.00 sys cpu s       0.00 wall s
+TIDE Trace of X-X^2 took      0.00 usr cpu s       0.00 sys cpu s       0.00 wall s
+INDE ||X-X^2||_F = 5.496235e-02 , ||X-X^2||_mixed = 4.773095e-02
+INDE trace(X-X^2) = 2.241582e-01
+INDE trace(X) = 4.714441e+01
+INDE Checking stopping criterion...   
+INDE Order of convergence cannot be computed
+TIDE stopping_criterion took      0.00 usr cpu s       0.00 sys cpu s       0.00 wall s
+TIDE Iteration 29 took      0.01 usr cpu s       0.03 sys cpu s       0.01 wall s
+INDE     ITERATION 30 :
+TIDE purify_X took      0.00 usr cpu s       0.00 sys cpu s       0.00 wall s
+TIDE truncate_matrix took      0.00 usr cpu s       0.00 sys cpu s       0.00 wall s
+INDE Actual introduced error   0.000000e+00 : nnz before  116964 <-> 100.00 % , nnz after  116964 <-> 100.00 %
+TIDE square took      0.01 usr cpu s       0.02 sys cpu s       0.00 wall s
+INDE NNZ Xsq = 116964 <-> 100.00 %
+TIDE Frobenius norm of X-X^2 took      0.00 usr cpu s       0.00 sys cpu s       0.00 wall s
+TIDE Mixed norm of X-X^2 took      0.00 usr cpu s       0.01 sys cpu s       0.00 wall s
+TIDE Trace of X-X^2 took      0.00 usr cpu s       0.00 sys cpu s       0.00 wall s
+INDE ||X-X^2||_F = 5.539991e-02 , ||X-X^2||_mixed = 5.484194e-02
+INDE trace(X-X^2) = 8.094408e-02
+INDE trace(X) = 4.692026e+01
+INDE Checking stopping criterion...   
+INDE e_i =5.484194e-02, C*e_{i-1}^q = 2.064174e-01
+INDE Order of convergence = 2.755774, stop = 0
+TIDE stopping_criterion took      0.00 usr cpu s       0.00 sys cpu s       0.00 wall s
+TIDE Iteration 30 took      0.01 usr cpu s       0.03 sys cpu s       0.00 wall s
+INDE     ITERATION 31 :
+TIDE purify_X took      0.00 usr cpu s       0.00 sys cpu s       0.00 wall s
+TIDE truncate_matrix took      0.00 usr cpu s       0.00 sys cpu s       0.00 wall s
+INDE Actual introduced error   0.000000e+00 : nnz before  116964 <-> 100.00 % , nnz after  116964 <-> 100.00 %
+TIDE square took      0.01 usr cpu s       0.02 sys cpu s       0.00 wall s
+INDE NNZ Xsq = 116964 <-> 100.00 %
+TIDE Frobenius norm of X-X^2 took      0.00 usr cpu s       0.00 sys cpu s       0.00 wall s
+TIDE Mixed norm of X-X^2 took      0.00 usr cpu s       0.01 sys cpu s       0.00 wall s
+TIDE Trace of X-X^2 took      0.00 usr cpu s       0.00 sys cpu s       0.00 wall s
+INDE ||X-X^2||_F = 3.011513e-03 , ||X-X^2||_mixed = 2.855690e-03
+INDE trace(X-X^2) = 7.891775e-03
+INDE trace(X) = 4.700120e+01
+INDE Checking stopping criterion...   
+INDE e_i =2.855690e-03, C*e_{i-1}^q = 1.569072e-02
+INDE Order of convergence = 2.560045, stop = 0
+TIDE stopping_criterion took      0.00 usr cpu s       0.00 sys cpu s       0.00 wall s
+TIDE Iteration 31 took      0.01 usr cpu s       0.02 sys cpu s       0.00 wall s
+INDE     ITERATION 32 :
+TIDE purify_X took      0.00 usr cpu s       0.00 sys cpu s       0.00 wall s
+TIDE truncate_matrix took      0.00 usr cpu s       0.00 sys cpu s       0.00 wall s
+INDE Actual introduced error   0.000000e+00 : nnz before  116964 <-> 100.00 % , nnz after  116964 <-> 100.00 %
+TIDE square took      0.01 usr cpu s       0.02 sys cpu s       0.00 wall s
+INDE NNZ Xsq = 116964 <-> 100.00 %
+TIDE Frobenius norm of X-X^2 took      0.00 usr cpu s       0.00 sys cpu s       0.00 wall s
+TIDE Mixed norm of X-X^2 took      0.00 usr cpu s       0.01 sys cpu s       0.00 wall s
+TIDE Trace of X-X^2 took      0.00 usr cpu s       0.00 sys cpu s       0.00 wall s
+INDE ||X-X^2||_F = 5.019538e-03 , ||X-X^2||_mixed = 4.988169e-03
+INDE trace(X-X^2) = 6.671357e-03
+INDE trace(X) = 4.699331e+01
+INDE Checking stopping criterion...   
+INDE e_i =4.988169e-03, C*e_{i-1}^q = 2.071421e-02
+INDE Order of convergence = 2.490391, stop = 0
+TIDE stopping_criterion took      0.00 usr cpu s       0.00 sys cpu s       0.00 wall s
+TIDE Iteration 32 took      0.01 usr cpu s       0.02 sys cpu s       0.00 wall s
+INDE     ITERATION 33 :
+TIDE purify_X took      0.00 usr cpu s       0.00 sys cpu s       0.00 wall s
+TIDE truncate_matrix took      0.00 usr cpu s       0.00 sys cpu s       0.00 wall s
+INDE Actual introduced error   0.000000e+00 : nnz before  116964 <-> 100.00 % , nnz after  116964 <-> 100.00 %
+TIDE square took      0.01 usr cpu s       0.02 sys cpu s       0.00 wall s
+INDE NNZ Xsq = 116964 <-> 100.00 %
+TIDE Frobenius norm of X-X^2 took      0.00 usr cpu s       0.00 sys cpu s       0.00 wall s
+TIDE Mixed norm of X-X^2 took      0.01 usr cpu s       0.00 sys cpu s       0.00 wall s
+TIDE Trace of X-X^2 took      0.00 usr cpu s       0.00 sys cpu s       0.00 wall s
+INDE ||X-X^2||_F = 2.156296e-05 , ||X-X^2||_mixed = 2.150000e-05
+INDE trace(X-X^2) = 3.087563e-05
+INDE trace(X) = 4.699998e+01
+INDE Checking stopping criterion...   
+INDE e_i =2.150000e-05, C*e_{i-1}^q = 5.616487e-05
+INDE Order of convergence = 2.163907, stop = 0
+TIDE stopping_criterion took      0.00 usr cpu s       0.00 sys cpu s       0.00 wall s
+TIDE Iteration 33 took      0.02 usr cpu s       0.02 sys cpu s       0.00 wall s
+INDE     ITERATION 34 :
+TIDE purify_X took      0.00 usr cpu s       0.00 sys cpu s       0.00 wall s
+TIDE truncate_matrix took      0.00 usr cpu s       0.00 sys cpu s       0.00 wall s
+INDE Actual introduced error   0.000000e+00 : nnz before  116964 <-> 100.00 % , nnz after  116964 <-> 100.00 %
+TIDE square took      0.01 usr cpu s       0.02 sys cpu s       0.00 wall s
+INDE NNZ Xsq = 116964 <-> 100.00 %
+TIDE Frobenius norm of X-X^2 took      0.00 usr cpu s       0.00 sys cpu s       0.00 wall s
+TIDE Mixed norm of X-X^2 took      0.00 usr cpu s       0.01 sys cpu s       0.00 wall s
+TIDE Trace of X-X^2 took      0.00 usr cpu s       0.00 sys cpu s       0.00 wall s
+INDE ||X-X^2||_F = 5.407853e-06 , ||X-X^2||_mixed = 4.833750e-06
+INDE trace(X-X^2) = 1.094130e-05
+INDE trace(X) = 4.700001e+01
+INDE Checking stopping criterion...   
+INDE Order of convergence cannot be computed
+TIDE stopping_criterion took      0.00 usr cpu s       0.00 sys cpu s       0.00 wall s
+TIDE Iteration 34 took      0.01 usr cpu s       0.03 sys cpu s       0.00 wall s
+INDE     ITERATION 35 :
+TIDE purify_X took      0.00 usr cpu s       0.00 sys cpu s       0.00 wall s
+TIDE truncate_matrix took      0.00 usr cpu s       0.00 sys cpu s       0.00 wall s
+INDE Actual introduced error   0.000000e+00 : nnz before  116964 <-> 100.00 % , nnz after  116964 <-> 100.00 %
+TIDE square took      0.01 usr cpu s       0.02 sys cpu s       0.00 wall s
+INDE NNZ Xsq = 116964 <-> 100.00 %
+TIDE Frobenius norm of X-X^2 took      0.00 usr cpu s       0.00 sys cpu s       0.00 wall s
+TIDE Mixed norm of X-X^2 took      0.00 usr cpu s       0.00 sys cpu s       0.00 wall s
+TIDE Trace of X-X^2 took      0.00 usr cpu s       0.00 sys cpu s       0.00 wall s
+INDE ||X-X^2||_F = 8.761816e-10 , ||X-X^2||_mixed = 8.761431e-10
+INDE trace(X-X^2) = 9.445884e-10
+INDE trace(X) = 4.700000e+01
+INDE Checking stopping criterion...   
+INDE e_i =8.761431e-10, C*e_{i-1}^q = 3.183608e-09
+INDE Order of convergence = 2.120051, stop = 0
+TIDE stopping_criterion took      0.00 usr cpu s       0.00 sys cpu s       0.00 wall s
+TIDE Iteration 35 took      0.01 usr cpu s       0.02 sys cpu s       0.00 wall s
+INDE     ITERATION 36 :
+TIDE purify_X took      0.00 usr cpu s       0.00 sys cpu s       0.00 wall s
+TIDE truncate_matrix took      0.00 usr cpu s       0.00 sys cpu s       0.00 wall s
+INDE Actual introduced error   0.000000e+00 : nnz before  116964 <-> 100.00 % , nnz after  116964 <-> 100.00 %
+TIDE square took      0.00 usr cpu s       0.02 sys cpu s       0.00 wall s
+INDE NNZ Xsq = 116964 <-> 100.00 %
+TIDE Frobenius norm of X-X^2 took      0.00 usr cpu s       0.00 sys cpu s       0.00 wall s
+TIDE Mixed norm of X-X^2 took      0.01 usr cpu s       0.00 sys cpu s       0.00 wall s
+TIDE Trace of X-X^2 took      0.00 usr cpu s       0.00 sys cpu s       0.00 wall s
+INDE ||X-X^2||_F = 3.867470e-11 , ||X-X^2||_mixed = 3.716114e-11
+INDE trace(X-X^2) = 5.847767e-11
+INDE trace(X) = 4.700000e+01
+INDE Checking stopping criterion...   
+INDE e_i =3.716114e-11, C*e_{i-1}^q = 1.609204e-10
+INDE Order of convergence = 2.119743, stop = 0
+TIDE stopping_criterion took      0.00 usr cpu s       0.00 sys cpu s       0.00 wall s
+TIDE Iteration 36 took      0.01 usr cpu s       0.02 sys cpu s       0.00 wall s
+INDE     ITERATION 37 :
+TIDE purify_X took      0.00 usr cpu s       0.00 sys cpu s       0.00 wall s
+TIDE truncate_matrix took      0.00 usr cpu s       0.00 sys cpu s       0.00 wall s
+INDE Actual introduced error   0.000000e+00 : nnz before  116964 <-> 100.00 % , nnz after  116964 <-> 100.00 %
+TIDE square took      0.01 usr cpu s       0.02 sys cpu s       0.00 wall s
+INDE NNZ Xsq = 116964 <-> 100.00 %
+TIDE Frobenius norm of X-X^2 took      0.00 usr cpu s       0.00 sys cpu s       0.00 wall s
+TIDE Mixed norm of X-X^2 took      0.00 usr cpu s       0.00 sys cpu s       0.00 wall s
+TIDE Trace of X-X^2 took      0.00 usr cpu s       0.00 sys cpu s       0.00 wall s
+INDE ||X-X^2||_F = 2.435923e-15 , ||X-X^2||_mixed = 0.000000e+00
+INDE trace(X-X^2) = 7.105427e-15
+INDE trace(X) = 4.700000e+01
+INDE Checking stopping criterion...   
+INDE ************************************************************************************************************
+INDE The norm value went much below machine precision, therefore we stop here since n_max can be underestimated.
+INDE ************************************************************************************************************
+INDE e_i =0.000000e+00, C*e_{i-1}^q = 5.286799e-18
+INDE Order of convergence = inf, stop = 1
+TIDE stopping_criterion took      0.00 usr cpu s       0.00 sys cpu s       0.00 wall s
+INDE PURIFICATION CONVERGED after 37 iterations
+TIDE Iteration 37 took      0.01 usr cpu s       0.02 sys cpu s       0.00 wall s
+INDE Number of non-zeros in D is  116964 <-> 100.00 %
+TIDE FileWritable::writeAndReadAll took      0.00 usr cpu s       0.00 sys cpu s       0.00 wall s
+INDE writeAndReadAll sizesStr: '0 MB (1 MatrixGeneral, 0 > 1 MB) + 0 MB (13 MatrixSymmetric, 0 > 1 MB) + 0 MB (2 VectorGeneral, 0 > 1 MB) = 0 MB (16 total, 0 > 1 MB)
+INDE TOTAL X square time: 0.128433 wall s
+INDE TOTAL X trunction time: 0.004129 wall s
+INDE TOTAL X purify (exl. X^2 computation) time: 0.004532 wall s
+INDE TOTAL time to get number of non-zero elements: 0.000733 wall s
+INDE TOTAL time to get mixed norm: 0.042131 wall s
+INDE TOTAL time to get Frobenius norm: 0.004376 wall s
+INDE TOTAL time for stopping criterion: 0.000852 wall s
+INDE TOTAL time to get matrix trace: 0.000401 wall s
+INDE Estimated bounds for the eigenvalues for the Fock matrix:
+INDE LUMO: [ 0.034373301497 , 0.063312246580 ]
+INDE HOMO: [ -0.385470808070 , -0.349771939222 ]
+TIDE eigenvalue_bounds_estimation() took      0.00 usr cpu s       0.00 sys cpu s       0.00 wall s
+TIDE Recursive expansion took      0.49 usr cpu s       1.26 sys cpu s       0.23 wall s
+TIDE Puri->PurificationStart() took      0.49 usr cpu s       1.26 sys cpu s       0.23 wall s
+TIDE Accumulated wall times for writeToFile in PurificationStart()          : 0 s (MatrixGeneral) + 9.5e-07 s (MatrixSymmetric) + 7.4e-05 s (VectorGeneral) = 7.5e-05 s
+TIDE Accumulated wall times for readFromFile in PurificationStart()         : 0 s (MatrixGeneral) + 0 s (MatrixSymmetric) + 2.3e-05 s (VectorGeneral) = 2.3e-05 s
+TIDE Accumulated wall times for copy and assign in PurificationStart()      : 9.5e-07 s (MatrixSymmetric) + 3.2e-05 s (VectorGeneral) = 3.3e-05 s
+INDE Number of calls to writeToFile in PurificationStart()                  : 2 (MatrixGeneral) + 27 (MatrixSymmetric) + 1544 (VectorGeneral) = 1573 
+INDE Number of calls to readFromFile in PurificationStart()                 : 2 (MatrixGeneral) + 26 (MatrixSymmetric) + 603 (VectorGeneral) = 631 
+INDE Number of calls to FileWritable copy and assign in PurificationStart() : 2 (MatrixSymmetric) + 39 (VectorGeneral) = 41 
+TIDE mat::Gblas::time after purification :     1.146345
+INDE Created .m files with results of the purification
+INDE Purification converged OK
+INDE E(LUMO) - E(HOMO) >=          0.38414524072 =         10.45312456972 eV
+INDE E(LUMO) - E(HOMO) <=          0.44878305465 =         12.21200909910 eV
+INDE HOMO interval : [   -0.385470808070   -0.349771939222 ]
+INDE LUMO interval : [    0.034373301497    0.063312246580 ]
+INDE Trace of resulting density matrix is         47.00000000000, error is   0.00000000000001.
+INDE Truncated D_ort ( mixed ), selected threshold = 9.99999e-08, returned error =          0, nnz before = 116964 <-> 100.0000 %, nnz after = 116964 <-> 100.0000 %
+TIDE FileWritable::writeAndReadAll took      0.00 usr cpu s       0.00 sys cpu s       0.00 wall s
+INDE writeAndReadAll sizesStr: '0 MB (1 MatrixGeneral, 0 > 1 MB) + 0 MB (12 MatrixSymmetric, 0 > 1 MB) + 0 MB (1 MatrixTriangular, 0 > 1 MB) = 0 MB (14 total, 0 > 1 MB)
+TIDE D_w to non-orthogonal basis took      0.00 usr cpu s       0.03 sys cpu s       0.00 wall s
+INDE Truncated D_S (eucl with Z), selected threshold = 9.99999e-08, returned error =          0, nnz before = 100.0000 %, nnz after = 100.0000 %
+INDE get_dens_from_fock_sparse ending OK
+TIDE get_dens_from_fock_sparse took      0.63 usr cpu s       1.75 sys cpu s       0.31 wall s
+ERDE get_dens_from_fock  (GetDensFromFock class) : purification finished OK.
+TIDE get_dens_from_fock took      0.63 usr cpu s       1.75 sys cpu s       0.31 wall s
+INSC Matrix 'new density matrix' ( symm ): n =    342, nnz =       116964 <-> 100.00 %, mem usage  0.0005 G
+INSC Tr( D * S ) =         93.99999999995
+TISC get_new_density_matrix took      0.63 usr cpu s       1.75 sys cpu s       0.31 wall s
+INMA ddf_writeShellListAndDensityMatricesToFile_sparse, n =    342, densityMatrixList[0].nvalues =       58653
+INMA opened temporary file 'density.bin.NH1oHn' for writing
+INMA Choosing matrixStorageType = MATRIX_STORAGE_TYPE_TRIANGLE.
+INMA fileSize =          560392 bytes =      0.560 MegaBytes
+INMA renamed file 'density.bin.NH1oHn' to 'density.bin'
+INMA ddf_writeShellListAndDensityMatricesToFile_sparse freeing buffer.
+INMA ddf_writeShellListAndDensityMatricesToFile_sparse returning OK.
+TISC write_density_to_file took      0.01 usr cpu s       0.05 sys cpu s       0.01 wall s
+INSC Creating mtx file for Fock matrix
+INSC Creating mtx file for density matrix
+INSC SCF cycle   1 finished.
+TISC SCF cycle   1 took    489.28 usr cpu s       4.10 sys cpu s      82.19 wall s
+INSC Beginning of SCF cycle 2:  Fri Jan  9 14:17:53 2026
+INDE compute_J_by_boxes_sparse() start.
+TIDE FileWritable::writeAndReadAll took      0.00 usr cpu s       0.00 sys cpu s       0.00 wall s
+INDE writeAndReadAll: '0 MB (1 MatrixGeneral, 0 > 1 MB) + 0 MB (11 MatrixSymmetric, 0 > 1 MB) = 0 MB (12 total, 0 > 1 MB)
+IN   compute_J_by_boxes_sparse, maxDensityMatrixElement =         22.35796366357
+ININ get_basis_func_pair_list, n =    342
+ININ create_box_system end OK, toplevelBoxSize:   7.0, #levels:  3, #boxes at top level:      6
+TIIN get_basis_func_pair_list_2el took      0.08 usr cpu s       0.00 sys cpu s       0.08 wall s
+IN   compute_J_by_boxes_sparse: noOfBasisFuncIndexPairs = 52606 ==> storing  44.98 % of a full matrix
+ININ entering compute_J_by_boxes_linear, no of basis funcs =   342, threshold_J =   1e-12
+ININ use_fmm = 1, fmm_box_size =   5.00
+TIIN Compute extent for all distrs took      0.24 usr cpu s       0.00 sys cpu s       0.24 wall s
+ININ extent_min =    0.000, extent_max =   19.778
+ININ Creating list of distributions etc done, distrCount =    353701
+TIIN Creating list of distributions etc took      0.34 usr cpu s       0.01 sys cpu s       0.35 wall s
+ININ create_box_system end OK, toplevelBoxSize:   5.0, #levels:  3, #boxes at top level:     10
+TIIN Creating boxes took      0.02 usr cpu s       0.01 sys cpu s       0.03 wall s
+ININ noOfBranches = 5, splitters:  10.00  5.00  2.50  0.00
+ININ J org done, groupCount =    15565
+TIIN J org took      0.80 usr cpu s       0.00 sys cpu s       0.80 wall s
+TIIN Generate group multipoles took      0.33 usr cpu s       0.00 sys cpu s       0.33 wall s
+ININ totChargeWholeSystem =          0.00000000000
+ININ Generating multipole for each branch at top level, MAX_MULTIPOLE_DEGREE = 15
+TIIN Translate multipoles (step 1) took      0.25 usr cpu s       0.00 sys cpu s       0.25 wall s
+TIIN Translate multipoles (step 2) took      0.04 usr cpu s       0.00 sys cpu s       0.04 wall s
+ININ job lists for J created OK, noOfJobs_J_standard =     1255, noOfJobs_J_multipole =       40
+TIIN Creating job lists for J took      0.00 usr cpu s       0.00 sys cpu s       0.00 wall s
+ININ execute_joblist_J_std_threaded, noOfThreads =  8
+ININ 8 threads started OK.
+ININ all 8 threads have finished.
+TIIN execute_joblist_J_std_threaded took    105.29 usr cpu s       0.09 sys cpu s      16.45 wall s
+TIIN sort_list_of_multipole_jobs init part took      0.00 usr cpu s       0.00 sys cpu s       0.00 wall s
+TIIN sort_list_of_multipole_jobs complete took      0.00 usr cpu s       0.00 sys cpu s       0.00 wall s
+TIIN sort_list_of_multipole_jobs took      0.00 usr cpu s       0.00 sys cpu s       0.00 wall s
+ININ execute_joblist_J_fmm_shared: Allocating multipoleList_4, maxnoOfMinimalDistrsPerBoxBranch =     65422
+ININ execute_joblist_J_fmm_shared: jobIndexLo =            0, jobIndexHi =            5
+ININ execute_joblist_J_fmm_shared: Allocating multipoleList_4, maxnoOfMinimalDistrsPerBoxBranch =     65422
+ININ execute_joblist_J_fmm_shared: Allocating multipoleList_4, maxnoOfMinimalDistrsPerBoxBranch =     65422
+ININ execute_joblist_J_fmm_shared: jobIndexLo =            5, jobIndexHi =           10
+ININ execute_joblist_J_fmm_shared: jobIndexLo =           10, jobIndexHi =           15
+ININ execute_joblist_J_fmm_shared: Allocating multipoleList_4, maxnoOfMinimalDistrsPerBoxBranch =     65422
+ININ execute_joblist_J_fmm_shared: jobIndexLo =           15, jobIndexHi =           20
+ININ execute_joblist_J_fmm_shared: Allocating multipoleList_4, maxnoOfMinimalDistrsPerBoxBranch =     65422
+ININ execute_joblist_J_fmm_shared: jobIndexLo =           20, jobIndexHi =           25
+ININ execute_joblist_J_fmm_shared: Allocating multipoleList_4, maxnoOfMinimalDistrsPerBoxBranch =     65422
+ININ execute_joblist_J_fmm_shared: jobIndexLo =           25, jobIndexHi =           30
+ININ execute_joblist_J_fmm_shared: Allocating multipoleList_4, maxnoOfMinimalDistrsPerBoxBranch =     65422
+ININ execute_joblist_J_fmm_shared: jobIndexLo =           30, jobIndexHi =           35
+ININ execute_joblist_J_fmm_shared: Allocating multipoleList_4, maxnoOfMinimalDistrsPerBoxBranch =     65422
+ININ execute_joblist_J_fmm_shared: jobIndexLo =           35, jobIndexHi =           40
+ININ execute_joblist_J_fmm_shared: done!
+ININ execute_joblist_J_fmm_shared: done!
+ININ execute_joblist_J_fmm_shared: done!
+ININ execute_joblist_J_fmm_shared: done!
+ININ execute_joblist_J_fmm_shared: done!
+ININ execute_joblist_J_fmm_shared: done!
+ININ execute_joblist_J_fmm_shared: done!
+ININ execute_joblist_J_fmm_shared: done!
+ININ multipole job list for J executed, largest L used: 12
+TIIN Executing multipole job list for J took      0.18 usr cpu s       0.00 sys cpu s       0.07 wall s
+ININ compute_J_by_boxes_linear ending OK.
+TIIN compute_J_by_boxes_linear took    107.26 usr cpu s       0.10 sys cpu s      18.33 wall s
+TI   compute_J_by_boxes_sparse total took    107.35 usr cpu s       0.10 sys cpu s      18.42 wall s
+ININ entering create_CSR_for_K, no of basis funcs =   342, threshold_K =   1e-12
+ININ create_box_system end OK, toplevelBoxSize:   7.0, #levels:  3, #boxes at top level:      6
+ININ create_box_system end OK, toplevelBoxSize:   7.0, #levels:  3, #boxes at top level:      6
+ININ create_box_system end OK, toplevelBoxSize:   7.0, #levels:  3, #boxes at top level:      6
+TIIN create_CSR_for_K getting list of distrs took      0.22 usr cpu s       0.00 sys cpu s       0.22 wall s
+ININ list of neighbors complete.
+TIIN create_CSR_for_K getting list of neighbors took      0.00 usr cpu s       0.00 sys cpu s       0.00 wall s
+TIIN create_CSR_for_K sort each list of neighbors took      0.03 usr cpu s       0.00 sys cpu s       0.03 wall s
+ININ 8 threads started OK.
+TIIN identify_needed_elements() took    303.32 usr cpu s       0.51 sys cpu s      39.70 wall s
+ININ computing nnz..
+ININ create_CSR_for_K: predicted nnz =        58653, <->  50.15% of a full matrix
+TIIN create_CSR_for_K last part took      0.00 usr cpu s       0.00 sys cpu s       0.00 wall s
+TIIN create_CSR_for_K total took    303.58 usr cpu s       0.51 sys cpu s      39.96 wall s
+ININ entering compute_K_by_boxes, no of basis funcs =   342, threshold_K =   1e-12, exchange_box_size =   5.00
+ININ create_box_system end OK, toplevelBoxSize:   7.0, #levels:  3, #boxes at top level:      6
+ININ create_box_system end OK, toplevelBoxSize:   7.0, #levels:  3, #boxes at top level:      6
+ININ create_box_system end OK, toplevelBoxSize:   7.0, #levels:  3, #boxes at top level:      6
+TIIN Compute extent for all distrs took      0.24 usr cpu s       0.00 sys cpu s       0.24 wall s
+ININ Creating list of distributions done, distrCountTot =    353701
+TIIN Creating list of distributions took      0.38 usr cpu s       0.00 sys cpu s       0.38 wall s
+ININ create_box_system end OK, toplevelBoxSize:   5.0, #levels:  3, #boxes at top level:     10
+ININ create_box_system end OK, toplevelBoxSize:   2.5, #levels:  4, #boxes at top level:     16
+ININ noOfLevelsBasisFuncs = 4, noOfLevelsDiff = 1
+TIIN Creating boxes etc took      0.02 usr cpu s       0.00 sys cpu s       0.02 wall s
+TIIN getting multipoleNormVectorList took      0.36 usr cpu s       0.00 sys cpu s       0.36 wall s
+TIIN K organize_distributions for all boxes took      0.99 usr cpu s       0.01 sys cpu s       1.00 wall s
+ININ starting loop to setup basisFuncGroupInfoList, with added index checks.
+TIIN GetLimitsAllLevels took      0.15 usr cpu s       0.00 sys cpu s       0.15 wall s
+ININ getDmatLimitMatrixCSRList start.
+TIIN getting densityMatrixLimitMatrixList took      0.01 usr cpu s       0.00 sys cpu s       0.01 wall s
+ININ job list for K created,       55 jobs
+TIIN creating job list for K took      0.00 usr cpu s       0.00 sys cpu s       0.00 wall s
+ININ execute_joblist_K_threaded, noOfThreads =  8, basisFuncListCount_max =   325
+ININ 8 threads started OK.
+ININ all 8 threads have finished, took       15 wall s.
+TIIN Executing job list for K took     70.11 usr cpu s       0.02 sys cpu s      15.14 wall s
+TIIN compute_K_by_boxes took     72.03 usr cpu s       0.03 sys cpu s      17.06 wall s
+TI   compute_K_by_boxes_sparse total took    375.62 usr cpu s       0.55 sys cpu s      57.04 wall s
+INSC About to truncate FockMatrix, gap of Fprev >=          0.38414524072
+TISC symmMatrix::mixed_diff for F vs Fprev maxEigValMovement_mixed took      0.00 usr cpu s       0.00 sys cpu s       0.00 wall s
+TISC symmMatrix::eucl_diff for maxEigValMovement_eucl  took      0.02 usr cpu s       0.08 sys cpu s       0.02 wall s
+INSC maxEigValMovement_frob  =          0.00000134340
+INSC maxEigValMovement_mixed =          0.00000110740
+INSC maxEigValMovement_eucl  =          0.00000060158
+TISC FockMatrix.eucl_thresh() (with Z) took      0.07 usr cpu s       0.24 sys cpu s       0.05 wall s
+INSC Truncated FockMatrix (eucl with Z), selected threshold = 3.84144e-08, returned error =          0, nnz before = 100.0000 %, nnz after = 100.0000 %
+INSC Matrix 'S' ( symm ): n =    342, nnz =       116964 <-> 100.00 %, mem usage  0.0005 G
+INSC Matrix 'F' ( symm ): n =    342, nnz =       116964 <-> 100.00 %, mem usage  0.0005 G
+INSC Matrix 'D' ( symm ): n =    342, nnz =       116964 <-> 100.00 %, mem usage  0.0005 G
+INSC nuclearEnergy, energy_2el, energy = 782.160484, 1007.253420, -645.112846
+INSC Energy   2 =       -645.11284581277
+INSC calling compute_FDSminusSDF_sparse, n = 342
+INDE compute_FDSminusSDF_sparse() start.
+TIDE FileWritable::writeAndReadAll took      0.00 usr cpu s       0.00 sys cpu s       0.00 wall s
+INDE writeAndReadAll: '0 MB (1 MatrixGeneral, 0 > 1 MB) + 0 MB (9 MatrixSymmetric, 0 > 1 MB) = 0 MB (10 total, 0 > 1 MB)
+TISC compute_FDSminusSDF_sparse, F*D mult took      0.02 usr cpu s       0.03 sys cpu s       0.01 wall s
+INSC Matrix 'FD before eucl truncation' (normal): n =    342, nnz =       116964 <-> 100.00 %, mem usage  0.0009 G
+INSC Matrix 'FD after  eucl truncation' (normal): n =    342, nnz =       116964 <-> 100.00 %, mem usage  0.0009 G
+INSC Matrix 'FDS before eucl truncation' (normal): n =    342, nnz =       116964 <-> 100.00 %, mem usage  0.0009 G
+INSC Matrix 'FDS after  eucl truncation' (normal): n =    342, nnz =       116964 <-> 100.00 %, mem usage  0.0009 G
+INSC compute_FDSminusSDF_sparse ending OK.
+TISC compute_FDSminusSDF_sparse took      0.08 usr cpu s       0.18 sys cpu s       0.03 wall s
+INSC Matrix 'FDS-SDF' (normal): n =    342, nnz =       111332 <->  95.18 %, mem usage  0.0009 G
+INSC SCF_restricted::get_FDSminusSDF finished.
+TISC get_FDSminusSDF took      0.08 usr cpu s       0.18 sys cpu s       0.03 wall s
+INSC maxabs FDS-SDF is 8.95e-08
+INSC frob   FDS-SDF is 9.38e-07
+TISC get_error_measure took      0.00 usr cpu s       0.00 sys cpu s       0.00 wall s
+INSC Creating mtx file for Fock matrix
+RESC CONVERGED after   2 iterations.
+RESC FINAL ENERGY:       -645.11284581277
+TISC Main SCF loop took    972.58 usr cpu s       5.66 sys cpu s     157.86 wall s
+INSC After main SCF loop: AllocatorManager statistics:  noOfRealsPerBuffer: 1024 noOfBuffers: 20000 list.size(): 1. Allocated: 0.164 GB, Used: 0.00659 GB, Peak alloc: 0.164 GB.
+INSC SCF_restricted::compute_dipole_moment
+ININ compute_operator_matrix_sparse, nBastA =    342, nBastB =    342, pows (x y z) = (1 0 0)
+ININ create_box_system end OK, toplevelBoxSize:   7.0, #levels:  3, #boxes at top level:      6
+ININ compute_operator_matrix_sparse finished.
+TIIN compute_operator_matrix_sparse took      0.09 usr cpu s       0.00 sys cpu s       0.09 wall s
+ININ compute_operator_matrix_sparse, nBastA =    342, nBastB =    342, pows (x y z) = (0 1 0)
+ININ create_box_system end OK, toplevelBoxSize:   7.0, #levels:  3, #boxes at top level:      6
+ININ compute_operator_matrix_sparse finished.
+TIIN compute_operator_matrix_sparse took      0.10 usr cpu s       0.00 sys cpu s       0.10 wall s
+ININ compute_operator_matrix_sparse, nBastA =    342, nBastB =    342, pows (x y z) = (0 0 1)
+ININ create_box_system end OK, toplevelBoxSize:   7.0, #levels:  3, #boxes at top level:      6
+ININ compute_operator_matrix_sparse finished.
+TIIN compute_operator_matrix_sparse took      0.09 usr cpu s       0.00 sys cpu s       0.09 wall s
+INSC SCF: dipole_moment_x [atomic units] =      -0.42052272
+INSC SCF: dipole_moment_y [atomic units] =       0.35240611
+INSC SCF: dipole_moment_z [atomic units] =       0.16845565
+INSC SCF_general::do_SCF_iterations finished.
+TISC SCF_general::do_SCF_iterations took    973.36 usr cpu s       7.07 sys cpu s     158.51 wall s
