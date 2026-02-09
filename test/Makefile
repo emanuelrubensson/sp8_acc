@@ -9,7 +9,7 @@ test_homotopy_solver: test_homotopy_solver.cc
 test_sp8_evaluation_scalar: test_sp8_evaluation_scalar.cc 
 	$(CXX) -std=c++17 $(SP8_ACC_INCL) -o $@ $^ $(LIBS)
 
-test_poly8_evaluation_matrix: test_poly8_evaluation_matrix.cc
+test_poly8_evaluation_matrix: test_poly8_evaluation_matrix.cc $(TOPDIR)/sp8cc/poly8_eval_low_mem.h
 	$(CXX) -std=c++17 $(SP8_ACC_INCL) -o $@ $^ $(LIBS)
 
 test_poly8_evaluation_matrix_symmetric: test_poly8_evaluation_matrix_symmetric.cc

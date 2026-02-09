@@ -1,31 +1,18 @@
 #ifndef POLY8_EVAL_LOW_MEM_HEADER
 #define POLY8_EVAL_LOW_MEM_HEADER
+#include <iostream>
 #include <vector>
 #include <cmath>
-namespace sp8 {   
-
-  //helper function for more efficient memory usage
-  template<typename T_matrix>
-    void set_lincomb(T_matrix & X,
-                     T_matrix & X2,
-                     T_matrix & T1,
-                     double f1,
-                     double f2,
-                     double e1,
-                     double d1,
-                     double d2) {
-    T1.scale_and_add(1.0, d1, X);
-    T1.scale_and_add(1.0, d2, X2);
-    X2.scale_and_add(1.0, e1-d1, X);
-    X.scale_and_add(f1 - f2*(e1-d1),f2,X2);
-    X2.scale_and_add(1.0, 1.0, T1);
-  }
+namespace sp8 {
 
 template<typename T_matrix>
     void poly_8_eval_low_mem(std::vector<typename T_matrix::value_type> const & mc,
-		     T_matrix & X,
-		     T_matrix & X2,
-		     T_matrix & T1) {
+		     T_matrix & M1,
+		     T_matrix & M2,
+		     T_matrix & M3) {
+    //------------------------------------------------------------------------------
+    // Precompute c,d,e,f
+    //------------------------------------------------------------------------------
     typedef typename T_matrix::value_type scalar_type;
     const scalar_type b0=mc[8], b1=mc[7], b2=mc[6];
     const scalar_type b3=mc[5], b4=mc[4], b5=mc[3];
@@ -49,30 +36,28 @@ template<typename T_matrix>
     const scalar_type f2 = b2-f4*(d0*e2+d1*e1);
     const scalar_type f1 = b1-f4*d0*e1;
     const scalar_type f0 = b0;
-    //    const scalar_type one = 1.0;
     //------------------------------------------------------------------------------
-    // Stage 1
+    // Precompute r
     //------------------------------------------------------------------------------
-    //X2.scale_and_add(0.0,1.0,X);
-    //X2.multiply(X,X,1.0, 0.5*c1);
-    //X2.multiply(X,X); Assume input X2 already contains x^2
-    X2.scale_and_add(1.0,0.5*c1,X);
-    T1.multiply(X2,X2);
-    X2.scale_and_add(1.0, -0.5*c1, X);
-    T1.scale_and_add(1.0, -0.25*c1*c1, X2);
+    const scalar_type r1 = d1 - 0.5*c1*(d2-0.25*c1*c1);
+    const scalar_type r2 = d2 -0.25*c1*c1;
+    const scalar_type r3 = e1 - d1 - 0.5*c1;
+    const scalar_type r4 = f1 - f2*(e1-d1);
 
     //------------------------------------------------------------------------------
-    // Stage 2
+    // Computation Stage
     //------------------------------------------------------------------------------
-    // here we use the lincomb helper function:
-    set_lincomb(X,X2,T1,f1,f2,e1,d1,d2);
-    //------------------------------------------------------------------------------
-    // Stage 3
-    //------------------------------------------------------------------------------
-    // finalize with S1, S2, S3 in memory slots:
-    T1.add_scaled_identity(d0);
-    X.multiply(X2,T1,f4,1.0);  //1.0 and f0 works as alpha and beta in gemm
-    X.add_scaled_identity(f0);
+    // M2 already contains X^2        // line 3
+    M2.scale_and_add(1.0,0.5*c1,M1);  // line 4
+    M3.multiply(M2,M2);                // line 5
+    M3.scale_and_add(1.0, r1, M1);     // line 6
+    M3.scale_and_add(1.0, r2, M2);     // line 7
+    M2.scale_and_add(1.0, r3, M1);     // line 8
+    M1.scale_and_add(r4, f2, M2);     // line 9 (1/2)
+    M1.add_scaled_identity(f0);        // line 9 (2/2)
+    M2.scale_and_add(1.0,1.0,M3);      // line 10
+    M3.add_scaled_identity(d0);        // line 11
+    M1.multiply(M2,M3,f4,1.0);         // line 12
   }   
 
 
