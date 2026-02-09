@@ -1,5 +1,6 @@
 #ifndef POLY8_EVAL_LOW_MEM_HEADER
 #define POLY8_EVAL_LOW_MEM_HEADER
+#include <iostream>
 #include <vector>
 #include <cmath>
 namespace sp8 {
@@ -38,24 +39,25 @@ template<typename T_matrix>
     //------------------------------------------------------------------------------
     // Precompute r
     //------------------------------------------------------------------------------
-    const scalar_type r1 = d1 - 0.5*c1*(d2-0.25*c1*c1)
-    const scalar_type r2 = d2 -0.25*c1*c1
-    const scalar_type r3 = e1 - d1 - 0.5*c1
-    const scalar_type r4 = f_1 - f_2*(e1-d1)
+    const scalar_type r1 = d1 - 0.5*c1*(d2-0.25*c1*c1);
+    const scalar_type r2 = d2 -0.25*c1*c1;
+    const scalar_type r3 = e1 - d1 - 0.5*c1;
+    const scalar_type r4 = f1 - f2*(e1-d1);
+
     //------------------------------------------------------------------------------
     // Computation Stage
     //------------------------------------------------------------------------------
     // M2 already contains X^2        // line 3
     M2.scale_and_add(1.0,0.5*c1,M1);  // line 4
-    M3.multiply(M2,M2)                // line 5
-    M3.scale_and_add(1.0, r1, M1)     // line 6
-    M3.scale_and_add(1.0, r2, M2)     // line 7
-    M2.scale_and_add(1.0, r3, M1)     // line 8
+    M3.multiply(M2,M2);                // line 5
+    M3.scale_and_add(1.0, r1, M1);     // line 6
+    M3.scale_and_add(1.0, r2, M2);     // line 7
+    M2.scale_and_add(1.0, r3, M1);     // line 8
     M1.scale_and_add(r4, f2, M2);     // line 9 (1/2)
-    M1.add_scaled_identity(f0)        // line 9 (2/2)
-    M2.scale_and_add(1.0,1.0,M3)      // line 10
-    M3.add_scaled_identity(d0)        // line 11
-    M1.multiply(M2,M3,f4,1.0)         // line 12
+    M1.add_scaled_identity(f0);        // line 9 (2/2)
+    M2.scale_and_add(1.0,1.0,M3);      // line 10
+    M3.add_scaled_identity(d0);        // line 11
+    M1.multiply(M2,M3,f4,1.0);         // line 12
   }   
 
 
