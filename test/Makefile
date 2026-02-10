@@ -45,4 +45,9 @@ check: all
 	rm test_get_sp8_params_max_gap_output.txt
 	printf "test_get_sp8_params_max_gap finished OK!\n"
 clean:
-	rm test_homotopy_solver test_sp8_evaluation_scalar test_poly8_evaluation_matrix test_poly8_evaluation_matrix_symmetric test_eval_sp8 test_get_sp8_params_max_gap
+	rm -f test_homotopy_solver \
+	test_sp8_evaluation_scalar \
+	test_poly8_evaluation_matrix \
+	test_poly8_evaluation_matrix_symmetric \
+	test_eval_sp8 \
+	test_get_sp8_params_max_gap

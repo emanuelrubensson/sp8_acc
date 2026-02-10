@@ -12,4 +12,6 @@ check:
 	(cd testpy && $(MAKE) check)
 
 clean:
-	rm sp8cc/sp8cc.so
+	$(MAKE) -C test clean
+	$(MAKE) -C sp8cc clean
+	rm -rf sp8py/__pycache__/
