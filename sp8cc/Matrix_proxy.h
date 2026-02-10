@@ -1,5 +1,11 @@
 #ifndef MATRIX_PROXY_HEADER
 #define MATRIX_PROXY_HEADER
+
+#include <type_traits>  // for std::remove_const
+#include <algorithm>    // for std::copy_n
+#include <iostream>     // for std::cout, std::endl
+#include <cassert>      // for assert
+
 extern "C" void dgemm_(const char *ta,const char *tb,
                        const int *n, const int *k, const int *l,
                        const double *alpha,const double *A,const int *lda,

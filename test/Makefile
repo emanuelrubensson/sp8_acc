@@ -1,23 +1,31 @@
 TOPDIR=..
 SP8_ACC_INCL=-I$(realpath $(TOPDIR)/sp8cc)
+SP8_ACC_HEADER_FILES := $(wildcard $(TOPDIR)/sp8cc/*.h)
 LIBS=-llapack -lblas
 all: test_homotopy_solver test_sp8_evaluation_scalar test_poly8_evaluation_matrix test_poly8_evaluation_matrix_symmetric test_get_sp8_params_max_gap
 
-test_homotopy_solver: test_homotopy_solver.cc
+test_homotopy_solver: test_homotopy_solver.cc \
+	$(SP8_ACC_HEADER_FILES)
 	$(CXX) -std=c++17 $(SP8_ACC_INCL) -o $@ $^ $(LIBS)
 
-test_sp8_evaluation_scalar: test_sp8_evaluation_scalar.cc 
+test_sp8_evaluation_scalar: test_sp8_evaluation_scalar.cc \
+	$(SP8_ACC_HEADER_FILES)
 	$(CXX) -std=c++17 $(SP8_ACC_INCL) -o $@ $^ $(LIBS)
 
-test_poly8_evaluation_matrix: test_poly8_evaluation_matrix.cc $(TOPDIR)/sp8cc/poly8_eval_low_mem.h
+test_poly8_evaluation_matrix: test_poly8_evaluation_matrix.cc \
+	$(SP8_ACC_HEADER_FILES)
 	$(CXX) -std=c++17 $(SP8_ACC_INCL) -o $@ $^ $(LIBS)
 
-test_poly8_evaluation_matrix_symmetric: test_poly8_evaluation_matrix_symmetric.cc
-	$(CXX) -std=c++17 $(SP8_ACC_INCL) -o $@ $^ $(LIBS)
-test_get_sp8_params_max_gap: test_get_sp8_params_max_gap.cc
+test_poly8_evaluation_matrix_symmetric: test_poly8_evaluation_matrix_symmetric.cc \
+	$(SP8_ACC_HEADER_FILES)
 	$(CXX) -std=c++17 $(SP8_ACC_INCL) -o $@ $^ $(LIBS)
 
-test_eval_sp8: test_eval_sp8.cc
+test_get_sp8_params_max_gap: test_get_sp8_params_max_gap.cc \
+	$(SP8_ACC_HEADER_FILES)
+	$(CXX) -std=c++17 $(SP8_ACC_INCL) -o $@ $^ $(LIBS)
+
+test_eval_sp8: test_eval_sp8.cc \
+	$(SP8_ACC_HEADER_FILES)
 	$(CXX) $(SP8_ACC_INCL) -o $@ $^ $(LIBS)
 
 check: all
