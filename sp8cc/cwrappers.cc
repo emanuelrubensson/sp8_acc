@@ -106,9 +106,10 @@ extern "C" {
   void get_sp8_params_max_gap(const double L_outer, const double L_inner,
                               const double H_inner, const double H_outer,
 			      const double kappa,
-                              double* v_output) {
+                              double* v_output,
+			      double* C_q_sp8) {
     std::vector<double> v;
-    sp8::get_sp8_params_max_gap(L_outer, L_inner, H_inner, H_outer, kappa, v);
+    sp8::get_sp8_params_max_gap(L_outer, L_inner, H_inner, H_outer, kappa, v, C_q_sp8[0], C_q_sp8[1]);
     assert(v.size() == 9);
     std::copy_n(v.begin(), 9, v_output);
   }

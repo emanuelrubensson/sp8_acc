@@ -9,7 +9,11 @@ static void test_get_sp8_params_max_gap(const T L_outer, const T L_inner,
 					const T H_inner, const T H_outer) {
   int n_values = 100;
   std::vector<T> v;
-  sp8::get_sp8_params_max_gap(L_outer, L_inner, H_inner, H_outer, v);
+  T kappa = 0.01;
+  T Csp8;
+  T qsp8;
+  sp8::get_sp8_params_max_gap(L_outer, L_inner, H_inner, H_outer, kappa,
+			      v, Csp8, qsp8);
   // Check if values are in [0,1]
   for (int ind = 0; ind <= n_values; ind++) {
     T x = ind/T(n_values);

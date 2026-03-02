@@ -841,37 +841,52 @@ namespace sp8 {
 
   template<typename T>
   void get_sp8_params_no_acc(const int left, const int right,
-                             std::vector<T> & v) {
+                             std::vector<T> & v,
+                             T & Csp8, T & qsp8) {
     auto switch_pair = [](unsigned int x, unsigned int y){return (x<<3)+y;};
     switch(switch_pair(left, right)) {
     case switch_pair(4,3):
       v.assign({-280.0, 0, 0, 0, 0, 0, 1, 1, 1});
+      Csp8 = 82; qsp8 = 4;
       break;
     case switch_pair(3,4):
       v.assign({280.0, 0, 0, 0, 0, 1, 1, 1, 1});
+      Csp8 = 82; qsp8 = 4;
       break;
     case switch_pair(5,2):
       v.assign({168.0, 0, 0, 0, 0, 0, 0, 1, 1});
+      Csp8 = 56; qsp8 = 3;
       break;
     case switch_pair(2,5):
       v.assign({-168.0, 0, 0, 0, 1, 1, 1, 1, 1});
+      Csp8 = 56; qsp8 = 3;
       break;
     case switch_pair(6,1):
+      Csp8 = 28; qsp8 = 2;
       v.assign({-56.0, 0, 0, 0, 0, 0, 0, 0, 1});
       break;
     case switch_pair(1,6):
       v.assign({56.0, 0, 0, 1, 1, 1, 1, 1, 1});
+      Csp8 = 28; qsp8 = 2;
       break;
     case switch_pair(7,0):
       v.assign({8.0, 0, 0, 0, 0, 0, 0, 0, 0});
+      Csp8 = std::numeric_limits<double>::infinity(); qsp8 = 1;
       break;
     case switch_pair(0,7):
       v.assign({-8.0, 0, 1, 1, 1, 1, 1, 1, 1});
+      Csp8 = std::numeric_limits<double>::infinity(); qsp8 = 1;
       break;
     default:
       std::cout << "sp8 without acceleration does not exist with <left-right> = <" << left << "-" << right << ">" << std::endl;
       std::exit(1);
     }
+  }
+  template<typename T>
+  void get_sp8_params_no_acc(const int left, const int right,
+			     std::vector<T> & v) {
+    T Csp8 = 0; T qsp8 = 1; // dummy variables
+    get_sp8_params_no_acc(left, right, v, Csp8, qsp8);
   }
 
   /** Get coefficients of eigth degree polynomial. User decides location
@@ -886,12 +901,17 @@ namespace sp8 {
   template<typename T>
   int get_sp8_params(const T L, const T H,
 		     const SP8_spec sp8_spec,
-		     std::vector<T> & v) {
+		     std::vector<T> & v,
+		     T & Csp8, T & qsp8) {
     assert(0 <= L);
     assert(L <  H);
     assert(H <= 1);
+    // By default params for stopping criteria set to not stop
+    Csp8 = std::numeric_limits<double>::infinity();
+    qsp8 = 1;
     if (!sp8_spec.acc_left && !sp8_spec.acc_right) {
-      get_sp8_params_no_acc(sp8_spec.left, sp8_spec.right, v);
+      get_sp8_params_no_acc(sp8_spec.left, sp8_spec.right, v, Csp8, qsp8);
+      // Params for stopping criteria updated in this case
       return 0;
     }
     int left  = sp8_spec.left;
@@ -913,7 +933,13 @@ namespace sp8 {
     delete solver;
     return info;
   }
-
+  template<typename T>
+  int get_sp8_params(const T L, const T H,
+		     const SP8_spec sp8_spec,
+		     std::vector<T> & v) {
+    T Csp8 = 0; T qsp8 = 1; // dummy variables
+    return get_sp8_params(L, H, sp8_spec, v, Csp8, qsp8);
+  }
 
   /** Choose number of extremal points to the left and right based on
    *  which one gives the largest slope at mu = (H+L)/2.  The break
@@ -988,7 +1014,11 @@ namespace sp8 {
   void get_sp8_params_max_gap(const T L_outer, const T L_inner,
 			      const T H_inner, const T H_outer,
 			      const T kappa,
-			      std::vector<T> & v) {
+			      std::vector<T> & v,
+			      T & Csp8,
+			      T & qsp8) {
+    T Csp8_tmp = std::numeric_limits<double>::infinity();
+    T qsp8_tmp = 1.0;
     int left_start = 1;
     int left_end   = 6;
     if ((L_inner > kappa) && (H_inner < 1-kappa)) {
@@ -1011,7 +1041,7 @@ namespace sp8 {
       // Outer bounds used for acceleration, a precautious approach and
       // necessary if we want homo and lumo to be isolated for eigenvalue
       // estimation
-      int info = get_sp8_params(L_outer, H_outer, sp8_spec, v_tmp);
+      int info = get_sp8_params(L_outer, H_outer, sp8_spec, v_tmp, Csp8_tmp, qsp8_tmp);
       if (info != 0) {
 	// Attempt to turn off acceleration
 	if (info !=  2)  // if problem not to the right (only)
@@ -1019,7 +1049,7 @@ namespace sp8 {
 	if (info != -2) // if problem not to the left (only)
 	  sp8_spec.acc_right = false;
 	std::cout << "Rerun without acceleration triggered! info = " << info << std::endl;
-	info = get_sp8_params(L_outer, H_outer, sp8_spec, v_tmp);
+	info = get_sp8_params(L_outer, H_outer, sp8_spec, v_tmp, Csp8_tmp, qsp8_tmp);
       }
       if (info != 0) {
 	std::cerr << "Warning: get_sp8_params_max_gap: get_sp8_params failed with info = " << info
@@ -1040,6 +1070,8 @@ namespace sp8 {
       if (gap_tmp > gap) {
 	gap = gap_tmp;
 	v = v_tmp;
+	Csp8 = Csp8_tmp;
+	qsp8 = qsp8_tmp;
       }
     }
     if (gap == 0) {
