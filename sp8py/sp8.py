@@ -35,7 +35,7 @@ def sp8_acc(X, L_outer, L_inner, H_inner, H_outer, expensive_output=0, fixed_nit
     nmul_vec = [nmul]
     while precond_phase:
 #        sp8py.get_sp8_params_max_slope(L_outer, H_outer, v)
-        sp8py.get_sp8_params_max_gap(L_outer, L_inner, H_inner, H_outer, v)
+        sp8py.get_sp8_params_max_gap(L_outer, L_inner, H_inner, H_outer, precond_limit, v)
         sp8py.get_sp8_monomial_coefficients(v, mc)
         # Evaluate SP8 for X
         sp8py.matmul(X, X, X2)

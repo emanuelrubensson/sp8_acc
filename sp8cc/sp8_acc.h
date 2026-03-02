@@ -987,19 +987,26 @@ namespace sp8 {
   template<typename T>
   void get_sp8_params_max_gap(const T L_outer, const T L_inner,
 			      const T H_inner, const T H_outer,
+			      const T kappa,
 			      std::vector<T> & v) {
-    const T limit_value = 0.01;
+    int left_start = 1;
+    int left_end   = 6;
+    if ((L_inner > kappa) && (H_inner < 1-kappa)) {
+      // Use all candidate polynomials
+      left_start = 0;
+      left_end   = 7;
+    }
     T gap_old = H_inner-L_inner;
     assert(gap_old > 0);
     T gap = 0;
     std::vector<T> v_tmp;
-    for(int left = 0; left <= 7; left++) {
+    for(int left = left_start; left <= left_end; left++) {
       int right = 7 - left;
       // Use acceleration to the left when L_outer is away from 0
       // but not when there are no stationary points to the left
-      bool acc_left  = L_outer > limit_value && left > 0;
+      bool acc_left  = L_outer > kappa && left > 0;
       // and similarly to the right
-      bool acc_right = H_outer < 1-limit_value && right > 0;
+      bool acc_right = H_outer < 1-kappa && right > 0;
       SP8_spec sp8_spec = {left, right, acc_left, acc_right};
       // Outer bounds used for acceleration, a precautious approach and
       // necessary if we want homo and lumo to be isolated for eigenvalue

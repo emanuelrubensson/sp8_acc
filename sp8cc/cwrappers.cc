@@ -105,9 +105,10 @@ extern "C" {
   /** v_output should point to array with 9 elements */
   void get_sp8_params_max_gap(const double L_outer, const double L_inner,
                               const double H_inner, const double H_outer,
+			      const double kappa,
                               double* v_output) {
     std::vector<double> v;
-    sp8::get_sp8_params_max_gap(L_outer, L_inner, H_inner, H_outer, v);
+    sp8::get_sp8_params_max_gap(L_outer, L_inner, H_inner, H_outer, kappa, v);
     assert(v.size() == 9);
     std::copy_n(v.begin(), 9, v_output);
   }
