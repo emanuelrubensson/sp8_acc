@@ -1079,7 +1079,15 @@ namespace sp8 {
       std::cerr << "get_sp8_params_max_gap: get_sp8_params failed for all possible configurations, exiting." << std::endl;
       std::exit(1);
     }
-    if (gap <= gap_old) {
+    if (gap_old < 1-std::sqrt(std::numeric_limits<T>::epsilon()) && gap <= gap_old) {
+      std::cerr << "get_sp8_params_max_gap: "
+		<< " with params L_outer = " << L_outer
+		<< ", L_inner = " << L_inner
+		<< ", H_inner = " << H_inner
+		<< ", H_outer = " << H_outer
+		<< ", gap_old = " << gap_old
+		<< ", gap = " << gap
+		<< std::endl;
       std::cerr << "get_sp8_params_max_gap: get_sp8_params failed to produce polynomial giving increasing gap, exiting." << std::endl;
       std::exit(1);
     }
