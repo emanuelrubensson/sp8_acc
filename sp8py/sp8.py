@@ -13,7 +13,60 @@ def poly8_simple(mc,X):
     Y = np.asanyarray(Y, order='F', dtype=type(X[0][0]))
     return Y
 
-def sp8_acc(X, L_outer, L_inner, H_inner, H_outer, expensive_output=0, fixed_niter=0, sp2_purification=0):
+def sp8_acc(X, L_outer, L_inner, H_inner, H_outer, expensive_output=0, fixed_niter=0):
+    kappa = 0.01
+    X2 = np.empty_like(X)
+    M2 = np.empty_like(X)
+    v  = np.empty(9)
+    mc = np.empty(9)
+    C_q_sp8 = np.empty(2) # [Csp8, qsp8]
+    idem_err_trace = [sp8py.trace_XmX2(X)]
+    idem_err_maxabs = []
+    polys = []
+    gap   = [H_inner - L_inner]
+    nmul = 0
+    nmul_vec = [nmul]
+    while 1:
+        sp8py.get_sp8_params_max_gap(L_outer, L_inner, H_inner, H_outer, kappa, v, C_q_sp8)
+        sp8py.get_sp8_monomial_coefficients(v, mc)
+        sp8py.matmul(X, X, X2)
+        nmul += 1
+        if expensive_output:
+            idem_err_maxabs.append(np.max(np.abs(X-X2)))
+        sp8py.poly_8_eval_low_mem(mc, X, X2, M2)
+        nmul += 2
+        polys.append(list(mc))
+        # Update homo lumo bounds
+        L_outer = np.polyval(mc, L_outer)
+        L_inner = np.polyval(mc, L_inner)
+        H_inner = np.polyval(mc, H_inner)
+        H_outer = np.polyval(mc, H_outer)
+        L_outer = max(L_outer,0.0)
+        H_outer = min(H_outer,1.0)
+        gap.append(H_inner - L_inner)
+        # Compute Tr[X-X**2] (without computing X**2)
+        nmul_vec.append(nmul)
+        idem_err_trace.append( sp8py.trace_XmX2(X) )
+        # Check for loop termination in case of fixed number of iterations
+        if fixed_niter:
+            if len(nmul_vec) >= fixed_niter:
+                break
+            # Otherwise skip regular checks
+            continue
+        # Regular convergence checks
+        if idem_err_trace[-1] <= 0:
+            break
+        if idem_err_trace[-1] > C_q_sp8[0]*idem_err_trace[-2]**C_q_sp8[1]:
+            # Note that sp8py.get_sp8_params_max_gap --> Csp8 = Inf when acceleration is used
+            # print(f'A: {idem_err_trace[-1]} > {Csp8*idem_err_trace[-2]**qsp8} ---- {idem_err_trace[-2]}')
+            break
+    if expensive_output:
+        sp8py.matmul(X,X,X2)
+        idem_err_maxabs.append(np.max(np.abs(X-X2)))
+        return X,nmul,polys,gap,nmul_vec,idem_err_trace,idem_err_maxabs
+    return X,nmul,polys,gap,nmul_vec,idem_err_trace
+
+def sp8_acc_old(X, L_outer, L_inner, H_inner, H_outer, expensive_output=0, fixed_niter=0, sp2_purification=0):
     Csp8 = 85
     qsp8 = 4
     Csp8sp2 = 275

@@ -43,9 +43,9 @@ def plot_convergence_sp2(X, D, Z, L_out, L_in, H_in, H_out, ax_cond, ax_idem, ma
                      color=color, marker=marker, linestyle=linestyle,
                      linewidth=1, markersize=3) # pre stop
 
-def plot_convergence_sp8(X, D, Z, L_out, L_in, H_in, H_out, ax_cond, ax_idem, marker, color, linestyle, label='',sp2_puri=0):
+def plot_convergence_sp8(X, D, Z, L_out, L_in, H_in, H_out, ax_cond, ax_idem, marker, color, linestyle, label=''):
     X0 = np.copy(X)
-    sp8_out = sp8.sp8_acc(X0, L_out, L_in, H_in, H_out, expensive_output=1, sp2_purification=sp2_puri)
+    sp8_out = sp8.sp8_acc(X0, L_out, L_in, H_in, H_out, expensive_output=1)
     # sp8_out: X, nmul, polys, gap, nmul_vec, idem_err_trace, idem_err_maxabs
     #          0  1     2      3    4         5               6
     check_result(sp8_out[0],D,Z)
@@ -53,7 +53,7 @@ def plot_convergence_sp8(X, D, Z, L_out, L_in, H_in, H_out, ax_cond, ax_idem, ma
     nmul_vec = sp8_out[4]
     idem_err_maxabs = sp8_out[6]
     X0 = np.copy(X)
-    sp8_out_extraiter = sp8.sp8_acc(X0, L_out, L_in, H_in, H_out, expensive_output=1,fixed_niter=len(nmul_vec)+2, sp2_purification=sp2_puri)
+    sp8_out_extraiter = sp8.sp8_acc(X0, L_out, L_in, H_in, H_out, expensive_output=1,fixed_niter=len(nmul_vec)+2)
     nmul_vec_poststop = sp8_out_extraiter[4][len(nmul_vec)-1:]
     idem_err_maxabs_poststop = sp8_out_extraiter[6][len(nmul_vec)-1:]
     ax_cond.semilogy(nmul_vec,[1/x for x in gap[0:len(nmul_vec)]],
@@ -148,7 +148,7 @@ plot_convergence_sp2(X0, D, Z, 0.0, L_inner, H_inner, 1.0, ax1, ax2,'D','tab:gre
 #plot_convergence_sp2(X0_single, D, L_outer, L_inner, H_inner, H_outer, ax1, ax2,'x','r')
 
 # plot_convergence_sp8(X0, D, L_outer, L_inner, H_inner, H_outer, ax1, ax2,'o','black', 'SP8-ACC',sp2_puri=1)
-plot_convergence_sp8(X0, D, Z, L_outer, L_inner, H_inner, H_outer, ax1, ax2,'o','tab:blue', 'solid', 'SP8-ACC',sp2_puri=0)
+plot_convergence_sp8(X0, D, Z, L_outer, L_inner, H_inner, H_outer, ax1, ax2,'o','tab:blue', 'solid', 'SP8-ACC')
 
 plot_convergence_sp8(X0, D, Z, 0.0, L_inner, H_inner, 1.0, ax1, ax2,'o','tab:blue', 'dashed', 'SP8')
 
