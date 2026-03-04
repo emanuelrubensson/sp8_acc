@@ -7,7 +7,7 @@ install:
 uninstall:
 	pip uninstall sp8py
 
-check:
+check: all
 	(cd test && $(MAKE) check)
 	(cd testpy && $(MAKE) check)
 
