@@ -27,7 +27,13 @@ def sp8_acc(X, L_outer, L_inner, H_inner, H_outer, expensive_output=0, fixed_nit
     nmul = 0
     nmul_vec = [nmul]
     while 1:
-        sp8py.get_sp8_params_max_gap(L_outer, L_inner, H_inner, H_outer, kappa, v, C_q_sp8)
+        if ((L_inner < kappa) and (H_inner > 1-kappa)):
+            if  len(nmul_vec) % 2: # odd
+                sp8py.get_sp8_params_no_acc(3, 4, v, C_q_sp8)
+            else:
+                sp8py.get_sp8_params_no_acc(4, 3, v, C_q_sp8)
+        else:
+            sp8py.get_sp8_params_max_gap(L_outer, L_inner, H_inner, H_outer, kappa, v, C_q_sp8)
         sp8py.get_sp8_monomial_coefficients(v, mc)
         sp8py.matmul(X, X, X2)
         nmul += 1

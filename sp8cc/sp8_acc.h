@@ -1021,12 +1021,14 @@ namespace sp8 {
     T qsp8_tmp = 1.0;
     int left_start = 0;
     int left_end   = 7;
+#if 0 // This part moved to python code
     if ((L_inner < kappa) && (H_inner > 1-kappa)) {
       // Only <3,4> and <4,3> are candidate polynomials close to
       // convergence.
       left_start = 3;
       left_end   = 4;
     }
+#endif
     T gap_old = H_inner-L_inner;
     assert(gap_old > 0);
     T gap = 0;

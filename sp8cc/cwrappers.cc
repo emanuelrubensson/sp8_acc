@@ -71,9 +71,10 @@ T_scalar trace_XmX2(T_scalar const * ap, int n) {
 extern "C" {
   /** v_output should point to array with 9 elements */
   void get_sp8_params_no_acc(const int left, const int right,
-			     double* v_output) {
+			     double* v_output,
+			     double* C_q_sp8) {
     std::vector<double> v;
-    sp8::get_sp8_params_no_acc(left, right, v);
+    sp8::get_sp8_params_no_acc(left, right, v, C_q_sp8[0], C_q_sp8[1]);
     assert(v.size() == 9);
     std::copy_n(v.begin(), 9, v_output);
   }
