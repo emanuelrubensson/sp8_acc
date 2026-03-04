@@ -1019,12 +1019,13 @@ namespace sp8 {
 			      T & qsp8) {
     T Csp8_tmp = std::numeric_limits<double>::infinity();
     T qsp8_tmp = 1.0;
-    int left_start = 1;
-    int left_end   = 6;
-    if ((L_inner > kappa) && (H_inner < 1-kappa)) {
-      // Use all candidate polynomials
-      left_start = 0;
-      left_end   = 7;
+    int left_start = 0;
+    int left_end   = 7;
+    if ((L_inner < kappa) && (H_inner > 1-kappa)) {
+      // Only <3,4> and <4,3> are candidate polynomials close to
+      // convergence.
+      left_start = 3;
+      left_end   = 4;
     }
     T gap_old = H_inner-L_inner;
     assert(gap_old > 0);
