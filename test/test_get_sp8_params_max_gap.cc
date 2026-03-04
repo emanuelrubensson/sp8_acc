@@ -7,6 +7,12 @@
 template<typename T>
 static void test_get_sp8_params_max_gap(const T L_outer, const T L_inner,
 					const T H_inner, const T H_outer) {
+  std::cout << "Running test_get_sp8_params_max_gap with Lout, Lin, Hin, Hout : "
+	    << std::setw(6) << L_outer << ", "
+	    << std::setw(6) << L_inner << ", "
+	    << std::setw(6) << H_inner << ", "
+	    << std::setw(6) << H_outer
+	    << std::endl;
   int n_values = 100;
   std::vector<T> v;
   T kappa = 0.01;
@@ -44,6 +50,8 @@ int main(int argc, char* const  argv[]){
   test_get_sp8_params_max_gap<double>(0.5,   0.55, 0.66, 0.77);
   test_get_sp8_params_max_gap<double>(0.011,  0.9, 0.91, 0.92);
   test_get_sp8_params_max_gap<double>(0.0,   0.01, 0.02, 0.03);
+  test_get_sp8_params_max_gap<double>(0.0,   0.0001, 0.0002, 0.0003);
+  test_get_sp8_params_max_gap<double>(0.0,   0.0001, 0.0002, 1.0);
   test_get_sp8_params_max_gap<double>(0.8,   0.95, 0.96, 0.99);
   test_get_sp8_params_max_gap<double>(0.011,  0.5, 0.51, 0.989);
   test_get_sp8_params_max_gap<double>(0.011,  0.011, 0.988, 0.989);
