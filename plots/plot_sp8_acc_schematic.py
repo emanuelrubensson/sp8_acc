@@ -74,8 +74,9 @@ print(lvec)
 offset_vec = np.zeros(left)
 offset_vec[left-1] = 0.005
 for ind,l in enumerate(lvec):
-    plot_xtick(l,mc,f'$l_{ind+1}$',offset=offset_vec[ind])
-plot_xtick(0.0,mc,f'$0\!=\!l_{left+1}$',offset=0.01, ha='right')
+    plot_xtick(l,mc,f'$s_{ind+1}$',offset=offset_vec[ind])
+# plot_xtick(0.0,mc,f'$0\!=\!l_{left+1}$',offset=0.01, ha='right')
+plot_xtick(0.0,mc,f'$0$',offset=0.0, ha='center')
 #plt.plot([0, 0],[-0.065,0],'--',color='black', linewidth=lw, dashes=mydashes)
 #plt.text(0.0,-0.065,f'$l_{left+1}=0$',ha='center',va='top')
 
@@ -87,8 +88,9 @@ plot_xtick(0.0,mc,f'$0\!=\!l_{left+1}$',offset=0.01, ha='right')
 rvec = v[2+left:]
 print(rvec)
 for ind,r in enumerate(rvec):
-    plot_xtick(r,mc,f'$r_{ind+1}$')
-plot_xtick(1.0,mc,f'$r_{right+1}\!=\!1$',offset=-0.01,ha='left')
+    plot_xtick(r,mc,f'$s_{left+ind+1}$')
+#plot_xtick(1.0,mc,f'$r_{right+1}\!=\!1$',offset=-0.01,ha='left')
+plot_xtick(1.0,mc,f'$1$',offset=-0.0,ha='center')
 #plt.plot([1, 1],[-0.065,0],'--',color='black', linewidth=lw, dashes=mydashes)
 #plt.text(1.0,-0.065,f'$r_{right+1}=1$',ha='center',va='top')
 ##
