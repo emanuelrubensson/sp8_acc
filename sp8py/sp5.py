@@ -93,10 +93,8 @@ def sp5_acc(X, L_outer, L_inner, H_inner, H_outer, expensive_output=0, fixed_nit
     if expensive_output:
         sp8py.matmul(X, X, X2)
         idem_err_maxabs.append(np.max(np.abs(X-X2)))
-    while L_outer > precond_limit:
-        mc5 = sp5_polynomial_coeffs(L_outer)
-        mc5_prim = np.polyder(mc5)
-        print('SP5 slope at 0.5: ',np.polyval(mc5_prim,0.5))
+    while L_outer > precond_limit and (1.0 - H_outer) > precond_limit:
+        mc5 = sp5_polynomial_coeffs(np.min([L_outer,1.0-H_outer]))
         X = poly5_simple(mc5,X) # FIXME: USE SCHEME USING ONLY 3 MULTS
         polys.append(mc5)
         nmul += 3
