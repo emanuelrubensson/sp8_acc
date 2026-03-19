@@ -47,7 +47,7 @@ def sp5_polynomial_coeffs(L):
         eq2 = I(L) - I(s2)   # p(s2)=p(L) <=> I(s2)=I(L)
         return np.array([eq1, eq2])
     initial_guess = np.array([0.7*L, 0.2*L])
-    sol = root(equations, initial_guess, method="hybr")
+    sol = root(equations, initial_guess, method="hybr", tol=1e-13)
     if not sol.success:
         raise RuntimeError("Nonlinear solve failed: " + sol.message)
     return polynomial_coefficients(sol.x[0],sol.x[1])
@@ -59,6 +59,7 @@ def sp5_acc(X, L_outer, L_inner, H_inner, H_outer, expensive_output=0, fixed_nit
     qsp5 = 3
     precond_limit = 0.01
     X2 = np.empty_like(X)
+    M2 = np.empty_like(X)
     mu = (L_inner+H_inner)/2
     polys = []
     nmul = 0
@@ -95,7 +96,19 @@ def sp5_acc(X, L_outer, L_inner, H_inner, H_outer, expensive_output=0, fixed_nit
         idem_err_maxabs.append(np.max(np.abs(X-X2)))
     while L_outer > precond_limit and (1.0 - H_outer) > precond_limit:
         mc5 = sp5_polynomial_coeffs(np.min([L_outer,1.0-H_outer]))
-        X = poly5_simple(mc5,X) # FIXME: USE SCHEME USING ONLY 3 MULTS
+        ### Stabilization Y = ((stab/2)*(2*X-1)+1/2) = stab*X + (1-stab)/2 with stab=0.99
+        ### Corresponds to sign function scaling with p(0.99*x), see
+        ### https://doi.org/10.48550/arXiv.2505.16932 using p(x/1.01)
+        stab = 0.99
+        np.multiply(X, stab, out=X)
+        np.fill_diagonal(X, np.diag(X) + (1.0-stab)/2)
+        L_inner = stab*L_inner + (1.0-stab)/2
+        H_inner = stab*H_inner + (1.0-stab)/2
+        L_outer = stab*L_outer + (1.0-stab)/2
+        H_outer = stab*H_outer + (1.0-stab)/2
+        ###
+        sp8py.matmul(X, X, X2)
+        sp8py.poly_5_eval(mc5, X, X2, M2)
         polys.append(mc5)
         nmul += 3
         L_inner = np.polyval(mc5, L_inner)
@@ -109,9 +122,10 @@ def sp5_acc(X, L_outer, L_inner, H_inner, H_outer, expensive_output=0, fixed_nit
             sp8py.matmul(X, X, X2)
             idem_err_maxabs.append(np.max(np.abs(X-X2)))
 
-    mc5 = [6.0, -15.0, 10.0, 0., 0., 0.]
+    mc5 = np.array([6.0, -15.0, 10.0, 0., 0., 0.])
     while 1:
-        X = poly5_simple(mc5,X) # FIXME: USE SCHEME USING ONLY 3 MULTS
+        sp8py.matmul(X, X, X2)
+        sp8py.poly_5_eval(mc5, X, X2, M2)
         polys.append(mc5)
         nmul += 3
         L_inner = np.polyval(mc5, L_inner)
