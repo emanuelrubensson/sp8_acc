@@ -18,3 +18,12 @@ def get_random_X(n,nocc,lumo,homo,float_type = float):
     X = np.asanyarray(X, order='F', dtype=float_type)
     D = np.matmul(Q[:,-nocc:],np.transpose(Q[:,-nocc:]))
     return X,D
+
+def get_diagonal_X(n,nocc,lumo,homo,float_type = float):
+    ev = np.concatenate((np.linspace(0,lumo,n-nocc),
+                         np.linspace(homo,1,nocc)))
+    X = np.diag(ev)
+    X = np.asanyarray(X, order='F', dtype=float_type)
+    ev = np.concatenate((np.zeros(n-nocc), np.ones(nocc)))
+    D = np.diag(ev)
+    return X,D
