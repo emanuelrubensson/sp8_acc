@@ -10,5 +10,6 @@ from .sp8cc_wrappers import (
     sastre_poly_8_eval,
     poly_8_eval,
     poly_8_eval_low_mem,
+    poly_5_eval,
     trace_XmX2
 )

@@ -204,3 +204,34 @@ def trace_XmX2(X):
         return trace_XmX2_double_helper(X,nX)
     if isinstance(X[0][0], np.float32):
         return trace_XmX2_single_helper(X,nX)
+
+
+poly_5_eval_single_helper = sp8_cwrappers_lib.poly_5_eval_single
+poly_5_eval_single_helper.restype = None
+poly_5_eval_single_helper.argtypes = [ndpointer(ctypes.c_float, ndim=1, shape=(6), flags="C_CONTIGUOUS"),
+                                      ndpointer(ctypes.c_float, ndim=2, flags="F_CONTIGUOUS"),
+                                      ndpointer(ctypes.c_float, ndim=2, flags="F_CONTIGUOUS"),
+                                      ndpointer(ctypes.c_float, ndim=2, flags="F_CONTIGUOUS"),
+                                      ctypes.c_int]
+poly_5_eval_double_helper = sp8_cwrappers_lib.poly_5_eval_double
+poly_5_eval_double_helper.restype = None
+poly_5_eval_double_helper.argtypes = [ndpointer(ctypes.c_double, ndim=1, shape=(6), flags="C_CONTIGUOUS"),
+                                      ndpointer(ctypes.c_double, ndim=2, flags="F_CONTIGUOUS"),
+                                      ndpointer(ctypes.c_double, ndim=2, flags="F_CONTIGUOUS"),
+                                      ndpointer(ctypes.c_double, ndim=2, flags="F_CONTIGUOUS"),
+                                      ctypes.c_int]
+
+def poly_5_eval(mc, X, X2, T1):
+    assert( none_is_another( (X, X2, T1) ) )
+    assert(np.ndim(X)==np.ndim(X2)==np.ndim(T1)==2)
+    mX,nX   = np.shape(X)
+    mX2,nX2 = np.shape(X2)
+    mT1,nT1 = np.shape(T1)
+    assert(mX == nX == mX2 == nX2 == mT1 == nT1)
+    if isinstance(X[0][0], float):
+        poly_5_eval_double_helper(mc, X, X2, T1, nX)
+        return
+    if isinstance(X[0][0], np.float32):
+        mc = np.asanyarray(mc, dtype=np.float32)
+        poly_5_eval_single_helper(mc, X, X2, T1, nX)
+        return
