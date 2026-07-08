@@ -4,7 +4,7 @@
 # In ergo-3.8.2 Run ./bootstrap.h && make
 topdir=`pwd`
 ergo_dirname=ergo-3.8.2
-ergo_output_dirname=aspirin_mtx
+ergo_output_dirname=aspirin_mtx_new
 rm -rf $ergo_output_dirname ; mkdir $ergo_output_dirname ;
 cd $ergo_output_dirname
 
@@ -30,6 +30,9 @@ echo Running Aspirin HF/6-311++Gss
 initial_density="density.bin"
 basis = "6-311++Gss"
 scf.calculation_identifier = "Aspirin"
+J_K.threshold_1el = 1e-16
+J_K.threshold_2el_K = 1e-16
+J_K.threshold_2el_J = 1e-16
 scf.create_mtx_file_S = 1
 scf.create_mtx_files_F = 1
 scf.create_mtx_files_D = 1
