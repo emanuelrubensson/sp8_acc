@@ -119,26 +119,16 @@ def plot_convergence_sp5(X, D, Z, L_out, L_in, H_in, H_out, ax_cond, ax_idem, ma
                      color=color, marker=marker, linestyle=linestyle,
                      linewidth=1, markersize=3) # pre stop
 
+### Aspirin
+# matrices and values from new clean run of script
+mtx_dirname='aspirin/aspirin_mtx_new/'
+#INDE HOMO interval : [   -0.357278101541   -0.348181679860 ]
+H_outer, H_inner = -0.357278101541, -0.348181679860
+#INDE LUMO interval : [    0.035549678247    0.056525111947 ]
+L_inner, L_outer = 0.035549678247, 0.056525111947
+#INDE Spectrum of F: 	 [ -20.624839086601 , 51.715199740553 ]
+lmin, lmax = -20.624839086601, 51.715199740553
 
-# float_type = np.float64
-# n    = 100
-# nocc = 40
-# L_inner = 0.495
-# H_inner = 0.505
-# L_inner = 0.7143989815234746 # Aspirin
-# H_inner = 0.7197035316060708 
-# L_outer = L_inner
-# H_outer = H_inner
-# X0,D = sp8py.test_utils.get_random_X(n,nocc,L_inner,H_inner,float_type)
-
-#### Aspirin
-mtx_dirname='aspirin/aspirin_mtx/'
-# INDE HOMO interval : [   -0.357278101527   -0.348181679848 ]
-H_outer, H_inner = -0.357278101527, -0.348181679848
-# INDE LUMO interval : [    0.035549679088    0.056525112327 ]
-L_inner, L_outer = 0.035549679088, 0.056525112327
-# INDE Spectrum of F: 	 [ -20.624839086600 , 51.715199740629 ]
-lmin, lmax = -20.624839086600, 51.715199740629
 #
 F_sparse = mmread(mtx_dirname+'F_matrix_final.mtx')
 F = F_sparse.todense()
