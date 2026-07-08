@@ -9,6 +9,7 @@ def get_random_X(n,nocc,lumo,homo,float_type = float):
     Returns also the projection matrix (density matrix) for projection
     onto the subspace corresponding to the nocc largest eigenvalues. 
     """
+    np.random.seed(3)
     T   = np.random.randn(n,n)
     Q,R = np.linalg.qr(T)
     ev = np.concatenate((np.linspace(0,lumo,n-nocc),
