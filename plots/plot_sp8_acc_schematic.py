@@ -43,11 +43,10 @@ info = sp8py.get_sp8_params(lumo,homo,sp8_spec,v)
 if info != 0:
     print(f"get_sp8_params failed with info = {info}")
     exit(1)
-print(f'Slope <{left},{right}>: {sp8py.sp8_prim(v,homo)}')
+# print(f'Slope <{left},{right}>: {sp8py.sp8_prim(v,homo)}')
 #    print(f'v: {[ "{:0.16f}".format(x) for x in v]}')
 mc = np.empty(9)
 sp8py.get_sp8_monomial_coefficients(v,mc)
-print(mc)
 xv = np.linspace(0,1,500)
 yv = [np.polyval(mc, x) for x in xv]
 plt.plot(xv,yv,zorder=3)
@@ -70,7 +69,7 @@ plt.text(homo-0.015,-0.02,'$\lambda_{\mathrm{homo}}$',ha='center',va='top')
 ##
 ## Plot l1...l_{left}
 lvec = v[1+left:1:-1]
-print(lvec)
+# print(lvec)
 offset_vec = np.zeros(left)
 offset_vec[left-1] = 0.005
 for ind,l in enumerate(lvec):
@@ -86,7 +85,7 @@ plot_xtick(0.0,mc,f'$0$',offset=0.0, ha='center')
 ##
 ## Plot l1...l_{right}
 rvec = v[2+left:]
-print(rvec)
+# print(rvec)
 for ind,r in enumerate(rvec):
     plot_xtick(r,mc,f'$s_{left+ind+1}$')
 #plot_xtick(1.0,mc,f'$r_{right+1}\!=\!1$',offset=-0.01,ha='left')
