@@ -70,4 +70,4 @@ plt.ylim([-0.1, 1.2])
 plt.axis('off')
 
 #plt.show()
-plt.savefig(f"sp3_schematic.eps", bbox_inches='tight')
+plt.savefig(f"sp3_schematic.pdf", bbox_inches='tight')

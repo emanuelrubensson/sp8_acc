@@ -102,8 +102,8 @@ plt.plot(mu_vec,sp8_acc_nmul,'-o',markersize=4,color = 'tab:blue', label='SP8-AC
 # plt.plot(mu_vec,sp5_nmul,'--s',color = 'tab:red', label='SP5')
 
 plt.grid('on')
-plt.xlabel('Gap location $\mu$')
+plt.xlabel('Step location $\mu$')
 plt.ylabel('No. of multiplications')
 plt.legend()
-plt.savefig('plot_mu_vs_nmul.eps', bbox_inches='tight')
+plt.savefig('plot_mu_vs_nmul.pdf', bbox_inches='tight')
 
