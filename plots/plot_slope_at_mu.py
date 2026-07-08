@@ -1,5 +1,7 @@
 #!/usr/bin/env python3
 import sp8py
+import sp8py.sp7 as sp7
+import sp8py.sp5 as sp5
 import numpy as np
 import matplotlib.pyplot as plt
 
@@ -17,6 +19,16 @@ def get_slope(left,right,mu_vec,gap):
         slope_vec[idx] = sp8py.sp8_prim(v,mu)
         map_vec[idx] = sp8py.sp8_eval(v,mu)
     return slope_vec, map_vec
+
+def get_slope_sp7(lumo):
+    mc,_ = sp7.sp7_polynomial_coeffs(lumo)
+    mcder = np.polyder(mc)
+    return np.polyval(mcder,0.5)
+
+def get_slope_sp5(lumo):
+    mc = sp5.sp5_polynomial_coeffs(lumo)
+    mcder = np.polyder(mc)
+    return np.polyval(mcder,0.5)
 
 npoints = 150
 gap = 1e-5
@@ -66,6 +78,12 @@ mu_vec = np.linspace(0.6,1-0.001,npoints)
 slope_vec, map_vec = get_slope(7, 0, mu_vec, gap)
 ax_slope.plot(mu_vec,slope_vec,label='(7,0)')
 ax_map.plot(mu_vec,map_vec,label='(7,0)')
+
+slope_sp5 = get_slope_sp5(0.5-gap/2)
+ax_slope.plot(0.5,slope_sp5,'o', label='Su5')
+
+slope_sp7 = get_slope_sp7(0.5-gap/2)
+ax_slope.plot(0.5,slope_sp7,'x', label='Su7')
 
 ax_slope.grid('on')
 ax_slope.set_xlim((0, 1))
