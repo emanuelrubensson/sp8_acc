@@ -39,18 +39,18 @@ phomo = np.polyval(mc, homo)
 ## x-axis
 plt.plot([lumo,lumo],[-0.01,0.01],'k-')
 plt.plot([lumo,lumo],[0, plumo],'--',color='black', linewidth=lw, dashes=mydashes)
-plt.text(lumo+0.0,-0.02,'$\lambda_{\mathrm{lumo}}$',ha='center',va='top')
+plt.text(lumo+0.0,-0.02,r'$\lambda_{\mathrm{lumo}}$',ha='center',va='top')
 #
 plt.plot([homo,homo],[-0.01,0.01],'k-')
 plt.plot([homo,homo],[0, phomo],'--',color='black', linewidth=lw, dashes=mydashes)
-plt.text(homo-0.0,-0.02,'$\lambda_{\mathrm{homo}}$',ha='center',va='top')
+plt.text(homo-0.0,-0.02,r'$\lambda_{\mathrm{homo}}$',ha='center',va='top')
 ## y-axis
 plt.plot([-0.01,0.01],[plumo,plumo],'k-')
-plt.text(-0.02,plumo-0.0,'$p(\lambda_{\mathrm{lumo}})$',ha='right',va='center')
+plt.text(-0.02,plumo-0.0,r'$p(\lambda_{\mathrm{lumo}})$',ha='right',va='center')
 plt.plot([0,1.0],[plumo, plumo],'--',color='tab:orange', linewidth=2*lw, dashes=mydashes)
 #
 plt.plot([-0.01,0.01],[phomo,phomo],'k-')
-plt.text(-0.02,phomo-0.0,'$p(\lambda_{\mathrm{homo}})$',ha='right',va='center')
+plt.text(-0.02,phomo-0.0,r'$p(\lambda_{\mathrm{homo}})$',ha='right',va='center')
 plt.plot([0,1.0],[phomo, phomo],'--',color='tab:orange', linewidth=2*lw, dashes=mydashes)
 
 ##
