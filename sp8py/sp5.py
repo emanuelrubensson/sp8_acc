@@ -47,7 +47,7 @@ def sp5_polynomial_coeffs(L):
         eq2 = I(L) - I(s2)   # p(s2)=p(L) <=> I(s2)=I(L)
         return np.array([eq1, eq2])
     initial_guess = np.array([0.7*L, 0.2*L])
-    sol = root(equations, initial_guess, method="hybr", tol=1e-13)
+    sol = root(equations, initial_guess, method="hybr", tol=1e-10)
     if not sol.success:
         raise RuntimeError("Nonlinear solve failed: " + sol.message)
     return polynomial_coefficients(sol.x[0],sol.x[1])
