@@ -131,11 +131,11 @@ lmin, lmax = -20.624839086601, 51.715199740553
 
 #
 F_sparse = mmread(mtx_dirname+'F_matrix_final.mtx')
-F = F_sparse.todense()
+F = F_sparse.toarray()
 D_sparse = mmread(mtx_dirname+'D_matrix_final.mtx')
-D = D_sparse.todense()
+D = D_sparse.toarray()
 S_sparse = mmread(mtx_dirname+'S_matrix.mtx')
-S = S_sparse.todense()
+S = S_sparse.toarray()
 # F_ort = Z'*F*Z
 U = cholesky(S, lower=False)
 Z = np.linalg.inv(U)
