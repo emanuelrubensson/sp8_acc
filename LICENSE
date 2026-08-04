@@ -1,12 +1,28 @@
-SP8_ACC, version 0.1. A library for creation of multiplication
-	 	      efficient polynomials for expansion of 
-		      matrix step functions. 
+SP8_ACC library
+
+A library for recursive polynomial expansion of the matrix step
+function and efficient matrix polynomial evaluation.
                       
-Copyright (C) 2021 Emanuel H. Rubensson and
-              	   Elias Jarlebring
+MIT License
 
-Distribution without copyright owners' explicit consent prohibited.
+Copyright (c) 2021 Emanuel H. Rubensson
+Copyright (c) 2021 Elias Jarlebring
+Copyright (c) 2024 Gustaf Lorentzon
 
-This source code is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
